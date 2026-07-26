@@ -1,4 +1,5 @@
 ﻿using Commerce.Infrastructure.Data;
+using Commerce.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,8 @@ public static class DependencyInjection
         {
             opt.UseSqlServer(connectionString);
         });
+
+        services.AddScoped<IProductRepository, ProductRepository>();
 
         return services;
     }

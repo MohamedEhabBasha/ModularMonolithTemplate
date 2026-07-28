@@ -1,11 +1,11 @@
+using App.API;
 using Commerce.Infrastructure;
 using Commerce.Infrastructure.Data.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
+//APP API
+builder.Services.AddAPI(builder.Configuration);
 
 // Commerce Module
 builder.Services

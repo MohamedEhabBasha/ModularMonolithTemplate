@@ -1,4 +1,5 @@
-﻿using Commerce.Application.Contracts.Persistence;
+﻿using BuildingBlocks.Application.Pagination;
+using Commerce.Application.Contracts.Persistence;
 using Commerce.Application.Specifications.Products;
 using Commerce.Core.Entities;
 
@@ -7,14 +8,12 @@ namespace App.API.Modules.Commerce;
 public class ProductsController(IProductRepository repo) : BaseController
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, 
-        string? sort)
+    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts
+        ([FromQuery] ProductSpecParams specParams)
     {
-        var spec = new ProductSpecification(brand, type, sort);
+        var spec = new ProductSpecification(specParams);
 
-        var products = await repo.ListAsync(spec);
-
-        return Ok(products);
+        return Ok(await Pagination.CreatePagedResult(repo, spec, specParams.PageIndex, specParams.PageSize));
     }
 
     [HttpGet("{id:int}")]

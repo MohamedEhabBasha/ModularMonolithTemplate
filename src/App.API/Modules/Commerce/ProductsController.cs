@@ -1,5 +1,5 @@
-﻿using BuildingBlocks.Application.Pagination;
-using Commerce.Application.Contracts.Persistence;
+﻿using Commerce.Application.Contracts.Persistence;
+using Commerce.Application.DTOs;
 using Commerce.Application.Specifications.Products;
 using Commerce.Core.Entities;
 
@@ -19,9 +19,8 @@ public class ProductsController(IProductRepository repo) : BaseController
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Product>> GetProduct(int id)
     {
-        var product = await repo.GetByIdAsync(id);
-
-        if (product == null) return NotFound();
+        var product = await repo.GetByIdAsync(id)
+            ?? throw new NotFoundException("Product Can Not Be Found");
 
         return Ok(product);
     }
@@ -36,13 +35,13 @@ public class ProductsController(IProductRepository repo) : BaseController
             return CreatedAtAction("GetProduct", new {id = product.Id}, product);
         }
 
-        return BadRequest("Problem Creating Product");
+        throw new BadRequestException("Problem Creating Product");
     }
     [HttpPut("{id:int}")]
     public async Task<ActionResult> UpdateProduct(int id, Product product)
     {
         if (id != product.Id || !ProductExists(id))
-            return BadRequest("The route ID does not match the product ID.");
+            throw new BadRequestException("The route ID does not match the product ID.");
 
         repo.Update(product);
 
@@ -51,14 +50,13 @@ public class ProductsController(IProductRepository repo) : BaseController
             return NoContent();
         }
 
-        return BadRequest("Problem Updating Product");
+        throw new BadRequestException("Problem Updating Product");
     }
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
-        var product = await repo.GetByIdAsync(id);
-
-        if (product == null) return NotFound();
+        var product = await repo.GetByIdAsync(id)
+            ?? throw new NotFoundException("Product Can Not Be Found");
 
         repo.Remove(product);
 
@@ -67,7 +65,7 @@ public class ProductsController(IProductRepository repo) : BaseController
             return NoContent();
         }
 
-        return BadRequest("Problem Deleting Product");
+        throw new BadRequestException("Problem Deleting Product");
     }
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()

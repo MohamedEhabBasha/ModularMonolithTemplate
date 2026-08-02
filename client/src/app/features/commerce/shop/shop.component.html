@@ -1,0 +1,60 @@
+<app-shop-carousel [autoplayDelayMs]="4000"></app-shop-carousel>
+<app-marquee [durationSeconds]="15">
+  Free shipping over $50 • New arrivals dropping weekly •
+  <span class="text-white/60 italic">MWgoods</span>
+  Secure checkout guaranteed • Shop the summer sale now •
+</app-marquee>
+<div class="flex flex-col lg:flex-row">
+  <!-- mobile trigger button, template -->
+  <div
+    class="w-[25%] flex items-center gap-2 bg-accent-red text-white p-2 rounded-md m-5 cursor-pointer lg:hidden"
+    (click)="openFilterDialog()"
+  >
+    <mat-icon>tune</mat-icon>
+    <h2 class="text-[1.5rem] font-semibold">Filters</h2>
+  </div>
+  <!-- Desktop-only filter column, plain div, sticky against page scroll -->
+  <aside class="hidden! lg:block! lg:w-[25%]! bg-white! border-r!">
+    <div class="sticky top-0 p-4">
+      <app-filter-sidenav
+        [allBrands]="shopService.brands()"
+        [allTypes]="shopService.types()"
+        (filtersChange)="onFiltersChange($event)"
+        (searchApply)="onSearchApply($event)"
+      ></app-filter-sidenav>
+    </div>
+  </aside>
+
+  <div class="flex flex-col flex-1 lg:bg-primary!">
+    <div class="p-4 lg:p-6">
+      <div class="hidden lg:flex items-center justify-between mb-4">
+        <span class="text-sm text-gray-500 ml-auto">{{ totalProducts() }} products</span>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    @if (totalProducts()) {
+      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 overflow-hidden p-5">
+        @for (product of products().items; track product.id) {
+          <app-product-item [product]="product" />
+        }
+      </div>
+      <div class="flex justify-center pb-6 mt-auto">
+        <mat-paginator
+          [length]="totalProducts()"
+          [pageIndex]="shopParams.pageNumber - 1"
+          [pageSize]="shopParams.pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          (page)="onPageChange($event)"
+          [showFirstLastButtons]="true"
+          aria-label="Select page"
+        ></mat-paginator>
+      </div>
+    } @else {
+      <div class="h-screen flex flex-col items-center justify-center py-20 text-gray-400">
+        <mat-icon class="text-5xl! w-12! h-12!">search_off</mat-icon>
+        <p class="mt-2">No products match your filters.</p>
+      </div>
+    }
+  </div>
+</div>

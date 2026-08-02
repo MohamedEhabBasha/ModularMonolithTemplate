@@ -1,0 +1,29 @@
+<mat-card class="flex! flex-col! h-full! rounded-xl! shadow-sm! hover:shadow-md! transition-shadow">
+  <div class="relative w-full aspect-square overflow-hidden bg-gray-100 rounded-t-xl">
+    <img
+      [src]="product().pictureUrl"
+      [alt]="product().name"
+      class="w-full h-full object-cover"
+      loading="lazy"
+    />
+  </div>
+
+  <mat-card-content class="flex! flex-col! flex-1! p-3! gap-1!">
+    <h3 class="text-sm font-semibold text-gray-900 line-clamp-1">
+      {{ product().name }}
+    </h3>
+    <p class="text-xs text-gray-500 line-clamp-2 flex-1">
+      {{ product().description }}
+    </p>
+    <p class="text-base font-bold text-gray-900 mt-1">
+      {{ product().price | currency }}
+    </p>
+  </mat-card-content>
+
+  <mat-card-actions class="p-3! pt-0!">
+    <button mat-flat-button color="primary" class="w-full!" (click)="onAddToCart()">
+      <mat-icon>add_shopping_cart</mat-icon>
+      Add to cart
+    </button>
+  </mat-card-actions>
+</mat-card>

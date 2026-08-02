@@ -1,0 +1,73 @@
+<section
+  class="relative h-[50vh] w-full overflow-hidden bg-secondary text-white"
+  aria-label="Featured promotions"
+>
+  <div #swiperContainer class="swiper h-full w-full">
+    <div class="swiper-wrapper h-full">
+      @for (slide of slides(); track slide.id) {
+        <div class="swiper-slide h-full w-full">
+          <div class="flex h-full w-full items-stretch">
+            <!-- Text column — 25% -->
+            <div
+              class="relative z-10 flex w-1/4 min-w-55 flex-col justify-center gap-3 px-6 sm:px-10 lg:px-14"
+            >
+              <span
+                class="text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-accent-red"
+              >
+                {{ slide.eyebrow }}
+              </span>
+
+              <h1
+                class="text-2xl sm:text-4xl lg:text-5xl font-bold leading-[1.05] tracking-tight text-white"
+              >
+                {{ slide.headline }}
+              </h1>
+
+              <p class="max-w-xs text-sm sm:text-base text-white/80">
+                {{ slide.subline }}
+              </p>
+            </div>
+
+            <!-- Image column — 75%, image centered -->
+            <div class="relative flex w-3/4 items-center justify-center overflow-hidden transform-[translateZ(0)]">
+              <img
+                [src]="slide.imageUrl"
+                [alt]="slide.imageAlt"
+                class="h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <!-- Subtle gradient so the text column always reads over any image -->
+              <div
+                class="pointer-events-none absolute inset-y-0 left-0 w-full bg-linear-to-r from-secondary to-transparent"
+                aria-hidden="true"
+              ></div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Slide indicators -->
+  <div
+    class="absolute bottom-5 left-6 sm:left-10 lg:left-14 z-20 flex items-center gap-2"
+    role="tablist"
+    aria-label="Choose slide"
+  >
+    @for (slide of slides(); track slide.id; let i = $index) {
+      <button
+        type="button"
+        role="tab"
+        class="h-1.5 rounded-full transition-all duration-300"
+        [class.w-8]="activeIndex() === i"
+        [class.w-3]="activeIndex() !== i"
+        [class.bg-accent-red]="activeIndex() === i"
+        [class.bg-white/40]="activeIndex() !== i"
+        [attr.aria-selected]="activeIndex() === i"
+        [attr.aria-label]="'Go to slide: ' + slide.headline"
+        (click)="goTo(i)"
+      ></button>
+    }
+  </div>
+</section>

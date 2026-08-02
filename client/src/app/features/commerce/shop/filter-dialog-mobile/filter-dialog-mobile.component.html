@@ -1,0 +1,14 @@
+<h2 mat-dialog-title class="flex! items-center! justify-between!">
+  <button mat-icon-button (click)="onClose()" aria-label="Close">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content class="pt-2!">
+  <app-filter-sidenav
+    [allTypes]="data.allTypes"
+    [allBrands]="data.allBrands"
+    (filtersChange)="onFiltersChange($event)"
+    (searchApply)="onSearchApply($event)"
+  ></app-filter-sidenav>
+</mat-dialog-content>

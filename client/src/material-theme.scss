@@ -1,7 +1,3 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
@@ -36,3 +32,36 @@ body {
   margin: 0;
   height: 100%;
 }
+
+@include mat.button-overrides(
+  (
+    text-label-text-color: #333333,
+    text-ripple-color: rgba(0, 0, 0, 0.1),
+    text-state-layer-color: rgba(0, 0, 0, 0.5),
+    filled-container-color: #d32f2f,
+  )
+);
+
+@include mat.form-field-overrides(
+  (
+    outlined-focus-outline-color: #d32f2f,
+    outlined-focus-label-text-color: #d32f2f,
+  )
+);
+
+@include mat.expansion-overrides(
+  (
+    container-background-color: white,
+  )
+);
+
+@include mat.checkbox-overrides(
+  (
+    selected-icon-color: #d32f2f,
+    selected-focus-icon-color: #d32f2f,
+    selected-focus-state-layer-color: #d32f2f,
+  )
+);
+  @include mat.paginator-overrides((
+    container-background-color: #f4f6f9,
+  ));

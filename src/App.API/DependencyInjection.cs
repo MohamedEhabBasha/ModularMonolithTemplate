@@ -13,6 +13,7 @@ public static class DependencyInjection
 
         services.AddExceptionHandler<CustomExceptionHandler>();
         services.AddProblemDetails();
+        services.AddCors();
 
         return services;
     }

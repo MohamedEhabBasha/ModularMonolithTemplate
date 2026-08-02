@@ -1,0 +1,76 @@
+<div class="flex flex-col gap-4">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2 bg-accent-red/75 text-white p-2 rounded-md">
+      <mat-icon>tune</mat-icon>
+      <h2 class="text-[1.5rem] font-semibold">Filters</h2>
+    </div>
+    <button mat-button class="cursor-pointer" (click)="clearAll()">Clear all</button>
+  </div>
+
+  <!-- SEARCH INPUT -->
+
+  <div class="flex items-center gap-2 mt-5">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Search products</mat-label>
+      <input
+        matInput
+        [ngModel]="searchDraft()"
+        (ngModelChange)="onSearchInput($event)"
+        (keyup.enter)="onSearchSubmit()"
+        placeholder="e.g. jacket"
+      />
+    </mat-form-field>
+    <button  (click)="onSearchSubmit()" aria-label="Search" class="cursor-pointer">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- SORT FILTER -->
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Sort by price</mat-label>
+    <mat-select [ngModel]="filters().sort" (ngModelChange)="onSortChange($event)">
+      <mat-option value="name">None</mat-option>
+      <mat-option value="priceAsc">Price: Low to High</mat-option>
+      <mat-option value="priceDesc">Price: High to Low</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-divider></mat-divider>
+
+  <!-- TYPE FILTER -->
+  <mat-expansion-panel [expanded]="true" class="shadow-none! border! border-gray-200!">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Type</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="flex flex-col gap-1">
+      @for (type of allTypes(); track type) {
+        <mat-checkbox
+          [checked]="filters().types.includes(type)"
+          (change)="onTypeToggle(type, $event.checked)"
+        >
+          {{ type }}
+        </mat-checkbox>
+      }
+    </div>
+  </mat-expansion-panel>
+
+  <!-- BRAND FILTER -->
+  <mat-expansion-panel [expanded]="true" class="shadow-none! border! border-gray-200!">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Brand</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="flex flex-col gap-1">
+      @for (brand of allBrands(); track brand) {
+        <mat-checkbox
+          [checked]="filters().brands.includes(brand)"
+          (change)="onBrandToggle(brand, $event.checked)"
+        >
+          {{ brand }}
+        </mat-checkbox>
+      }
+    </div>
+  </mat-expansion-panel>
+</div>

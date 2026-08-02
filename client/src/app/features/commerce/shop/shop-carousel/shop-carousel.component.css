@@ -1,0 +1,9 @@
+:host ::ng-deep .swiper,
+:host ::ng-deep .swiper-wrapper,
+:host ::ng-deep .swiper-slide {
+  height: 100%;
+}
+ 
+:host ::ng-deep .swiper-slide {
+  position: relative;
+}

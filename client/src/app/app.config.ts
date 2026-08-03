@@ -6,7 +6,9 @@ import {
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { errorInterceptor } from './core/interceptors/error-interceptor';
+import { loadingInterceptor } from './core/interceptors/loading-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +22,6 @@ export const appConfig: ApplicationConfig = {
       }),
       withComponentInputBinding(),
     ),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor])),
   ],
 };

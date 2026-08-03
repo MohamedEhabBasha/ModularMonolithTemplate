@@ -1,4 +1,4 @@
-<nav class="w-full bg-secondary" aria-label="Main navigation">
+<nav class="w-full bg-secondary border-b border-white/20" aria-label="Main navigation">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="grid h-20 grid-cols-2 items-center gap-4 md:grid-cols-[1fr_auto_1fr] pt-5">
       <!-- Shop link (desktop only) -->
@@ -6,7 +6,7 @@
         <a
           routerLink="/shop"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact: true}"
+          [routerLinkActiveOptions]="{ exact: true }"
           class="cursor-pointer rounded text-sm font-medium tracking-wide text-white transition-colors hover:text-stone-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
         >
           Shop
@@ -98,3 +98,6 @@
     </div>
   </div>
 </nav>
+  @if (busyService.loading()) {
+    <mat-progress-bar mode="indeterminate" class="fixed top-0 z-50"></mat-progress-bar>
+  }

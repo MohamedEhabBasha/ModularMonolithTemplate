@@ -64,6 +64,21 @@ body {
     selected-focus-state-layer-color: #d32f2f,
   )
 );
-  @include mat.paginator-overrides((
+@include mat.paginator-overrides(
+  (
     container-background-color: #f4f6f9,
-  ));
+  )
+);
+@include mat.snack-bar-overrides(
+  (
+    button-color: white,
+    container-color: #d32f2f,
+    supporting-text-color: white,
+  )
+);
+@include mat.progress-bar-overrides(
+  (
+    active-indicator-color: white,
+    track-color: #d32f2f,
+  )
+);

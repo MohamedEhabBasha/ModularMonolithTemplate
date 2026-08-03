@@ -1,10 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { FilterSidenavComponent, FilterState } from '../filter-sidenav/filter-sidenav.component';
+import { FilterSidenavComponent } from '../filter-sidenav/filter-sidenav.component';
 import { MatIcon } from '@angular/material/icon';
+import { FilterState } from '../shop.component';
 
-export interface FilterDialogData {
+interface FilterDialogData {
   allTypes: string[];
   allBrands: string[];
 }

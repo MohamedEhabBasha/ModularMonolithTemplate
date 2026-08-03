@@ -5,7 +5,9 @@
       <div class="hidden justify-self-start md:flex">
         <a
           routerLink="/shop"
-          class="rounded text-sm font-medium tracking-wide text-white transition-colors hover:text-stone-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="cursor-pointer rounded text-sm font-medium tracking-wide text-white transition-colors hover:text-stone-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
         >
           Shop
         </a>
@@ -17,7 +19,8 @@
         class="justify-self-start rounded text-xl font-bold leading-none tracking-tight focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red md:justify-self-center"
         aria-label="mwgoods home"
       >
-        <span class="bg-accent-red p-0.5 rounded-[0.3rem] text-white mr-1">MW</span><span class="font-normal text-white">goods</span>
+        <span class="bg-accent-red p-0.5 rounded-[0.3rem] text-white mr-1">MW</span
+        ><span class="font-normal text-white">goods</span>
       </a>
 
       <!-- Cart + Sign up (desktop only) -->

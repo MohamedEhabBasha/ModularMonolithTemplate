@@ -1,0 +1,112 @@
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, inject, input, linkedSignal, output } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { ShopService } from '../../../../core/services/commerce/shop';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { Product } from '../../../../shared/models/commerce/products';
+
+import type { SwiperContainer } from 'swiper/element';
+
+interface ProductMedia {
+  readonly type: 'image' | 'video';
+  readonly url: string;
+  readonly poster?: string;
+}
+
+@Component({
+  selector: 'app-product-details',
+  imports: [CurrencyPipe, MatButtonModule, MatIconModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  templateUrl: './product-details.component.html',
+  styleUrl: './product-details.component.css',
+})
+export class ProductDetailsComponent {
+  readonly id = input.required<string>();
+
+  private readonly shopService = inject(ShopService);
+
+  readonly productResource = rxResource({
+    params: () => ({ id: Number(this.id()) }),
+    stream: ({ params }) => this.shopService.getProduct(params.id),
+  });
+
+  readonly media = computed<ProductMedia[]>(() => {
+    const product = this.productResource.value();
+    return product ? [{ type: 'image', url: product.pictureUrl }] : [];
+  });
+
+  readonly quantity = linkedSignal({
+    source: () => this.productResource.value()?.id,
+    computation: () => 1,
+  });
+
+  readonly isSaved = linkedSignal({
+    source: () => this.productResource.value()?.id,
+    computation: () => false,
+  });
+
+  readonly maxQuantity = computed(() => this.productResource.value()?.quantityInStock ?? 0);
+  readonly isOutOfStock = computed(() => this.maxQuantity() <= 0);
+  readonly exceedsStock = computed(() => this.quantity() > this.maxQuantity());
+  readonly addToCartDisabled = computed(() => this.isOutOfStock() || this.exceedsStock());
+
+  readonly stockStatus = computed(() => {
+    const stock = this.maxQuantity();
+    if (stock <= 0) {
+      return { label: 'Out of stock', isWarning: true };
+    }
+    if (this.exceedsStock() || stock <= 5) {
+      return { label: `Only ${stock} left in stock`, isWarning: true };
+    }
+    return { label: 'In stock', isWarning: false };
+  });
+
+  readonly addedToCart = output<{ product: Product; quantity: number }>();
+  readonly saveToggled = output<{ product: Product; saved: boolean }>();
+
+  retry(): void {
+    this.productResource.reload();
+  }
+
+  increment(): void {
+    this.quantity.update((quantity) => quantity + 1);
+  }
+
+  decrement(): void {
+    this.quantity.update((quantity) => Math.max(1, quantity - 1));
+  }
+
+  onQuantityInput(rawValue: string): void {
+    const parsed = Math.trunc(Number(rawValue));
+    this.quantity.set(Number.isFinite(parsed) && parsed > 0 ? parsed : 1);
+  }
+
+  addToCart(): void {
+    const product = this.productResource.value();
+    if (!product || this.addToCartDisabled()) {
+      return;
+    }
+    this.addedToCart.emit({ product, quantity: this.quantity() });
+  }
+
+  toggleSave(): void {
+    const product = this.productResource.value();
+    if (!product) {
+      return;
+    }
+    this.isSaved.update((saved) => !saved);
+    this.saveToggled.emit({ product, saved: this.isSaved() });
+  }
+
+  /** Pauses any video slide once it's scrolled out of the active position. */
+  onSlideChange(event: Event): void {
+    const swiperContainer = event.currentTarget as SwiperContainer;
+    swiperContainer.querySelectorAll('video').forEach((video) => {
+      const slide = video.closest('swiper-slide');
+      if (!slide?.classList.contains('swiper-slide-active')) {
+        video.pause();
+      }
+    });
+  }
+}

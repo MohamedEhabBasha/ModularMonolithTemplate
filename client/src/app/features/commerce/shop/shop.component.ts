@@ -2,7 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ShopService } from '../../../core/services/commerce/shop';
 import { Product } from '../../../shared/models/commerce/products';
 import { ShopCarouselComponent } from './shop-carousel/shop-carousel.component';
-import { FilterSidenavComponent, FilterState } from './filter-sidenav/filter-sidenav.component';
+import { FilterSidenavComponent } from './filter-sidenav/filter-sidenav.component';
 import { ProductItemComponent } from './product-item/product-item.component';
 import { ShopParams } from '../../../shared/models/commerce/shopParams ';
 import { MatIcon } from '@angular/material/icon';
@@ -11,6 +11,13 @@ import { Pagination } from '../../../shared/models/Pagination';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogMobileComponent } from './filter-dialog-mobile/filter-dialog-mobile.component';
 import { MarqueeComponent } from './marquee/marquee.component';
+
+export interface FilterState {
+  search: string;
+  types: string[];
+  brands: string[];
+  sort: 'name' | 'priceAsc' | 'priceDesc';
+}
 
 @Component({
   selector: 'app-shop',

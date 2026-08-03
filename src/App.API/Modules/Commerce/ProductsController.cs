@@ -1,5 +1,4 @@
 ﻿using Commerce.Application.Contracts.Persistence;
-using Commerce.Application.DTOs;
 using Commerce.Application.Specifications.Products;
 using Commerce.Core.Entities;
 

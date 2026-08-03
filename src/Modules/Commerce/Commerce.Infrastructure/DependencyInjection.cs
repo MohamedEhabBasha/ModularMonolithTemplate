@@ -1,5 +1,6 @@
 ﻿using Commerce.Infrastructure.Data;
 using Commerce.Infrastructure.Data.Repositories;
+using Commerce.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddSingleton<ShoppingCartCacheService>();
 
         return services;
     }

@@ -1,10 +1,11 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Product } from '../../../../shared/models/commerce/products';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { CartService } from '../../../../core/services/commerce/cart';
 
 @Component({
   selector: 'app-product-item',
@@ -15,5 +16,9 @@ import { RouterLink } from '@angular/router';
 export class ProductItemComponent {
   product = input.required<Product>();
 
-  onAddToCart(): void {}
+  private cartService = inject(CartService);
+
+  onAddToCart(): void {
+    this.cartService.addItemToCart(this.product());
+  }
 }

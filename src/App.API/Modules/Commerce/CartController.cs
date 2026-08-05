@@ -15,8 +15,9 @@ public class CartController(ShoppingCartCacheService cartService) : BaseControll
     [HttpPost]
     public async Task<ActionResult<ShoppingCart>> UpdateCart(ShoppingCart cart)
     {
-        var updatedCart = await cartService.SetCartAsync(cart);
-        if (updatedCart == null) throw new BadRequestException("Problem with cart");
+        var updatedCart = await cartService.SetCartAsync(cart)
+            ?? throw new BadRequestException("Problem with cart");
+
         return updatedCart;
     }
 

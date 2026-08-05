@@ -5,6 +5,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BusyService } from '../../core/services/busy-service';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { CartService } from '../../core/services/commerce/cart';
 
 @Component({
   selector: 'app-navbar',
@@ -21,6 +22,7 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 })
 export class NavbarComponent {
   protected readonly busyService = inject(BusyService);
+  protected cartService = inject(CartService);
   protected readonly isMenuOpen = signal(false);
 
   protected toggleMenu(): void {

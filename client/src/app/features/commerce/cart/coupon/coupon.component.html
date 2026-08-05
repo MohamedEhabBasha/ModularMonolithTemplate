@@ -1,0 +1,29 @@
+<div class="bg-white border border-gray-200 rounded-lg p-6 flex flex-col gap-3">
+  <h2 class="text-sm font-semibold text-secondary">Have a coupon?</h2>
+
+  <div class="flex gap-2">
+    <input
+      type="text"
+      [value]="code()"
+      (input)="updateCode($any($event.target).value)"
+      [disabled]="status() === 'applying'"
+      placeholder="Enter code"
+      class="flex-1 min-w-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-secondary focus:outline-none focus:ring-2 focus:ring-accent-red disabled:bg-gray-50"
+    />
+    <button
+      type="button"
+      (click)="applyCoupon()"
+      [disabled]="status() === 'applying' || !code().trim()"
+      class="bg-accent-red text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-accent-red/90 disabled:opacity-40 disabled:cursor-not-allowed transition"
+    >
+      {{ status() === 'applying' ? 'Applying…' : 'Apply' }}
+    </button>
+  </div>
+
+  @if (status() === 'applied') {
+    <p class="text-sm text-green-600">Coupon applied!</p>
+  }
+  @if (status() === 'error') {
+    <p class="text-sm text-accent-red">Invalid coupon code.</p>
+  }
+</div>

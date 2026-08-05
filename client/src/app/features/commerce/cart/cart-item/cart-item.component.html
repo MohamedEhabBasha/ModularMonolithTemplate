@@ -1,0 +1,65 @@
+<div class="flex items-center gap-4 bg-white border border-gray-200 rounded-lg p-4">
+  <img
+    routerLink="/shop/product/{{ item().productId }}"
+    [src]="item().pictureUrl"
+    [alt]="item().productName"
+    loading="lazy"
+    class="w-20 h-20 object-cover rounded-md shrink-0 cursor-pointer"
+  />
+
+  <div class="flex-1 min-w-0">
+    <h3
+      routerLink="/shop/product/{{ item().productId }}"
+      class="text-secondary font-medium truncate cursor-pointer"
+    >
+      {{ item().productName }}
+    </h3>
+    <p class="text-sm text-gray-500 truncate">{{ item().brand }} · {{ item().type }}</p>
+    <p class="text-accent-red font-semibold mt-1">{{ item().price | currency }}</p>
+  </div>
+
+  <div class="flex items-center border border-gray-200 rounded-md">
+    <button
+      type="button"
+      (click)="decrementQuantity()"
+      [disabled]="item().quantity <= 1"
+      class="w-8 h-8 flex items-center justify-center text-secondary hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed rounded-l-md"
+      aria-label="Decrease quantity"
+    >
+      −
+    </button>
+    <span class="w-8 text-center text-sm text-secondary" aria-live="polite">{{
+      item().quantity
+    }}</span>
+    <button
+      type="button"
+      (click)="incrementQuantity()"
+      class="w-8 h-8 flex items-center justify-center text-secondary hover:bg-gray-100 rounded-r-md"
+      aria-label="Increase quantity"
+    >
+      +
+    </button>
+  </div>
+
+  <p class="w-20 text-right font-semibold text-secondary">
+    {{ item().price * item().quantity | currency }}
+  </p>
+
+  <button
+    type="button"
+    (click)="removeItemFromCart()"
+    class="text-gray-400 hover:text-accent-red transition p-1"
+    aria-label="Remove {{ item().productName }} from cart"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-5 h-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+</div>

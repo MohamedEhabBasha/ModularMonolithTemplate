@@ -1,4 +1,13 @@
-import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, inject, input, linkedSignal, output } from '@angular/core';
+import {
+  Component,
+  computed,
+  CUSTOM_ELEMENTS_SCHEMA,
+  inject,
+  input,
+  linkedSignal,
+  output,
+  signal,
+} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { ShopService } from '../../../../core/services/commerce/shop';
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -7,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Product } from '../../../../shared/models/commerce/products';
 
 import type { SwiperContainer } from 'swiper/element';
+import { CartService } from '../../../../core/services/commerce/cart';
 
 interface ProductMedia {
   readonly type: 'image' | 'video';
@@ -25,6 +35,7 @@ export class ProductDetailsComponent {
   readonly id = input.required<string>();
 
   private readonly shopService = inject(ShopService);
+  private readonly cartService = inject(CartService);
 
   readonly productResource = rxResource({
     params: () => ({ id: Number(this.id()) }),
@@ -36,9 +47,16 @@ export class ProductDetailsComponent {
     return product ? [{ type: 'image', url: product.pictureUrl }] : [];
   });
 
+  readonly cartQuantity = computed<number>(
+    () =>
+      this.cartService
+        .cart()
+        ?.items.find((item) => item.productId === this.productResource.value()?.id)?.quantity ?? 0,
+  );
+
   readonly quantity = linkedSignal({
     source: () => this.productResource.value()?.id,
-    computation: () => 1,
+    computation: () => this.cartQuantity() || 1,
   });
 
   readonly isSaved = linkedSignal({
@@ -46,7 +64,7 @@ export class ProductDetailsComponent {
     computation: () => false,
   });
 
-  readonly maxQuantity = computed(() => this.productResource.value()?.quantityInStock ?? 0);
+  readonly maxQuantity = computed(() => this.productResource.value()?.availableQuantity ?? 0);
   readonly isOutOfStock = computed(() => this.maxQuantity() <= 0);
   readonly exceedsStock = computed(() => this.quantity() > this.maxQuantity());
   readonly addToCartDisabled = computed(() => this.isOutOfStock() || this.exceedsStock());
@@ -62,7 +80,6 @@ export class ProductDetailsComponent {
     return { label: 'In stock', isWarning: false };
   });
 
-  readonly addedToCart = output<{ product: Product; quantity: number }>();
   readonly saveToggled = output<{ product: Product; saved: boolean }>();
 
   retry(): void {
@@ -87,7 +104,18 @@ export class ProductDetailsComponent {
     if (!product || this.addToCartDisabled()) {
       return;
     }
-    this.addedToCart.emit({ product, quantity: this.quantity() });
+
+    if (this.quantity() > this.cartQuantity()) {
+      this.cartService.addItemToCart(
+        this.productResource.value() as Product,
+        this.quantity() - this.cartQuantity(),
+      );
+    } else if (this.quantity() < this.cartQuantity()) {
+      this.cartService.removeItemFromCart(
+        this.productResource.value()!.id,
+        this.cartQuantity() - this.quantity(),
+      );
+    }
   }
 
   toggleSave(): void {

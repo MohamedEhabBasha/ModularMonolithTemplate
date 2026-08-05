@@ -23,7 +23,7 @@
     </p>
   </mat-card-content>
 
-  <mat-card-actions class="p-3! pt-0!">
+  <mat-card-actions class="p-3! pt-0!" (click)="$event.stopPropagation()">
     <button mat-flat-button color="primary" class="w-full!" (click)="onAddToCart()">
       <mat-icon>add_shopping_cart</mat-icon>
       Add to cart

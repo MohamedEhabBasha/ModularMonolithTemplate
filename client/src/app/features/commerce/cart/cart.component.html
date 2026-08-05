@@ -1,0 +1,39 @@
+<div class="bg-primary min-h-screen py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-2xl font-bold text-secondary mb-6">Shopping Cart</h1>
+
+    @let cart = cartService.cart();
+
+    @if (cart && cart.items.length > 0) {
+      <div class="flex flex-col lg:flex-row items-start gap-6">
+        <!-- Cart items (3/4 width) -->
+        <ul class="w-full lg:w-3/4 flex flex-col gap-4">
+          @for (item of cart.items; track item.productId) {
+            <li>
+              <app-cart-item [item]="item"></app-cart-item>
+            </li>
+          }
+        </ul>
+
+        <!-- Order summary + coupon (1/4 width) -->
+        <div class="w-full lg:w-1/4 flex flex-col gap-4 lg:sticky lg:top-8">
+          <app-order-summary> </app-order-summary>
+          <app-coupon></app-coupon>
+        </div>
+      </div>
+    } @else {
+      <div
+        class="flex flex-col items-center justify-center gap-3 py-24 text-center bg-white border border-gray-200 rounded-lg"
+      >
+        <p class="text-secondary font-medium">Your cart is empty</p>
+        <a
+          routerLink="/shop"
+          class="mt-2 inline-block bg-accent-red text-white text-sm font-medium
+          px-6 py-2.5 rounded-md hover:bg-accent-red/90 transition"
+        >
+          Continue Shopping
+        </a>
+      </div>
+    }
+  </div>
+</div>

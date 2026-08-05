@@ -25,16 +25,20 @@
 
       <!-- Cart + Sign up (desktop only) -->
       <div class="hidden items-center justify-self-end gap-3 md:flex">
-        <button
+        <a
+          routerLink="/cart"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
           mat-icon-button
           type="button"
           class="text-white! focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
-          matBadgeSize="small"
+          matBadge="{{ cartService.itemCount() }}"
+          matBadgeSize="large"
           matBadgeColor="warn"
           aria-label="View cart"
         >
           <mat-icon class="text-white!">shopping_cart</mat-icon>
-        </button>
+        </a>
 
         <button
           type="button"
@@ -76,7 +80,9 @@
         </a>
 
         <div class="flex items-center gap-3">
-          <button
+          <a
+            routerLink="/cart"
+            (click)="closeMenu()"
             mat-icon-button
             type="button"
             class="text-white! focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
@@ -85,7 +91,7 @@
             aria-label="View cart"
           >
             <mat-icon class="text-white!">shopping_cart</mat-icon>
-          </button>
+          </a>
 
           <button
             type="button"
@@ -98,6 +104,6 @@
     </div>
   </div>
 </nav>
-  @if (busyService.loading()) {
-    <mat-progress-bar mode="indeterminate" class="fixed top-0 z-50"></mat-progress-bar>
-  }
+@if (busyService.loading()) {
+  <mat-progress-bar mode="indeterminate" class="fixed top-0 z-50"></mat-progress-bar>
+}

@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Modules\Identity\" />
     <Folder Include="Modules\Community\" />
   </ItemGroup>
 

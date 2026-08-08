@@ -13,6 +13,7 @@ import { errorInterceptor } from './core/interceptors/error-interceptor';
 import { loadingInterceptor } from './core/interceptors/loading-interceptor';
 import { InitService } from './core/services/init';
 import { lastValueFrom } from 'rxjs';
+import { credentialsInterceptor } from './core/interceptors/credentials-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,8 +27,10 @@ export const appConfig: ApplicationConfig = {
       }),
       withComponentInputBinding(),
     ),
-    provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor])),
-/*     provideAppInitializer(async () => {
+    provideHttpClient(
+      withInterceptors([errorInterceptor, loadingInterceptor, credentialsInterceptor]),
+    ),
+    /*     provideAppInitializer(async () => {
       const initService = inject(InitService);
       return lastValueFrom(initService.init()).finally(() => {
         const splash = document.getElementById('initial-splash');

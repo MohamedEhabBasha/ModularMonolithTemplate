@@ -51,10 +51,12 @@
         ></mat-paginator>
       </div>
     } @else {
-      <div class="h-screen flex flex-col items-center justify-center py-20 text-gray-400">
-        <mat-icon class="text-5xl! w-12! h-12!">search_off</mat-icon>
-        <p class="mt-2">No products match your filters.</p>
-      </div>
+      <app-empty-state
+        icon="search_off"
+        title="No products found"
+        message="Try adjusting your filters or search term."
+      >
+      </app-empty-state>
     }
   </div>
 </div>

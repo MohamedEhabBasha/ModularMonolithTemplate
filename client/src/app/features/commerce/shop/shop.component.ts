@@ -11,6 +11,7 @@ import { Pagination } from '../../../shared/models/Pagination';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogMobileComponent } from './filter-dialog-mobile/filter-dialog-mobile.component';
 import { MarqueeComponent } from './marquee/marquee.component';
+import { EmptyStateComponent } from "../../../shared/components/empty-state/empty-state.component";
 
 export interface FilterState {
   search: string;
@@ -28,7 +29,8 @@ export interface FilterState {
     ProductItemComponent,
     MatPaginatorModule,
     MarqueeComponent,
-  ],
+    EmptyStateComponent
+],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
 })

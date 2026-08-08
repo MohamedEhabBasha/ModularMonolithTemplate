@@ -1,0 +1,1 @@
+export type FieldErrorMessages = Record<string, string>;

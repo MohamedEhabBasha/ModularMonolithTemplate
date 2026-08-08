@@ -1,0 +1,13 @@
+<mat-form-field appearance="outline" class="w-full">
+  <mat-label>{{ label() }}</mat-label>
+  <input
+    matInput
+    [type]="type()"
+    [formControl]="control()"
+    [autocomplete]="autocomplete()"
+    [attr.aria-invalid]="control().invalid && control().touched"
+  />
+  @if (control().touched && activeErrorMessage(); as message) {
+    <mat-error>{{ message }}</mat-error>
+  }
+</mat-form-field>

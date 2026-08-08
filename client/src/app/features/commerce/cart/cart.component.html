@@ -22,18 +22,19 @@
         </div>
       </div>
     } @else {
-      <div
-        class="flex flex-col items-center justify-center gap-3 py-24 text-center bg-white border border-gray-200 rounded-lg"
+      <app-empty-state
+        icon="shopping_cart"
+        title="Your cart is empty"
+        message="Looks like you haven't added anything yet."
       >
-        <p class="text-secondary font-medium">Your cart is empty</p>
         <a
           routerLink="/shop"
-          class="mt-2 inline-block bg-accent-red text-white text-sm font-medium
-          px-6 py-2.5 rounded-md hover:bg-accent-red/90 transition"
+          class="mt-2 inline-block bg-accent-red text-white text-sm font-medium px-6 py-2.5 rounded-md hover:bg-accent-red/90 transition"
+          emptyStateAction
         >
           Continue Shopping
         </a>
-      </div>
+      </app-empty-state>
     }
   </div>
 </div>

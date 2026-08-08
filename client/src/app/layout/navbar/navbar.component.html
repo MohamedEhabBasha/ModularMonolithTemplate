@@ -14,6 +14,7 @@
       </div>
 
       <!-- Logo: left on mobile, centered on desktop -->
+
       <a
         routerLink="/"
         class="justify-self-start rounded text-xl font-bold leading-none tracking-tight focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red md:justify-self-center"
@@ -23,7 +24,7 @@
         ><span class="font-normal text-white">goods</span>
       </a>
 
-      <!-- Cart + Sign up (desktop only) -->
+      <!-- Cart + Sign up / Account menu (desktop only) -->
       <div class="hidden items-center justify-self-end gap-3 md:flex">
         <a
           routerLink="/cart"
@@ -40,12 +41,25 @@
           <mat-icon class="text-white!">shopping_cart</mat-icon>
         </a>
 
-        <button
-          type="button"
-          class="rounded-md bg-accent-red px-5 py-1 text-sm font-semibold text-white transition-colors hover:bg-accent-red/90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
-        >
-          Sign Up
-        </button>
+        @if (accountService.currentUser() === null) {
+          <button
+            routerLink="/account/login"
+            type="button"
+            class="cursor-pointer rounded-md bg-accent-red px-5 py-1 text-sm font-semibold text-white transition-colors hover:bg-accent-red/90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            Sign Up
+          </button>
+        } @else {
+          <button
+            mat-button
+            [matMenuTriggerFor]="userMenu"
+            type="button"
+            class="cursor-pointer rounded-md px-3 py-1 text-sm font-semibold text-white! transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+          >
+            Hi, {{ accountService.currentUser()?.firstName || 'there' }}
+            <mat-icon class="text-white! align-middle" iconPositionEnd>expand_more</mat-icon>
+          </button>
+        }
       </div>
 
       <!-- Mobile menu toggle -->
@@ -93,17 +107,44 @@
             <mat-icon class="text-white!">shopping_cart</mat-icon>
           </a>
 
-          <button
-            type="button"
-            class="rounded-md bg-accent-red px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-red/90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            Sign Up
-          </button>
+          @if (accountService.currentUser() === null) {
+            <button
+              routerLink="/account/login"
+              type="button"
+              class="cursor-pointer rounded-md bg-accent-red px-5 py-1 text-sm font-semibold text-white transition-colors hover:bg-accent-red/90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              Sign Up
+            </button>
+          } @else {
+            <button
+              mat-button
+              [matMenuTriggerFor]="userMenu"
+              type="button"
+              class="cursor-pointer rounded-md px-3 py-1 text-sm font-semibold text-white! transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+            >
+              Hi, {{ accountService.currentUser()?.firstName || 'there' }}
+              <mat-icon class="text-white! align-middle" iconPositionEnd>expand_more</mat-icon>
+            </button>
+          }
         </div>
       </div>
     </div>
   </div>
 </nav>
+
+<!-- Shared account dropdown — same panel, triggered from either the desktop or mobile button above -->
+<mat-menu #userMenu="matMenu" panelClass="bg-white!">
+  <a mat-menu-item routerLink="/account/orders">
+    <mat-icon>receipt_long</mat-icon>
+    <span>My Orders</span>
+  </a>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>
+
 @if (busyService.loading()) {
   <mat-progress-bar mode="indeterminate" class="fixed top-0 z-50"></mat-progress-bar>
 }

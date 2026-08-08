@@ -5,6 +5,7 @@ using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace App.API.Modules.Identity;
 
@@ -29,6 +30,9 @@ public class IdentityController(UserManager<AppUser> _userManager,
         {
             foreach (var error in result.Errors)
             {
+                if (error.Code == "DuplicateUserName")
+                    continue;
+
                 ModelState.AddModelError(error.Code, error.Description);
             }
 
@@ -50,7 +54,15 @@ public class IdentityController(UserManager<AppUser> _userManager,
         if (result.IsLockedOut)
             return StatusCode(StatusCodes.Status423Locked, new { error = "Account locked. Try again later." });
 
-        return result.Succeeded ? Ok() : Unauthorized();
+        return result.Succeeded ? 
+            Ok() 
+            : 
+            Unauthorized(new ProblemDetails
+            {
+                Title = "Authentication failed",
+                Detail = "Invalid email or password.",
+                Status = StatusCodes.Status401Unauthorized
+            });
     }
 
     [HttpPost("logout")]

@@ -82,3 +82,14 @@ body {
     track-color: #d32f2f,
   )
 );
+@include mat.menu-overrides(
+  (
+    divider-color: rgba(0, 0, 0, 0.2),
+    container-color: white,
+  )
+);
+@include mat.progress-spinner-overrides(
+  (
+    active-indicator-color: white,
+  )
+);

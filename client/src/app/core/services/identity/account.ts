@@ -38,6 +38,7 @@ export class AccountService {
 
   async loadCurrentUser() {
     const user = await firstValueFrom(this.http.get<User>(`${this.baseUrl}identity/user-info`));
+    console.log('USER_INFO', user);
     this.currentUser.set(user);
     return user;
   }
@@ -49,8 +50,12 @@ export class AccountService {
     return state.isAuthenticated;
   }
 
-  async updateAddress(address: Address) {
-    return await firstValueFrom(this.http.post(this.baseUrl + 'identity/address', address));
+  updateAddress(address: Address) {
+    return this.http.post(this.baseUrl + 'identity/address', address);
+  }
+
+  updatePhoneNumber(phoneNumber: string) {
+    return this.http.put(`${this.baseUrl}identity/phone-number`, { phoneNumber });
   }
 
   // Runs once on app bootstrap — see app.config.ts

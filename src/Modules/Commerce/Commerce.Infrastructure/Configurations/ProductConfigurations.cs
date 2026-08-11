@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Commerce.Infrastructure.Configurations;
+﻿namespace Commerce.Infrastructure.Configurations;
 
 public class ProductConfigurations : IEntityTypeConfiguration<Product>
 {

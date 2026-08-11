@@ -34,5 +34,25 @@ public static class StoreSeeder
 
             await context.SaveChangesAsync();
         }
+
+        if (!context.Products.Any())
+        {
+            var path = Path.Combine(
+                AppContext.BaseDirectory,
+                "Data",
+                "Seed",
+                "Json",
+                "delivery.json");
+
+            var deliveryData = await File.ReadAllTextAsync(path);
+
+            var deliveries = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+
+            if (deliveries is null) return;
+
+            context.DeliveryMethods.AddRange(deliveries);
+
+            await context.SaveChangesAsync();
+        }
     }
 }

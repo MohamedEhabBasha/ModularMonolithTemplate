@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.Core.Entities;
-
-namespace Commerce.Core.Entities;
+﻿namespace Commerce.Core.Entities;
 
 public sealed class Product : BaseEntity
 {

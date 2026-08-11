@@ -24,31 +24,4 @@ public static class ClaimsPrincipalExtensions
 
         return user ?? throw new AuthenticationException("User not found");
     }
-    public static Address ToEntity(this AddressDto addressDto)
-    {
-        return addressDto == null
-            ? throw new ArgumentNullException(nameof(addressDto))
-            : new Address
-        {
-            Line1 = addressDto.Line1,
-            Line2 = addressDto.Line2,
-            City = addressDto.City,
-            State = addressDto.State,
-            Country = addressDto.Country,
-            PostalCode = addressDto.PostalCode,
-        };
-    }
-
-    public static void UpdateFromDto(this Address address, AddressDto addressDto)
-    {
-        ArgumentNullException.ThrowIfNull(addressDto);
-        ArgumentNullException.ThrowIfNull(address);
-
-        address.Line1 = addressDto.Line1;
-        address.Line2 = addressDto.Line2;
-        address.City = addressDto.City;
-        address.State = addressDto.State;
-        address.Country = addressDto.Country;
-        address.PostalCode = addressDto.PostalCode;
-    }
 }

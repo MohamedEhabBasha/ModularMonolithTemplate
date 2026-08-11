@@ -1,8 +1,10 @@
-﻿using Commerce.Infrastructure.Data;
+﻿using Commerce.Application.Contracts.Services.Payment;
+using Commerce.Infrastructure.Data;
 using Commerce.Infrastructure.Data.Repositories;
 using Commerce.Infrastructure.Services;
+using Commerce.Infrastructure.Services.Payment;
+using Commerce.Infrastructure.Services.Payment.Paymob;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Commerce.Infrastructure;
 
@@ -19,7 +21,13 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IDeliveryMethodRepository, DeliveryMethodRepository>();
         services.AddSingleton<ShoppingCartCacheService>();
+
+        // PAYMENT
+        services.AddScoped<IPaymentServiceResolver, PaymentServiceResolver>();
+        services.AddKeyedScoped<IPaymentService, StripePaymentService>("Stripe");
+        services.AddKeyedScoped<IPaymentService, PaymobPaymentService>("Paymob");
 
         return services;
     }

@@ -1,1 +1,16 @@
-<p>checkout works!</p>
+<mat-stepper linear #stepper class="w-full md:w-3/4 p-5">
+  <mat-step label="Address">
+    <div class="flex flex-col">
+      <app-address-step #addressStep></app-address-step>
+      <button
+        mat-button
+        matStepperNext
+        (click)="onAddressNext(stepper)"
+        [disabled]="!addressStep.valid() || saving()"
+        class="mt-2 ml-auto"
+      >
+        Continue
+      </button>
+    </div>
+  </mat-step>
+</mat-stepper>

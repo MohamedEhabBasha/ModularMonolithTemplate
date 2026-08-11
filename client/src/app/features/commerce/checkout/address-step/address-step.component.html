@@ -1,0 +1,61 @@
+<form [formGroup]="addressForm" class="grid grid-cols-1 gap-4 md:grid-cols-2 px-5 py-10 bg-white border border-neutral-300 rounded-2xl">
+  <app-text-field
+    [control]="addressForm.controls.firstName"
+    label="First name"
+    autocomplete="given-name"
+    [errorMessages]="{ required: 'First name is required' }"
+  />
+
+  <app-text-field
+    [control]="addressForm.controls.lastName"
+    label="Last name"
+    autocomplete="family-name"
+    [errorMessages]="{ required: 'Last name is required' }"
+  />
+
+  <app-text-field
+    [control]="addressForm.controls.email"
+    label="Email"
+    type="email"
+    autocomplete="email"
+    [errorMessages]="{ required: 'Email is required', email: 'Enter a valid email' }"
+  />
+
+  <app-text-field
+    [control]="addressForm.controls.phoneNumber"
+    label="Phone number"
+    type="tel"
+    autocomplete="tel"
+    [errorMessages]="{ required: 'Phone number is required' }"
+  />
+
+  <mat-form-field appearance="outline">
+    <mat-label>Country</mat-label>
+    <mat-select [formControl]="addressForm.controls.country">
+      <mat-option value="EG">Egypt</mat-option>
+      <mat-option value="US">United States</mat-option>
+      <!-- expand as needed -->
+    </mat-select>
+    @if (
+      addressForm.controls.country.touched && addressForm.controls.country.hasError('required')
+    ) {
+      <mat-error>Country is required</mat-error>
+    }
+  </mat-form-field>
+
+  <app-text-field
+    [control]="addressForm.controls.city"
+    label="City"
+    autocomplete="address-level2"
+    [errorMessages]="{ required: 'City is required' }"
+  />
+
+  <app-text-field
+    class="md:col-span-2"
+    [control]="addressForm.controls.street"
+    label="Street"
+    autocomplete="street-address"
+    [errorMessages]="{ required: 'Street is required' }"
+  />
+  <mat-checkbox formControlName="saveAddress">Save this address for next time</mat-checkbox>
+</form>

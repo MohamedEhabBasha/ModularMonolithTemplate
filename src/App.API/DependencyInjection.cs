@@ -19,6 +19,8 @@ public static class DependencyInjection
 
         services.AddControllers();
 
+        services.AddHttpClient();
+
         services.AddExceptionHandler<CustomExceptionHandler>();
         services.AddProblemDetails();
         services.AddCors();

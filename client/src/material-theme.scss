@@ -93,3 +93,8 @@ body {
     active-indicator-color: white,
   )
 );
+@include mat.stepper-overrides(
+  (
+    header-selected-state-icon-background-color: #d32f2f,
+  )
+);

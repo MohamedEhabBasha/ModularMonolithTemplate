@@ -14,7 +14,7 @@ import { FieldErrorMessages } from '../../../models/field-error-messages';
 export class TextFieldComponent {
   readonly control = input.required<FormControl<string>>();
   readonly label = input.required<string>();
-  readonly type = input<'text' | 'email'>('text');
+  readonly type = input<'text' | 'email' | 'tel'>('text');
   readonly autocomplete = input<string>('off');
   readonly errorMessages = input<FieldErrorMessages>({});
 

@@ -5,7 +5,6 @@ using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace App.API.Modules.Identity;
 
@@ -82,7 +81,7 @@ public class IdentityController(UserManager<AppUser> _userManager,
             .GetCurrentUserWithAddressAsync(User, asNoTracking: true);
 
         return
-            Ok(new UserInfoResponseDto(user.Id, user.FirstName!, user.LastName!, user.Email!, user.Address?.ToDto()));
+            Ok(new UserInfoResponseDto(user.Id, user.Email!, user.FirstName!, user.LastName!, user.Address?.ToDto(), user.PhoneNumber));
     }
 
     // Deliberately anonymous: the SPA hits this on bootstrap to decide app-shell
@@ -95,7 +94,7 @@ public class IdentityController(UserManager<AppUser> _userManager,
     }
 
     [Authorize]
-    [HttpPut("address")]
+    [HttpPost("address")]
     public async Task<ActionResult<AddressDto>> CreateOrUpdateAddress(AddressDto addressDto)
     {
         var user = await _signInManager.UserManager.GetCurrentUserWithAddressAsync(User);
@@ -108,5 +107,18 @@ public class IdentityController(UserManager<AppUser> _userManager,
         await context.SaveChangesAsync();
 
         return Ok(user.Address.ToDto());
+    }
+    [Authorize]
+    [HttpPut("phone-number")]
+    public async Task<IActionResult> UpdatePhoneNumber(PhoneNumberDto request)
+    {
+        var user = await _signInManager.UserManager.GetUserAsync(User);
+        if (user is null) return Unauthorized();
+
+        var result = await _signInManager.UserManager.SetPhoneNumberAsync(user, request.PhoneNumber);
+        if (!result.Succeeded)
+            throw new BadRequestException(string.Join(", ", result.Errors.Select(e => e.Description)));
+
+        return Ok();
     }
 }

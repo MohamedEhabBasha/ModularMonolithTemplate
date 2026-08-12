@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CartService } from '../../../../core/services/commerce/cart';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, Location } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -11,4 +11,5 @@ import { RouterLink } from '@angular/router';
 })
 export class OrderSummaryComponent {
   protected cartService = inject(CartService);
+  protected location = inject(Location);
 }

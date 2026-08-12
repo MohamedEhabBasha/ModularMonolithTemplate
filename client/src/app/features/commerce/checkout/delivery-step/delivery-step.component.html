@@ -1,0 +1,18 @@
+<div
+  [formGroup]="deliveryForm"
+  class="px-5 py-10 bg-white border border-neutral-300 rounded-2xl mt-5"
+>
+  <mat-radio-group formControlName="deliveryMethodId" class="grid grid-cols-1 gap-8">
+    @for (method of checkoutService.deliveryMethods(); track method.id) {
+      <mat-radio-button
+        [value]="method.id"
+        [checked]="cartService.cart()?.deliveryMethodId === method.id"
+        class="border-b border-neutral-300 py-5"
+      >
+        {{ method.shortName }} —
+        {{ method.deliveryTime }}
+        ({{ method.price | currency }})
+      </mat-radio-button>
+    }
+  </mat-radio-group>
+</div>

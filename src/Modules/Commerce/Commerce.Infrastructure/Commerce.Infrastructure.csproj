@@ -30,4 +30,10 @@
     <ProjectReference Include="..\Commerce.Core\Commerce.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\Seed\Json\delivery.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -7,10 +7,27 @@ import { MatButton } from '@angular/material/button';
 import { AddressStepComponent } from './address-step/address-step.component';
 import { pipe, switchMap } from 'rxjs';
 import { AccountService } from '../../../core/services/identity/account';
+import { DeliveryStepComponent } from './delivery-step/delivery-step.component';
+import { SnackbarService } from '../../../core/services/snackbar';
+import { ReviewStepComponent } from './review-step/review-step.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { CurrencyPipe } from '@angular/common';
+import { OrderSummaryComponent } from '../../../shared/components/commerce/order-summary/order-summary.component';
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, MatStepper, MatStep, MatButton, AddressStepComponent],
+  imports: [
+    ReactiveFormsModule,
+    MatProgressSpinner,
+    MatStepper,
+    MatStep,
+    MatButton,
+    AddressStepComponent,
+    DeliveryStepComponent,
+    ReviewStepComponent,
+    CurrencyPipe,
+    OrderSummaryComponent,
+  ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css',
 })
@@ -18,12 +35,20 @@ export class CheckoutComponent {
   protected checkoutService = inject(CheckoutService);
   private accountService = inject(AccountService);
   protected cartService = inject(CartService);
+  private snackbarService = inject(SnackbarService);
 
-  private addressStepComponent = viewChild.required(AddressStepComponent);
+  private addressStep = viewChild.required(AddressStepComponent);
+  protected deliveryStep = viewChild.required(DeliveryStepComponent);
+  protected reviewStep = viewChild.required(ReviewStepComponent);
+
+  protected addressCompleted = signal(false);
+  protected deliveryCompleted = signal(false);
+
   protected saving = signal(false);
+  protected redirectUrl = signal<string | null>(null);
 
   onAddressNext(stepper: MatStepper) {
-    const step = this.addressStepComponent();
+    const step = this.addressStep();
 
     if (step.addressForm.invalid) {
       step.addressForm.markAllAsTouched();
@@ -31,6 +56,7 @@ export class CheckoutComponent {
     }
 
     if (!step.saveAddress) {
+      this.addressCompleted.set(true);
       stepper.next();
       return;
     }
@@ -43,10 +69,47 @@ export class CheckoutComponent {
       .subscribe({
         next: () => {
           this.saving.set(false);
+          this.addressCompleted.set(true);
           stepper.next();
         },
         error: () => {
           this.saving.set(false);
+        },
+      });
+  }
+
+  onDeliveryNext(stepper: MatStepper) {
+    const step = this.deliveryStep();
+    if (step.deliveryForm.invalid) {
+      step.deliveryForm.markAllAsTouched();
+      return;
+    }
+
+    const cart = this.cartService.cart();
+    if (!cart) return;
+
+    this.saving.set(true);
+
+    this.cartService
+      .setCart({ ...cart, deliveryMethodId: step.value })
+      .pipe(
+        switchMap((updatedCart) =>
+          this.checkoutService.createOrUpdatePayment({
+            cartId: updatedCart.id,
+            billingAddress: this.addressStep().value,
+          }),
+        ),
+      )
+      .subscribe({
+        next: (updatedCart) => {
+          this.saving.set(false);
+          this.deliveryCompleted.set(true);
+          this.redirectUrl.set(updatedCart.redirectUrl ?? null); // adjust to your Cart type's field name
+          stepper.next();
+        },
+        error: (err) => {
+          this.saving.set(false);
+          this.snackbarService.error(err.message ?? 'Could not proceed to payment');
         },
       });
   }

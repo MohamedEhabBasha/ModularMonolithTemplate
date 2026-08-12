@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Application.Contracts.Persistence;
-using BuildingBlocks.Application.Contracts.Services;
+﻿using BuildingBlocks.Application.Contracts.Services;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Core.Entities.Cart;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +8,7 @@ using System.Text.Json;
 namespace Commerce.Infrastructure.Services.Payment.Paymob;
 
 public class PaymobPaymentService(
-    ICacheService<ShoppingCart> _cartCache,
+    ShoppingCartCacheService _cartCache,
     IDeliveryMethodRepository _dmRepo,
     HttpClient _httpClient,
     IConfiguration config) : IPaymentService
@@ -20,7 +19,7 @@ public class PaymobPaymentService(
     };
     public async Task<ShoppingCart?> CreateOrUpdatePayment(PaymentRequest paymentRequest)
     {
-        var cart = await _cartCache.GetAsync(paymentRequest.CartId);
+        var cart = await _cartCache.GetCartAsync(paymentRequest.CartId);
         if (cart is null) return null;
 
         var baseUrl = config["PaymentSettings:Paymob:BaseUrl"]!;
@@ -80,7 +79,7 @@ public class PaymobPaymentService(
         cart.PaymentReference = intention!.ClientSecret; // Paymob updates are addressed by client_secret
         cart.RedirectUrl = $"{baseUrl}/unifiedcheckout/?publicKey={publicKey}&clientSecret={intention.ClientSecret}";
 
-        await _cartCache.SetAsync(paymentRequest.CartId, cart);
+        await _cartCache.SetCartAsync(cart);
         return cart;
     }
 }

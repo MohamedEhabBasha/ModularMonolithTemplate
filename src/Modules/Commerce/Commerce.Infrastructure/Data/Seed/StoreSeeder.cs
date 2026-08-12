@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Commerce.Infrastructure.Data.Seed;
 
@@ -35,7 +34,7 @@ public static class StoreSeeder
             await context.SaveChangesAsync();
         }
 
-        if (!context.Products.Any())
+        if (!context.DeliveryMethods.Any())
         {
             var path = Path.Combine(
                 AppContext.BaseDirectory,

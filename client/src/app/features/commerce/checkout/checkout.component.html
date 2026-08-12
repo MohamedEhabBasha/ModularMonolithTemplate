@@ -1,16 +1,52 @@
-<mat-stepper linear #stepper class="w-full md:w-3/4 p-5">
-  <mat-step label="Address">
-    <div class="flex flex-col">
-      <app-address-step #addressStep></app-address-step>
-      <button
-        mat-button
-        matStepperNext
-        (click)="onAddressNext(stepper)"
-        [disabled]="!addressStep.valid() || saving()"
-        class="mt-2 ml-auto"
-      >
-        Continue
-      </button>
-    </div>
-  </mat-step>
-</mat-stepper>
+<div class="flex flex-col md:flex-row p-5">
+  <mat-stepper linear #stepper class="w-full md:w-3/4">
+    <mat-step label="Address" [completed]="addressCompleted()">
+      <div class="flex flex-col">
+        <app-address-step #addressStep></app-address-step>
+        <button
+          mat-button
+          (click)="onAddressNext(stepper)"
+          [disabled]="!addressStep.valid() || saving()"
+          class="mt-2 ml-auto"
+        >
+          Continue
+        </button>
+      </div>
+    </mat-step>
+    <mat-step label="Shipping" [completed]="deliveryCompleted()">
+      <app-delivery-step></app-delivery-step>
+      <div class="flex justify-between">
+        <button mat-button (click)="stepper.previous()">Back</button>
+        <button
+          mat-button
+          (click)="onDeliveryNext(stepper)"
+          [disabled]="deliveryStep().deliveryForm.invalid || saving()"
+        >
+          Continue
+        </button>
+      </div>
+    </mat-step>
+    <mat-step label="Review">
+      <app-review-step
+        #reviewStep
+        [redirectUrl]="redirectUrl()"
+        [billingAddress]="addressStep.value"
+      />
+      <div class="flex justify-between mt-6">
+        <button matStepperPrevious mat-button [disabled]="reviewStep.redirecting()">Back</button>
+        <button
+          [disabled]="!redirectUrl() || reviewStep.redirecting()"
+          (click)="reviewStep.pay()"
+          mat-flat-button
+        >
+          @if (reviewStep.redirecting()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            <span>Pay {{ cartService.totals()?.total | currency }}</span>
+          }
+        </button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+  <app-order-summary class="w-full md:w-1/4 md:mt-23 px-5"></app-order-summary>
+</div>

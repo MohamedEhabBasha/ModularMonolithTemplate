@@ -11,11 +11,15 @@
       </div>
       <div class="flex justify-between text-secondary">
         <span>Discount</span>
-        <span class="text-green-600">{{ totals.discount === 0 ? '-0.00' : (totals.discount | currency) }}</span>
+        <span class="text-green-600">{{
+          totals.discount === 0 ? '-0.00' : (totals.discount | currency)
+        }}</span>
       </div>
       <div class="flex justify-between text-secondary">
         <span>Shipping</span>
-        <span>{{ totals.shipping === 0 ? 'Free' : (totals.shipping | currency) }}</span>
+        <span>{{
+          cartService.shippingPrice() === 0 ? 'Free' : (cartService.shippingPrice() | currency)
+        }}</span>
       </div>
       @if (totals.discount > 0) {
         <div class="flex justify-between text-accent-red">
@@ -31,14 +35,14 @@
       <span class="font-medium">Total</span>
       <span class="text-lg font-bold">{{ totals.total | currency }}</span>
     </div>
-
-    <button
-      type="button"
-      routerLink="/checkout"
-      class="w-full bg-accent-red text-white font-medium py-2.5 rounded-md hover:bg-accent-red/90 transition"
-    >
-      Proceed to Checkout
-    </button>
+    @if (location.path() !== '/checkout') {
+      <button
+        type="button"
+        routerLink="/checkout"
+        class="w-full bg-accent-red text-white font-medium py-2.5 rounded-md hover:bg-accent-red/90 transition"
+      >
+        Proceed to Checkout
+      </button>
+    }
   </div>
 }
-

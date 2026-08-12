@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Application.Contracts.Persistence;
+﻿using Commerce.Application.Contracts.Persistence;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Core.Entities;
 using Commerce.Core.Entities.Cart;
@@ -8,7 +8,7 @@ namespace App.API.Modules.Commerce;
 
 public class PaymentsController(
     IPaymentServiceResolver paymentServiceResolver,
-    IGenericRepository<DeliveryMethod> dmRepo) : BaseController
+    IDeliveryMethodRepository dmRepo) : BaseController
 {
     [Authorize]
     [HttpPost]

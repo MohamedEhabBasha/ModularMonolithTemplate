@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Cart, CartItem } from '../../../shared/models/commerce/cart';
 import { map, Observable, of, tap } from 'rxjs';
 import { Product } from '../../../shared/models/commerce/products';
+import { CheckoutService } from './checkout';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +12,25 @@ import { Product } from '../../../shared/models/commerce/products';
 export class CartService {
   baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
+  private checkoutService = inject(CheckoutService);
 
   cart = signal<Cart | null>(null);
+
+  readonly shippingPrice = computed(() => {
+    const deliveryMethods = this.checkoutService.deliveryMethods();
+
+    return (
+      deliveryMethods.find((method) => method.id === this.cart()?.deliveryMethodId)?.price ?? 0
+    );
+  });
+
   itemCount = computed(() => this.cart()?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0);
 
   totals = computed(() => {
     const cart = this.cart();
     if (!cart) return null;
     const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const shipping = 0;
+    const shipping = this.shippingPrice();
     const discount = 0;
     return {
       subtotal,

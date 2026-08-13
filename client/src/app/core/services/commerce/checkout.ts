@@ -25,4 +25,11 @@ export class CheckoutService {
     return this.http.post<Cart>(`${this.baseUrl}payments`, request);
     //TODO call cart.setCart in case this method changes the cart
   }
+
+  // paymob-webhook-result
+  getPaymentStatus(cartId: string) {
+    return this.http.get<{ status: 'pending' | 'paid' | 'failed' }>(
+      `${this.baseUrl}paymobWebhook/status/${cartId}`,
+    );
+  }
 }

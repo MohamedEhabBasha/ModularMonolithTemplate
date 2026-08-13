@@ -32,17 +32,14 @@ import { OrderSummaryComponent } from '../../../shared/components/commerce/order
   styleUrl: './checkout.component.css',
 })
 export class CheckoutComponent {
-  protected checkoutService = inject(CheckoutService);
   private accountService = inject(AccountService);
-  protected cartService = inject(CartService);
   private snackbarService = inject(SnackbarService);
+  protected checkoutService = inject(CheckoutService);
+  protected cartService = inject(CartService);
 
-  private addressStep = viewChild.required(AddressStepComponent);
+  protected addressStep = viewChild.required(AddressStepComponent);
   protected deliveryStep = viewChild.required(DeliveryStepComponent);
   protected reviewStep = viewChild.required(ReviewStepComponent);
-
-  protected addressCompleted = signal(false);
-  protected deliveryCompleted = signal(false);
 
   protected saving = signal(false);
   protected redirectUrl = signal<string | null>(null);
@@ -56,7 +53,6 @@ export class CheckoutComponent {
     }
 
     if (!step.saveAddress) {
-      this.addressCompleted.set(true);
       stepper.next();
       return;
     }
@@ -69,7 +65,6 @@ export class CheckoutComponent {
       .subscribe({
         next: () => {
           this.saving.set(false);
-          this.addressCompleted.set(true);
           stepper.next();
         },
         error: () => {
@@ -103,7 +98,6 @@ export class CheckoutComponent {
       .subscribe({
         next: (updatedCart) => {
           this.saving.set(false);
-          this.deliveryCompleted.set(true);
           this.redirectUrl.set(updatedCart.redirectUrl ?? null); // adjust to your Cart type's field name
           stepper.next();
         },

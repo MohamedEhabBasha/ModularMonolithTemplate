@@ -8,4 +8,5 @@ public class ShoppingCart
     public string? PaymentReference { get; set; } // gateway's transaction/order id — decides create vs. update
     public string? ClientToken { get; set; }      // embedded/SDK flows (Stripe's ClientSecret)
     public string? RedirectUrl { get; set; }      // hosted-checkout flows (Paymob and most MENA gateways)
+    public string? PaymentStatus { get; set; } // null, "pending", "paid", or "failed"
 }

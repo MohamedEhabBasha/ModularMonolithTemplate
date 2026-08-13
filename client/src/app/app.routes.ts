@@ -9,12 +9,14 @@ import { RegisterComponent } from './features/identity/register/register.compone
 import { LoginComponent } from './features/identity/login/login.component';
 import { authGuard } from './core/guards/auth-guard';
 import { emptyCartGuard } from './core/guards/commerce/empty-cart-guard';
+import { ConfirmationStepComponent } from './features/commerce/checkout/confirmation-step/confirmation-step.component';
 
 export const routes: Routes = [
   { path: 'shop', component: ShopComponent },
   { path: 'shop/product/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard, emptyCartGuard] },
+  { path: 'checkout/confirmation', component: ConfirmationStepComponent, canActivate: [authGuard] },
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'not-found', component: NotFoundComponent },

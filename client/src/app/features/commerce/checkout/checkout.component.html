@@ -1,19 +1,19 @@
 <div class="flex flex-col md:flex-row p-5">
   <mat-stepper linear #stepper class="w-full md:w-3/4">
-    <mat-step label="Address" [completed]="addressCompleted()">
+    <mat-step label="Address" [stepControl]="addressStep().addressForm">
       <div class="flex flex-col">
-        <app-address-step #addressStep></app-address-step>
+        <app-address-step></app-address-step>
         <button
           mat-button
           (click)="onAddressNext(stepper)"
-          [disabled]="!addressStep.valid() || saving()"
+          [disabled]="!addressStep().valid() || saving()"
           class="mt-2 ml-auto"
         >
           Continue
         </button>
       </div>
     </mat-step>
-    <mat-step label="Shipping" [completed]="deliveryCompleted()">
+    <mat-step label="Shipping" [stepControl]="deliveryStep().deliveryForm">
       <app-delivery-step></app-delivery-step>
       <div class="flex justify-between">
         <button mat-button (click)="stepper.previous()">Back</button>
@@ -30,7 +30,7 @@
       <app-review-step
         #reviewStep
         [redirectUrl]="redirectUrl()"
-        [billingAddress]="addressStep.value"
+        [billingAddress]="addressStep().value"
       />
       <div class="flex justify-between mt-6">
         <button matStepperPrevious mat-button [disabled]="reviewStep.redirecting()">Back</button>

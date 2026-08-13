@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Application.Contracts.Services;
+using BuildingBlocks.Application.Exceptions;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Core.Entities.Cart;
 using Microsoft.Extensions.Configuration;
@@ -50,6 +51,9 @@ public class PaymobPaymentService(
             Amount = items.Sum(i => i.Amount * i.Quantity),
             PaymentMethods = [integrationId],
             Items = items,
+            SpecialReference = cart.Id + Guid.NewGuid().ToString("N")[..8],
+            NotificationUrl = "https://mule-lumping-moody.ngrok-free.dev/api/paymobWebhook/webhook",
+            RedirectionUrl = $"{config["AppSettings:ClientBaseUrl"]}/checkout/confirmation",
             BillingData = new BillingAddress
             {
                 FirstName = paymentRequest.BillingAddress.FirstName
@@ -72,6 +76,13 @@ public class PaymobPaymentService(
         request.Content = JsonContent.Create(requestBody, options: JsonOptions);
 
         var response = await _httpClient.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync();
+            throw new BadRequestException($"Paymob {(isUpdate ? "update" : "create")} intention failed ({(int)response.StatusCode}): {errorBody}");
+        }
+
         response.EnsureSuccessStatusCode();
 
         var intention = await response.Content.ReadFromJsonAsync<PaymobIntentionResponse>(JsonOptions);

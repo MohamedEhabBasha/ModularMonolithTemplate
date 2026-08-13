@@ -1,0 +1,16 @@
+<div class="relative h-screen flex flex-col justify-center items-center gap-4 py-16 text-center">
+  @switch (status()) {
+    @case ('pending') {
+      <mat-spinner diameter="32" />
+      <p>Confirming your payment...</p>
+    }
+    @case ('paid') {
+      <h2 class="text-xl font-medium">Payment successful</h2>
+      <a routerLink="" mat-flat-button>View your order</a>
+    }
+    @case ('failed') {
+      <h2 class="text-xl font-medium">Payment failed</h2>
+      <a routerLink="/checkout" mat-stroked-button>Try again</a>
+    }
+  }
+</div>

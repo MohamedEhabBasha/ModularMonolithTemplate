@@ -6,5 +6,8 @@ public class PaymobIntentionRequest
     public string Currency { get; set; } = "EGP";
     public List<int> PaymentMethods { get; set; } = [];
     public List<PaymobItem> Items { get; set; } = [];
+    public string SpecialReference { get; set; } = string.Empty;
+    public string NotificationUrl { get; set; } = string.Empty;
+    public string RedirectionUrl { get; set; } = string.Empty;
     public BillingAddress BillingData { get; set; } = new();
 }

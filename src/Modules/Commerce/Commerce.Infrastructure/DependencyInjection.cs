@@ -1,4 +1,5 @@
-﻿using Commerce.Application.Contracts.Services.Payment;
+﻿using Commerce.Application.Contracts.Services.Orders;
+using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Infrastructure.Data;
 using Commerce.Infrastructure.Data.Repositories;
 using Commerce.Infrastructure.Services;
@@ -22,6 +23,9 @@ public static class DependencyInjection
 
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IDeliveryMethodRepository, DeliveryMethodRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IStoreUnitOfWork, StoreUnitOfWork>();
+        services.AddScoped<IOrderService, OrderService>();
         services.AddSingleton<ShoppingCartCacheService>();
 
         // PAYMENT

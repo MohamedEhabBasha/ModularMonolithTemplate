@@ -1,4 +1,6 @@
-﻿namespace BuildingBlocks.Infrastructure.Persistence.Specifications;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BuildingBlocks.Infrastructure.Persistence.Specifications;
 
 public class SpecificationEvaluator<T> where T : BaseEntity
 {
@@ -26,6 +28,9 @@ public class SpecificationEvaluator<T> where T : BaseEntity
         {
             query = query.Skip(spec.Skip).Take(spec.Take);
         }
+
+        query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
+        query = spec.IncludeStrings.Aggregate(query, (current, include) => current.Include(include));
 
         return query;
     }

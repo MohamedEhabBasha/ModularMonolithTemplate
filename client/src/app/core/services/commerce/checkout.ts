@@ -27,9 +27,9 @@ export class CheckoutService {
   }
 
   // paymob-webhook-result
-  getPaymentStatus(cartId: string) {
+  getPaymentStatus(merchantOrderId: string) {
     return this.http.get<{ status: 'pending' | 'paid' | 'failed' }>(
-      `${this.baseUrl}paymobWebhook/status/${cartId}`,
+      `${this.baseUrl}paymobWebhook/status/${merchantOrderId}`,
     );
   }
 }

@@ -10,13 +10,19 @@ import { LoginComponent } from './features/identity/login/login.component';
 import { authGuard } from './core/guards/auth-guard';
 import { emptyCartGuard } from './core/guards/commerce/empty-cart-guard';
 import { ConfirmationStepComponent } from './features/commerce/checkout/confirmation-step/confirmation-step.component';
+import { OrdersComponent } from './features/commerce/orders/orders.component';
+import { OrderDetailsComponent } from './features/commerce/orders/order-details/order-details.component';
+import { confirmationGuard } from './core/guards/commerce/confirmation-guard';
+
 
 export const routes: Routes = [
   { path: 'shop', component: ShopComponent },
   { path: 'shop/product/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
+  { path: 'orders', component: OrdersComponent, canActivate: [authGuard] },
+  { path: 'orders/:id', component: OrderDetailsComponent, canActivate: [authGuard] },
   { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard, emptyCartGuard] },
-  { path: 'checkout/confirmation', component: ConfirmationStepComponent, canActivate: [authGuard] },
+  { path: 'checkout/confirmation', component: ConfirmationStepComponent, canActivate: [authGuard, confirmationGuard] },
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'not-found', component: NotFoundComponent },

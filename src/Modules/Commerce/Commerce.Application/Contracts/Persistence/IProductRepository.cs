@@ -2,6 +2,4 @@
 
 namespace Commerce.Application.Contracts.Persistence;
 
-public interface IProductRepository : IGenericRepository<Product>
-{
-}
+public interface IProductRepository : IGenericRepository<Product>;

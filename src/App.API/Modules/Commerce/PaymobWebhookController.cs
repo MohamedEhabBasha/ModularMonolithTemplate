@@ -1,11 +1,19 @@
-﻿using Commerce.Infrastructure.Services;
+﻿using Commerce.Application.Contracts.Notifications;
+using Commerce.Application.Contracts.Services.Orders;
+using Commerce.Application.Extensions;
+using Commerce.Core.Entities.OrderAggregate;
+using Commerce.Infrastructure.Services;
 using Commerce.Infrastructure.Services.Payment.Paymob;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace App.API.Modules.Commerce;
 
-public class PaymobWebhookController(IConfiguration config, ShoppingCartCacheService cartCache) : BaseController
+public class PaymobWebhookController
+    (IConfiguration config, 
+    ShoppingCartCacheService cartCache, 
+    IOrderService orderService,
+    ICommerceNotifier notifier) : BaseController
 {
     [HttpPost("webhook")]
     public async Task<IActionResult> Webhook([FromQuery] string hmac, [FromBody] PaymobWebhookPayload payload)
@@ -27,7 +35,24 @@ public class PaymobWebhookController(IConfiguration config, ShoppingCartCacheSer
             if (cart is not null)
             {
                 cart.PaymentStatus = payload.Obj.Pending ? "pending" : payload.Obj.Success ? "paid" : "failed";
+
+                cart.PaymentSummary = new PaymentSummary
+                {
+                    Last4 = payload.Obj.SourceData.Pan,     // Paymob's "pan" is already just the last 4 digits, e.g. "2346"
+                    Brand = payload.Obj.SourceData.SubType  // e.g. "MasterCard"
+                };
+
                 await cartCache.SetCartAsync(cart);
+
+                if (cart.PaymentStatus == "paid")
+                {
+                    // fire-and-forget from the webhook's perspective
+                    var order = await orderService.CreateOrderFromCartAsync(cartId);
+                    await notifier.PaymentStatusChangedAsync(cartId, new PaymentStatusUpdate("paid", order?.ToResponseDto()));
+                }else
+                {
+                    await notifier.PaymentStatusChangedAsync(cartId, new PaymentStatusUpdate("failed", null));
+                }
             }
         }
 

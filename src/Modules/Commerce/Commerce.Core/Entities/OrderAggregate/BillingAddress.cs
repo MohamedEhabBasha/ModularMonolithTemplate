@@ -1,4 +1,4 @@
-﻿namespace Commerce.Core.Entities;
+﻿namespace Commerce.Core.Entities.OrderAggregate;
 
 public class BillingAddress
 {

@@ -1,0 +1,72 @@
+@if (loading()) {
+  <div class="flex justify-center py-16">
+    <mat-spinner diameter="32" />
+  </div>
+} @else if (displayOrder(); as order) {
+  <div class="min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white max-w-2xl w-full mx-auto space-y-6 p-8 rounded-2xl border border-neutral-300">
+      <div class="flex justify-between items-start">
+        <div>
+          <h2 class="text-lg font-medium">Order #{{ order.id }}</h2>
+          <p class="text-sm text-gray-500">{{ order.orderDate | date: 'medium' }}</p>
+        </div>
+        <span class="text-sm px-3 py-1 rounded-full bg-green-100 text-green-800 capitalize">{{
+          order.status
+        }}</span>
+      </div>
+
+      <div class="border border-neutral-200 rounded-xl divide-y">
+        @for (item of order.orderItems; track item.productId) {
+          <div class="flex items-center gap-4 p-4">
+            <img
+              [src]="item.pictureUrl"
+              [alt]="item.productName"
+              class="w-16 h-16 object-cover rounded-lg"
+            />
+            <div class="flex-1">
+              <p class="font-medium">{{ item.productName }}</p>
+              <p class="text-sm text-gray-500">Qty {{ item.quantity }}</p>
+            </div>
+            <p class="font-medium">{{ item.price * item.quantity | currency }}</p>
+          </div>
+        }
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 text-sm">
+        <div>
+          <h3 class="font-medium mb-1">Shipping address</h3>
+          <p class="text-gray-600">
+            {{ order.billingAddress.firstName }} {{ order.billingAddress.lastName }}<br />
+            {{ order.billingAddress.street }}, {{ order.billingAddress.city }}<br />
+            {{ order.billingAddress.country }}
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium mb-1">Payment</h3>
+          <p class="text-gray-600">
+            {{ order.paymentSummary.brand }} •••• {{ order.paymentSummary.last4 }}
+          </p>
+        </div>
+      </div>
+
+      <div class="border-t border-neutral-200 pt-4 space-y-1 text-sm">
+        <div class="flex justify-between">
+          <span>Subtotal</span>
+          <span>{{ order.subtotal | currency }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Delivery</span>
+          <span>{{ order.deliveryMethod }}</span>
+          <span>{{ order.deliveryPrice | currency }}</span>
+        </div>
+        <div class="flex justify-between font-medium text-base pt-2 border-t border-neutral-100">
+          <span>Total</span>
+          <span>{{ order.total | currency }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <app-empty-state icon="receipt_long" title="Order Not Found" message="Order Not Found">
+  </app-empty-state>
+}

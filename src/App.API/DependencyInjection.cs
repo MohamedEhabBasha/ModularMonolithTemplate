@@ -1,6 +1,8 @@
 ﻿using App.API.Exceptions;
+using App.API.Modules.Commerce.Realtime;
 using BuildingBlocks.Application.Contracts.Services;
 using BuildingBlocks.Infrastructure.Services.Caching;
+using Commerce.Application.Contracts.Notifications;
 using Identity.Core.Entities;
 using Identity.Infrastructure.Data;
 using Microsoft.AspNetCore.Antiforgery;
@@ -87,6 +89,9 @@ public static class DependencyInjection
             });
         });
 
+        services.AddSignalR();
+        services.AddScoped<ICommerceNotifier, SignalRCommerceNotifier>(); //Commerce
+
         return services;
     }
     public static WebApplication UseApiServices(this WebApplication app)
@@ -117,6 +122,7 @@ public static class DependencyInjection
         }).AllowAnonymous();
 
         app.MapControllers();
+        app.MapHub<CommerceHub>("/api/hubs/commerce");
 
         return app;
     }

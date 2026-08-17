@@ -6,6 +6,8 @@ public class StoreContext(DbContextOptions<StoreContext> options) : DbContext(op
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

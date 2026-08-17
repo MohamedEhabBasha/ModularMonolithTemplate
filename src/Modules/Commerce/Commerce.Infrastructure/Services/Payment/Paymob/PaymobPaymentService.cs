@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Application.Contracts.Services;
-using BuildingBlocks.Application.Exceptions;
+﻿using BuildingBlocks.Application.Exceptions;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Core.Entities.Cart;
 using Microsoft.Extensions.Configuration;
@@ -10,10 +9,11 @@ namespace Commerce.Infrastructure.Services.Payment.Paymob;
 
 public class PaymobPaymentService(
     ShoppingCartCacheService _cartCache,
-    IDeliveryMethodRepository _dmRepo,
+    IStoreUnitOfWork storeUnit,
     HttpClient _httpClient,
     IConfiguration config) : IPaymentService
 {
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
@@ -37,7 +37,7 @@ public class PaymobPaymentService(
 
         if (cart.DeliveryMethodId.HasValue)
         {
-            var delivery = await _dmRepo.GetByIdAsync(cart.DeliveryMethodId.Value);
+            var delivery = await storeUnit.DeliveryMethods.GetByIdAsync(cart.DeliveryMethodId.Value);
             if (delivery is not null)
             {
                 // Paymob requires amount == sum(items[].amount) exactly — delivery
@@ -90,6 +90,7 @@ public class PaymobPaymentService(
         cart.PaymentReference = intention!.ClientSecret; // Paymob updates are addressed by client_secret
         cart.RedirectUrl = $"{baseUrl}/unifiedcheckout/?publicKey={publicKey}&clientSecret={intention.ClientSecret}";
 
+        cart.BillingAddress = paymentRequest.BillingAddress;
         await _cartCache.SetCartAsync(cart);
         return cart;
     }

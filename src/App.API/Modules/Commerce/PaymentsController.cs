@@ -1,4 +1,5 @@
-﻿using Commerce.Application.Contracts.Persistence;
+﻿using BuildingBlocks.Application.Contracts.Persistence;
+using Commerce.Application.Contracts.Persistence;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Core.Entities;
 using Commerce.Core.Entities.Cart;
@@ -8,8 +9,9 @@ namespace App.API.Modules.Commerce;
 
 public class PaymentsController(
     IPaymentServiceResolver paymentServiceResolver,
-    IDeliveryMethodRepository dmRepo) : BaseController
+    IStoreUnitOfWork storeUnit) : BaseController
 {
+
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<ShoppingCart>> CreateOrUpdatePayment(PaymentRequest request)
@@ -25,6 +27,6 @@ public class PaymentsController(
     [HttpGet("delivery-methods")]
     public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
     {
-        return Ok(await dmRepo.ListAllAsync());
+        return Ok(await storeUnit.DeliveryMethods.ListAllAsync());
     }
 }

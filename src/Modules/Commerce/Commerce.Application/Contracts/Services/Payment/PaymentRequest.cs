@@ -1,4 +1,6 @@
-﻿namespace Commerce.Application.Contracts.Services.Payment;
+﻿using Commerce.Core.Entities.OrderAggregate;
+
+namespace Commerce.Application.Contracts.Services.Payment;
 
 public sealed class PaymentRequest
 {

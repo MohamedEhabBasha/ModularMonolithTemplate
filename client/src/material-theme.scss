@@ -99,3 +99,16 @@ body {
     header-edit-state-icon-background-color: #333,
   )
 );
+@include mat.radio-overrides(
+  (
+    checked-ripple-color: gray,
+    disabled-label-color: #d32f2f,
+    selected-icon-color: #d32f2f,
+    selected-focus-icon-color: #d32f2f,
+    selected-hover-icon-color: #d32f2f,
+    selected-pressed-icon-color: #d32f2f,
+    unselected-pressed-icon-color: #d32f2f,
+    unselected-icon-color: #d32f2f,
+    unselected-focus-icon-color: #d32f2f,
+  )
+);

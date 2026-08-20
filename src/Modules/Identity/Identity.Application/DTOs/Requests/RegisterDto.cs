@@ -1,4 +1,6 @@
-﻿namespace Identity.Application.DTOs.Requests;
+﻿using Identity.Core.Constants;
+
+namespace Identity.Application.DTOs.Requests;
 
 public class RegisterDto
 {
@@ -13,4 +15,8 @@ public class RegisterDto
 
     [Required]
     public string Password { get; set; } = string.Empty;
+
+    [Required]
+    [EnumDataType(typeof(AccountType))]
+    public AccountType? AccountType { get; set; }
 }

@@ -38,7 +38,6 @@ export class AccountService {
 
   async loadCurrentUser() {
     const user = await firstValueFrom(this.http.get<User>(`${this.baseUrl}identity/user-info`));
-    console.log('USER_INFO', user);
     this.currentUser.set(user);
     return user;
   }

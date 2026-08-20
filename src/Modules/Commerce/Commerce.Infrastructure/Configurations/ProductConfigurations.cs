@@ -1,4 +1,6 @@
-﻿namespace Commerce.Infrastructure.Configurations;
+﻿using Commerce.Core.Entities.Products;
+
+namespace Commerce.Infrastructure.Configurations;
 
 public class ProductConfigurations : IEntityTypeConfiguration<Product>
 {
@@ -28,5 +30,18 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.AvailableQuantity)
             .IsRequired();
+
+        builder.Property(p => p.SellerId).IsRequired().HasMaxLength(450); // matches IdentityUser.Id
+        builder.HasIndex(p => p.SellerId); // seller's own product list
+
+        builder.Property(p => p.Status)
+            .IsRequired()
+            .HasConversion<string>()   // readable in the DB — "Pending" not "0"
+            .HasMaxLength(20)
+            .HasDefaultValue(ProductStatus.Pending);
+
+        builder.HasIndex(p => new { p.Status, p.CreatedAt }); // admin queue: pending items, oldest first
+
+        builder.Property(p => p.RejectionReason).HasMaxLength(500);
     }
 }

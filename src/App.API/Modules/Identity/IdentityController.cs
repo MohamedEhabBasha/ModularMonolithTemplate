@@ -1,5 +1,6 @@
 ﻿using Identity.Application.DTOs.Requests;
 using Identity.Application.DTOs.Responses;
+using Identity.Core.Constants;
 using Identity.Core.Entities;
 using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Extensions;
@@ -35,6 +36,17 @@ public class IdentityController(UserManager<AppUser> _userManager,
                 ModelState.AddModelError(error.Code, error.Description);
             }
 
+            return ValidationProblem(ModelState);
+        }
+
+        var role = registerDto.AccountType == AccountType.Seller ? Roles.Seller : Roles.Buyer;
+        var roleResult = await _userManager.AddToRoleAsync(user, role);
+
+        if (!roleResult.Succeeded)
+        {
+            // Don't leave a role-less user behind — everything downstream assumes a role exists
+            await _userManager.DeleteAsync(user);
+            ModelState.AddModelError(string.Empty, "Unable to complete registration. Please try again.");
             return ValidationProblem(ModelState);
         }
 
@@ -80,8 +92,11 @@ public class IdentityController(UserManager<AppUser> _userManager,
         var user = await _signInManager.UserManager
             .GetCurrentUserWithAddressAsync(User, asNoTracking: true);
 
-        return
-            Ok(new UserInfoResponseDto(user.Id, user.Email!, user.FirstName!, user.LastName!, user.Address?.ToDto(), user.PhoneNumber));
+        var roles = await _signInManager.UserManager.GetRolesAsync(user);
+
+        return Ok(new UserInfoResponseDto(
+            user.Id, user.Email!, user.FirstName!, user.LastName!,
+            user.Address?.ToDto(), user.PhoneNumber, roles));
     }
 
     // Deliberately anonymous: the SPA hits this on bootstrap to decide app-shell

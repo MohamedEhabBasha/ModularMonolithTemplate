@@ -4,6 +4,7 @@ export type User = {
   email: string;
   phoneNumber?: string;
   address: Address;
+  roles: string[];
 };
 
 export type Address = {

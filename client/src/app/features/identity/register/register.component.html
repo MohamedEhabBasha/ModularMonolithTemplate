@@ -1,5 +1,5 @@
 <div class="min-h-[80vh] flex items-center justify-center px-4 py-8">
-  <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg p-8">
+  <div class="w-full max-w-xl bg-white border border-gray-300 rounded-lg p-8">
     <h1 class="text-2xl font-semibold text-secondary mb-6 text-center">Create an account</h1>
 
     <form [formGroup]="registerForm" (ngSubmit)="submit()" novalidate class="flex flex-col gap-4">
@@ -28,6 +28,13 @@
         [errorMessages]="{ required: 'Email is required', email: 'Enter a valid email address' }"
       />
 
+      <app-radio-group-field
+        [control]="registerForm.controls.accountType"
+        [options]="accountTypeOptions"
+        label="I want to"
+        [errorMessages]="{ required: 'Please choose an account type' }"
+      />
+
       <app-password-field
         [control]="registerForm.controls.password"
         label="Password"
@@ -40,7 +47,7 @@
         label="Confirm password"
         [errorMessages]="{
           required: 'Please confirm your password',
-          passwordsMismatch: 'Passwords do not match'
+          passwordsMismatch: 'Passwords do not match',
         }"
       />
 
@@ -52,7 +59,12 @@
         </ul>
       }
 
-      <button mat-flat-button type="submit" class="bg-secondary! text-white! w-full py-2! mt-2" [disabled]="loading()">
+      <button
+        mat-flat-button
+        type="submit"
+        class="bg-secondary! text-white! w-full py-2! mt-2"
+        [disabled]="loading()"
+      >
         @if (loading()) {
           <mat-progress-spinner diameter="20" mode="indeterminate" class="inline-block" />
         } @else {

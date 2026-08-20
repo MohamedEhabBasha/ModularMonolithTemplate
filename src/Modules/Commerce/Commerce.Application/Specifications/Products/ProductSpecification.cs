@@ -1,8 +1,11 @@
-﻿namespace Commerce.Application.Specifications.Products;
+﻿using Commerce.Core.Entities.Products;
+
+namespace Commerce.Application.Specifications.Products;
 
 public class ProductSpecification : BaseSpecification<Product>
 {
     public ProductSpecification(ProductSpecParams specParams) : base(x =>
+        x.Status == ProductStatus.Approved &&
         (string.IsNullOrEmpty(specParams.Search) || x.Name.ToLower().Contains(specParams.Search)) &&
         (specParams.Brands.Count == 0 || specParams.Brands.Contains(x.Brand)) &&
         (specParams.Types.Count == 0 || specParams.Types.Contains(x.Type))
@@ -22,5 +25,8 @@ public class ProductSpecification : BaseSpecification<Product>
                 AddOrderBy(x => x.Name);
                 break;
         }
+    }
+    public ProductSpecification(int id) : base(x => x.Id == id && x.Status == ProductStatus.Approved)
+    {
     }
 }

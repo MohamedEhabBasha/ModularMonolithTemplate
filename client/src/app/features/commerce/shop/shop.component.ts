@@ -65,7 +65,7 @@ export class ShopComponent implements OnInit {
     this.shopService.getProducts(this.shopParams).subscribe({
       next: (response) => {
         this.products.set(response);
-        console.log('Products fetched:', this.products());
+        //console.log('Products fetched:', this.products());
         this.totalCount.set(response.totalCount);
       },
       error: (error) => console.log(error),

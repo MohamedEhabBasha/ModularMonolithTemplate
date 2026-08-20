@@ -1,10 +1,12 @@
-﻿using Commerce.Application.Contracts.Services.Orders;
+﻿using BuildingBlocks.Application.Contracts.Services.Users;
+using Commerce.Application.Contracts.Services.Orders;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Infrastructure.Data;
 using Commerce.Infrastructure.Data.Repositories;
 using Commerce.Infrastructure.Services;
 using Commerce.Infrastructure.Services.Payment;
 using Commerce.Infrastructure.Services.Payment.Paymob;
+using Commerce.Infrastructure.Services.SellerProfiles;
 using Microsoft.Extensions.Configuration;
 
 namespace Commerce.Infrastructure;
@@ -21,11 +23,16 @@ public static class DependencyInjection
             opt.UseSqlServer(connectionString);
         });
 
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IDeliveryMethodRepository, DeliveryMethodRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ISellerProfileRepository, SellerProfileRepository>();
+        services.AddScoped<IDeliveryMethodRepository, DeliveryMethodRepository>();
+
         services.AddScoped<IStoreUnitOfWork, StoreUnitOfWork>();
         services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IUserProfileProvider, SellerProfileProvider>();
+        services.AddScoped<SellerBrandNameCacheService>();
+        services.AddScoped<SellerDisplayResolver>();
         services.AddSingleton<ShoppingCartCacheService>();
 
         // PAYMENT

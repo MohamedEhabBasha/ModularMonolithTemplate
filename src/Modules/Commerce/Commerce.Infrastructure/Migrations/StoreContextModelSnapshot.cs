@@ -30,6 +30,9 @@ namespace Commerce.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DeliveryTime")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -54,7 +57,7 @@ namespace Commerce.Infrastructure.Migrations
                     b.ToTable("DeliveryMethods");
                 });
 
-            modelBuilder.Entity("Commerce.Core.Entities.Order.Order", b =>
+            modelBuilder.Entity("Commerce.Core.Entities.OrderAggregate.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,6 +68,9 @@ namespace Commerce.Infrastructure.Migrations
                     b.Property<string>("BuyerEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("DeliveryMethodId")
                         .HasColumnType("int");
@@ -93,13 +99,16 @@ namespace Commerce.Infrastructure.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Commerce.Core.Entities.Order.OrderItem", b =>
+            modelBuilder.Entity("Commerce.Core.Entities.OrderAggregate.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -117,7 +126,7 @@ namespace Commerce.Infrastructure.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("Commerce.Core.Entities.Product", b =>
+            modelBuilder.Entity("Commerce.Core.Entities.Products.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,6 +141,9 @@ namespace Commerce.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -151,6 +163,28 @@ namespace Commerce.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReviewedByUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SellerId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("Pending");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -158,10 +192,43 @@ namespace Commerce.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SellerId");
+
+                    b.HasIndex("Status", "CreatedAt");
+
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Commerce.Core.Entities.Order.Order", b =>
+            modelBuilder.Entity("Commerce.Core.Entities.SellerProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BrandName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("SellerProfiles");
+                });
+
+            modelBuilder.Entity("Commerce.Core.Entities.OrderAggregate.Order", b =>
                 {
                     b.HasOne("Commerce.Core.Entities.DeliveryMethod", "DeliveryMethod")
                         .WithMany()
@@ -169,7 +236,7 @@ namespace Commerce.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Commerce.Core.Entities.Order.BillingAddress", "BillingAddress", b1 =>
+                    b.OwnsOne("Commerce.Core.Entities.OrderAggregate.BillingAddress", "BillingAddress", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
@@ -226,7 +293,7 @@ namespace Commerce.Infrastructure.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.OwnsOne("Commerce.Core.Entities.Order.PaymentSummary", "PaymentSummary", b1 =>
+                    b.OwnsOne("Commerce.Core.Entities.OrderAggregate.PaymentSummary", "PaymentSummary", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
@@ -261,14 +328,14 @@ namespace Commerce.Infrastructure.Migrations
                     b.Navigation("PaymentSummary");
                 });
 
-            modelBuilder.Entity("Commerce.Core.Entities.Order.OrderItem", b =>
+            modelBuilder.Entity("Commerce.Core.Entities.OrderAggregate.OrderItem", b =>
                 {
-                    b.HasOne("Commerce.Core.Entities.Order.Order", null)
+                    b.HasOne("Commerce.Core.Entities.OrderAggregate.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("Commerce.Core.Entities.Order.ProductItemOrdered", "ItemOrdered", b1 =>
+                    b.OwnsOne("Commerce.Core.Entities.OrderAggregate.ProductItemOrdered", "ItemOrdered", b1 =>
                         {
                             b1.Property<int>("OrderItemId")
                                 .HasColumnType("int");
@@ -296,7 +363,7 @@ namespace Commerce.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Commerce.Core.Entities.Order.Order", b =>
+            modelBuilder.Entity("Commerce.Core.Entities.OrderAggregate.Order", b =>
                 {
                     b.Navigation("OrderItems");
                 });

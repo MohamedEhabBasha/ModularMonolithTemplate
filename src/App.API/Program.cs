@@ -1,7 +1,10 @@
 using App.API;
-using Identity.Infrastructure;
 using Commerce.Infrastructure;
 using Commerce.Infrastructure.Data.Seed;
+using Identity.Core.Entities;
+using Identity.Infrastructure;
+using Identity.Infrastructure.Data.Seed;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,9 @@ app.UseApiServices();
 try
 {
     using var scope = app.Services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
+    await IdentitySeeder.InitializeAsync(scope.ServiceProvider, builder.Configuration, userManager);
     await StoreSeeder.InitializeAsync(scope.ServiceProvider);
 }
 catch (Exception ex)

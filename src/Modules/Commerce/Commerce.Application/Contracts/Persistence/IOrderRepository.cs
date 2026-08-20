@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Application.Contracts.Persistence;
-using Commerce.Core.Entities.OrderAggregate;
+﻿using Commerce.Core.Entities.OrderAggregate;
 
 namespace Commerce.Application.Contracts.Persistence;
 

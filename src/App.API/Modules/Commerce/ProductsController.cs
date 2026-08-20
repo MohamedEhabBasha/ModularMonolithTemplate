@@ -1,29 +1,40 @@
-﻿using BuildingBlocks.Application.Contracts.Persistence;
-using Commerce.Application.Contracts.Persistence;
+﻿using Commerce.Application.Contracts.Persistence;
+using Commerce.Application.DTOs;
 using Commerce.Application.Specifications.Products;
-using Commerce.Core.Entities;
+using Commerce.Application.Extensions;
+using Commerce.Core.Entities.Products;
+using Commerce.Infrastructure.Services.SellerProfiles;
 
 namespace App.API.Modules.Commerce;
 
-public class ProductsController(IStoreUnitOfWork storeUnit) : BaseController
+public class ProductsController(IStoreUnitOfWork storeUnit, SellerDisplayResolver sellerDisplayResolver) : BaseController
 {
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts
-        ([FromQuery] ProductSpecParams specParams)
+    public async Task<ActionResult<PagedResult<ProductDto>>> GetProducts([FromQuery] ProductSpecParams specParams)
     {
         var spec = new ProductSpecification(specParams);
 
-        return Ok(await Pagination.CreatePagedResult(storeUnit.Products, spec, specParams.PageIndex, specParams.PageSize));
+        var paged = await Pagination.CreatePagedResult(storeUnit.Products, spec, specParams.PageIndex, specParams.PageSize);
+
+        var sellerDisplays = await sellerDisplayResolver.GetManyAsync(paged.Items.Select(p => p.SellerId));
+
+        var dtos = paged.Items.Select(p => p.ToDto(sellerDisplays)).ToList();
+
+        return Ok(new PagedResult<ProductDto>(dtos, paged.TotalCount, paged.PageIndex, paged.PageSize));
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Product>> GetProduct(int id)
+    public async Task<ActionResult<ProductDto>> GetProduct(int id)
     {
-        var product = await storeUnit.Products.GetByIdAsync(id)
+        var spec = new ProductSpecification(id);
+
+        var product = await storeUnit.Products.GetEntityWithSpec(spec)
             ?? throw new NotFoundException("Product Can Not Be Found");
 
-        return Ok(product);
+        var sellerDisplays = await sellerDisplayResolver.GetManyAsync([product.SellerId]);
+
+        return Ok(product.ToDto(sellerDisplays));
     }
 
     [HttpPost]

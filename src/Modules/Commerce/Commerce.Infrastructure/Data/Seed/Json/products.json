@@ -6,7 +6,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boards",
     "Brand": "Angular",
-    "AvailableQuantity": 82
+    "AvailableQuantity": 82,
+    "SellerId": "10000000-0000-0000-0000-000000000001",
+    "Status": "Approved"
   },
   {
     "Name": "Green Angular Board 3000",
@@ -15,7 +17,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boards",
     "Brand": "Angular",
-    "AvailableQuantity": 75
+    "AvailableQuantity": 75,
+    "SellerId": "10000000-0000-0000-0000-000000000001",
+    "Status": "Approved"
   },
   {
     "Name": "Core Board Speed Rush 3",
@@ -24,7 +28,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boards",
     "Brand": "NetCore",
-    "AvailableQuantity": 3
+    "AvailableQuantity": 3,
+    "SellerId": "10000000-0000-0000-0000-000000000001",
+    "Status": "Approved"
   },
   {
     "Name": "Net Core Super Board",
@@ -33,7 +39,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boards",
     "Brand": "NetCore",
-    "AvailableQuantity": 52
+    "AvailableQuantity": 52,
+    "SellerId": "10000000-0000-0000-0000-000000000001",
+    "Status": "Approved"
   },
   {
     "Name": "React Board Super Whizzy Fast",
@@ -42,7 +50,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boards",
     "Brand": "React",
-    "AvailableQuantity": 97
+    "AvailableQuantity": 97,
+    "SellerId": "10000000-0000-0000-0000-000000000001",
+    "Status": "Approved"
   },
   {
     "Name": "Typescript Entry Board",
@@ -51,7 +61,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boards",
     "Brand": "Typescript",
-    "AvailableQuantity": 37
+    "AvailableQuantity": 37,
+    "SellerId": "10000000-0000-0000-0000-000000000001",
+    "Status": "Approved"
   },
   {
     "Name": "Core Blue Hat",
@@ -60,7 +72,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Hats",
     "Brand": "NetCore",
-    "AvailableQuantity": 32
+    "AvailableQuantity": 32,
+    "SellerId": "10000000-0000-0000-0000-000000000002",
+    "Status": "Approved"
   },
   {
     "Name": "Green React Woolen Hat",
@@ -69,7 +83,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Hats",
     "Brand": "React",
-    "AvailableQuantity": 6
+    "AvailableQuantity": 6,
+    "SellerId": "10000000-0000-0000-0000-000000000002",
+    "Status": "Approved"
   },
   {
     "Name": "Purple React Woolen Hat",
@@ -78,7 +94,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Hats",
     "Brand": "React",
-    "AvailableQuantity": 17
+    "AvailableQuantity": 17,
+    "SellerId": "10000000-0000-0000-0000-000000000002",
+    "Status": "Approved"
   },
   {
     "Name": "Blue Code Gloves",
@@ -87,7 +105,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Gloves",
     "Brand": "VS Code",
-    "AvailableQuantity": 74
+    "AvailableQuantity": 74,
+    "SellerId": "10000000-0000-0000-0000-000000000002",
+    "Status": "Approved"
   },
   {
     "Name": "Green Code Gloves",
@@ -96,7 +116,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Gloves",
     "Brand": "VS Code",
-    "AvailableQuantity": 19
+    "AvailableQuantity": 19,
+    "SellerId": "10000000-0000-0000-0000-000000000002",
+    "Status": "Approved"
   },
   {
     "Name": "Purple React Gloves",
@@ -105,7 +127,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Gloves",
     "Brand": "React",
-    "AvailableQuantity": 77
+    "AvailableQuantity": 77,
+    "SellerId": "10000000-0000-0000-0000-000000000002",
+    "Status": "Approved"
   },
   {
     "Name": "Green React Gloves",
@@ -114,7 +138,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Gloves",
     "Brand": "React",
-    "AvailableQuantity": 45
+    "AvailableQuantity": 45,
+    "SellerId": "10000000-0000-0000-0000-000000000003",
+    "Status": "Approved"
   },
   {
     "Name": "Redis Red Boots",
@@ -123,7 +149,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boots",
     "Brand": "Redis",
-    "AvailableQuantity": 49
+    "AvailableQuantity": 49,
+    "SellerId": "10000000-0000-0000-0000-000000000003",
+    "Status": "Approved"
   },
   {
     "Name": "Core Red Boots",
@@ -132,7 +160,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boots",
     "Brand": "NetCore",
-    "AvailableQuantity": 28
+    "AvailableQuantity": 28,
+    "SellerId": "10000000-0000-0000-0000-000000000003",
+    "Status": "Approved"
   },
   {
     "Name": "Core Purple Boots",
@@ -141,7 +171,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boots",
     "Brand": "NetCore",
-    "AvailableQuantity": 69
+    "AvailableQuantity": 69,
+    "SellerId": "10000000-0000-0000-0000-000000000003",
+    "Status": "Approved"
   },
   {
     "Name": "Angular Purple Boots",
@@ -150,7 +182,9 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boots",
     "Brand": "Angular",
-    "AvailableQuantity": 35
+    "AvailableQuantity": 35,
+    "SellerId": "10000000-0000-0000-0000-000000000003",
+    "Status": "Approved"
   },
   {
     "Name": "Angular Blue Boots",
@@ -159,6 +193,8 @@
     "PictureUrl": "https://picsum.photos/200/300",
     "Type": "Boots",
     "Brand": "Angular",
-    "AvailableQuantity": 27
+    "AvailableQuantity": 27,
+    "SellerId": "10000000-0000-0000-0000-000000000003",
+    "Status": "Approved"
   }
 ]

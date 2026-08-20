@@ -8,6 +8,7 @@ using Identity.Infrastructure.Data;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
+using System.Text.Json.Serialization;
 
 namespace App.API;
 
@@ -19,7 +20,11 @@ public static class DependencyInjection
     {
         // Add services to the container.
 
-        services.AddControllers();
+        //so the enum serializes as "Buyer"/"Seller" in JSON instead of 0/1
+        //(much less fragile against front/back drift)
+        services.AddControllers()
+         .AddJsonOptions(options =>
+             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
         services.AddHttpClient();
 

@@ -1,4 +1,7 @@
-﻿using Identity.Infrastructure.Data;
+﻿using BuildingBlocks.Application.Contracts.Services.Users;
+using BuildingBlocks.Infrastructure.Services.Resolvers;
+using Identity.Infrastructure.Data;
+using Identity.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +17,9 @@ public static class DependencyInjection
         {
             options.UseSqlServer(configuration.GetConnectionString("IdentityDb"));
         });
+
+        services.AddScoped<IUserDirectory, UserDirectory>();
+        services.AddScoped<UserProfileResolver>();
 
         return services;
     }

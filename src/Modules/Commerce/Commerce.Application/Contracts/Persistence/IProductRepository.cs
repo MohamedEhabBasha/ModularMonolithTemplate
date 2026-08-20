@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Application.Contracts.Persistence;
+﻿using Commerce.Core.Entities.Products;
 
 namespace Commerce.Application.Contracts.Persistence;
 

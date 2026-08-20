@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using BuildingBlocks.Infrastructure.Seeding;
+using Commerce.Core.Entities.Products;
+using System.Text.Json;
 
 namespace Commerce.Infrastructure.Data.Seed;
 
@@ -14,6 +16,16 @@ public static class StoreSeeder
     }
     private static async Task SeedAsync(StoreContext context)
     {
+        if (!context.SellerProfiles.Any())
+        {
+            context.SellerProfiles.AddRange(
+                SellerProfile.Create(SeedIds.Seller1Id, "PixelPeak Sports"),
+                SellerProfile.Create(SeedIds.Seller2Id, "CodeForge Outdoors"),
+                SellerProfile.Create(SeedIds.Seller3Id, "ByteTrail Gear")
+            );
+            await context.SaveChangesAsync();
+        }
+
         if (!context.Products.Any())
         {
             var path = Path.Combine(

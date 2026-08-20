@@ -7,9 +7,10 @@ import { MatButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { passwordStrengthValidator } from '../../../shared/helper/identity/passwordStrengthValidator';
 import { passwordsMatchValidator } from '../../../shared/helper/identity/passwordsMatchValidator';
-import { RegisterRequest } from '../../../shared/models/identity/register';
+import { AccountType, RegisterRequest } from '../../../shared/models/identity/register';
 import { TextFieldComponent } from '../../../shared/components/form-fields/text-field/text-field.component';
 import { PasswordFieldComponent } from '../../../shared/components/form-fields/password-field/password-field.component';
+import { RadioOption, RadioGroupFieldComponent } from '../../../shared/components/form-fields/radio-group-field/radio-group-field.component';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,8 @@ import { PasswordFieldComponent } from '../../../shared/components/form-fields/p
     MatProgressSpinner,
     TextFieldComponent,
     PasswordFieldComponent,
-  ],
+    RadioGroupFieldComponent
+],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,12 +35,28 @@ export class RegisterComponent {
   protected readonly serverValidationErrors = signal<string[] | undefined>(undefined);
   protected readonly loading = signal(false);
 
+  protected readonly accountTypeOptions: RadioOption<AccountType>[] = [
+    {
+      value: 'Buyer',
+      label: 'Buy',
+      description: 'Shop from sellers on the platform',
+      icon: 'shopping_bag',
+    },
+    {
+      value: 'Seller',
+      label: 'Sell',
+      description: 'List and manage your own products',
+      icon: 'storefront',
+    },
+  ];
+
   protected readonly registerForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
     password: ['', [Validators.required, passwordStrengthValidator]],
     confirmPassword: ['', [Validators.required, passwordsMatchValidator]],
+    accountType: this.fb.control<AccountType>('Buyer', { validators: [Validators.required] }),
   });
 
   constructor() {
@@ -68,6 +86,7 @@ export class RegisterComponent {
       password: raw.password,
       firstName: raw.firstName,
       lastName: raw.lastName,
+      accountType: raw.accountType,
     };
 
     try {

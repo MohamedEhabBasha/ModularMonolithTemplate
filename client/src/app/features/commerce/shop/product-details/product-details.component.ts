@@ -17,6 +17,7 @@ import { Product } from '../../../../shared/models/commerce/products';
 
 import type { SwiperContainer } from 'swiper/element';
 import { CartService } from '../../../../core/services/commerce/cart';
+import { RouterLink } from '@angular/router';
 
 interface ProductMedia {
   readonly type: 'image' | 'video';
@@ -26,7 +27,7 @@ interface ProductMedia {
 
 @Component({
   selector: 'app-product-details',
-  imports: [CurrencyPipe, MatButtonModule, MatIconModule],
+  imports: [RouterLink, CurrencyPipe, MatButtonModule, MatIconModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',

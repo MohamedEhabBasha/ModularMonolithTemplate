@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BuildingBlocks.Core.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Core.Entities;
 
@@ -7,5 +8,5 @@ public class AppUser : IdentityUser
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public Address? Address { get; set; }
-    public string? PictureUrl { get; set; }
+    public Photo? ProfilePhoto { get; set; }
 }

@@ -134,11 +134,23 @@
 
 <!-- Shared account dropdown — same panel, triggered from either the desktop or mobile button above -->
 <mat-menu #userMenu="matMenu" panelClass="bg-white!">
-  <a mat-menu-item routerLink="/orders">
-    <mat-icon>receipt_long</mat-icon>
-    <span>My Orders</span>
-  </a>
-  <mat-divider></mat-divider>
+  @if (accountService.currentUser()?.roles?.includes(accountRoles.Buyer)) {
+    <a mat-menu-item routerLink="/orders">
+      <mat-icon>receipt_long</mat-icon>
+      <span>My Orders</span>
+    </a>
+    <mat-divider></mat-divider>
+  }
+  @if (accountService.currentUser()?.roles?.includes(accountRoles.Seller)) {}
+
+  @if (accountService.currentUser()) {
+    <a mat-menu-item routerLink="/account/me">
+      <mat-icon>person</mat-icon>
+      <span>profile</span>
+    </a>
+    <mat-divider></mat-divider>
+  }
+
   <button mat-menu-item (click)="logout()">
     <mat-icon>logout</mat-icon>
     <span>Logout</span>

@@ -10,7 +10,8 @@ public static class ProductExtensions
         sellerDisplays.TryGetValue(product.SellerId, out var seller);
 
         return new ProductDto(
-            product.Id, product.Name, product.Description, product.Price, product.PictureUrl,
+            product.Id, product.Name, product.Description, product.Price,
+            [.. product.Photos.Select(p => p.Url)],
             product.Type, product.Brand, product.AvailableQuantity,
             product.SellerId, seller?.BrandName ?? string.Empty, seller?.PictureUrl);
     }

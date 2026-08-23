@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Application.Contracts.Persistence;
-using Commerce.Application.Contracts.Persistence;
+﻿using Commerce.Application.Contracts.Persistence;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Core.Entities;
 using Commerce.Core.Entities.Cart;

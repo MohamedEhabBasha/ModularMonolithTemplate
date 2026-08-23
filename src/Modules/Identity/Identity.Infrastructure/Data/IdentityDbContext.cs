@@ -20,5 +20,11 @@ public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : Id
             a.Property(x => x.PostalCode).HasMaxLength(20);
             a.Property(x => x.Country).HasMaxLength(100);
         });
+
+        builder.Entity<AppUser>().OwnsOne(u => u.ProfilePhoto, p =>
+        {
+            p.Property(x => x.Url).HasColumnName("PictureUrl");
+            p.Property(x => x.PublicId).HasColumnName("PicturePublicId");
+        });
     }
 }

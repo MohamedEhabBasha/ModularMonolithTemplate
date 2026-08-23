@@ -123,6 +123,25 @@ public class IdentityController(UserManager<AppUser> _userManager,
 
         return Ok(user.Address.ToDto());
     }
+
+    [Authorize]
+    [HttpPut("basic-info")]
+    public async Task<IActionResult> UpdateBasicInfo(UpdateBasicInfoDto dto)
+    {
+        var user = await _signInManager.UserManager.GetUserAsync(User);
+        if (user is null) return Unauthorized();
+
+        user.FirstName = dto.FirstName;
+        user.LastName = dto.LastName;
+        // user.Bio = dto.Bio;
+
+        var result = await _signInManager.UserManager.UpdateAsync(user);
+        if (!result.Succeeded)
+            throw new BadRequestException(string.Join(", ", result.Errors.Select(e => e.Description)));
+
+        return NoContent();
+    }
+
     [Authorize]
     [HttpPut("phone-number")]
     public async Task<IActionResult> UpdatePhoneNumber(PhoneNumberDto request)

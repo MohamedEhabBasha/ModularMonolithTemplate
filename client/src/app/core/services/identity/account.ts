@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { Address, User } from '../../../shared/models/identity/user';
+import { Address, UpdateBasicInfoDto, User } from '../../../shared/models/identity/user';
 import { firstValueFrom } from 'rxjs';
 import { RegisterRequest } from '../../../shared/models/identity/register';
 import { LoginRequest } from '../../../shared/models/identity/login';
@@ -39,6 +39,7 @@ export class AccountService {
   async loadCurrentUser() {
     const user = await firstValueFrom(this.http.get<User>(`${this.baseUrl}identity/user-info`));
     this.currentUser.set(user);
+    console.log('USER-INFO', user);
     return user;
   }
 
@@ -49,12 +50,38 @@ export class AccountService {
     return state.isAuthenticated;
   }
 
-  updateAddress(address: Address) {
-    return this.http.post(this.baseUrl + 'identity/address', address);
+  async updateBasicInfo(dto: UpdateBasicInfoDto): Promise<void> {
+    await firstValueFrom(this.http.put<void>(`${this.baseUrl}identity/basic-info`, dto));
+
+    const current = this.currentUser();
+    if (current) {
+      this.currentUser.set({ ...current, firstName: dto.firstName, lastName: dto.lastName });
+    }
   }
 
-  updatePhoneNumber(phoneNumber: string) {
-    return this.http.put(`${this.baseUrl}identity/phone-number`, { phoneNumber });
+  async updateAddress(address: Address): Promise<Address> {
+    const updated = await firstValueFrom(
+      this.http.post<Address>(`${this.baseUrl}identity/address`, address),
+    );
+
+    const current = this.currentUser();
+    if (current) {
+      this.currentUser.set({ ...current, address: updated });
+    }
+
+    return updated;
+  }
+
+  // account.ts
+  async updatePhoneNumber(phoneNumber: string): Promise<void> {
+    await firstValueFrom(
+      this.http.put<void>(`${this.baseUrl}identity/phone-number`, { phoneNumber }),
+    );
+
+    const current = this.currentUser();
+    if (current) {
+      this.currentUser.set({ ...current, phoneNumber });
+    }
   }
 
   // Runs once on app bootstrap — see app.config.ts

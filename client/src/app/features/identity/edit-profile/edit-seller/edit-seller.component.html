@@ -1,0 +1,28 @@
+<!-- edit-seller.component.html -->
+<div class="max-w-2xl mx-auto p-10">
+  <app-profile-fields />
+
+  <mat-accordion class="block mt-9">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Brand Name</mat-panel-title>
+      </mat-expansion-panel-header>
+      <form [formGroup]="brandNameForm" (ngSubmit)="saveBrandName()" class="flex flex-col gap-3 py-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Brand Name</mat-label>
+          <input matInput formControlName="brandName" [readonly]="!canEditBrandName()" />
+        </mat-form-field>
+        <p class="text-sm text-gray-500">
+          @if (canEditBrandName()) {
+            You can change your brand name once every 30 days.
+          } @else {
+            You changed your brand name recently. You can change it again in {{ daysUntilBrandNameEditable() }} day{{ daysUntilBrandNameEditable() === 1 ? '' : 's' }}.
+          }
+        </p>
+        @if (error()) { <p class="text-red-600 text-sm">{{ error() }}</p> }
+        <button mat-flat-button color="primary" type="submit"
+                [disabled]="!canEditBrandName() || brandNameForm.invalid || brandNameForm.pristine || saving()">Save</button>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

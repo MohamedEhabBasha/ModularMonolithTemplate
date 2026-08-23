@@ -155,11 +155,6 @@ namespace Commerce.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("PictureUrl")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -211,6 +206,9 @@ namespace Commerce.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset?>("BrandNameChangedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -361,6 +359,40 @@ namespace Commerce.Infrastructure.Migrations
 
                     b.Navigation("ItemOrdered")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Commerce.Core.Entities.Products.Product", b =>
+                {
+                    b.OwnsMany("BuildingBlocks.Core.Entities.Photo", "Photos", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<int>("ProductId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("PublicId")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Url")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("ProductId");
+
+                            b1.ToTable("ProductPhotos", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+                        });
+
+                    b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("Commerce.Core.Entities.OrderAggregate.Order", b =>

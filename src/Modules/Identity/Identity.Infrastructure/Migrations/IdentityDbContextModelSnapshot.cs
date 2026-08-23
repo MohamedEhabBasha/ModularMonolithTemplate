@@ -116,9 +116,6 @@ namespace Identity.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PictureUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -283,7 +280,31 @@ namespace Identity.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
+                    b.OwnsOne("BuildingBlocks.Core.Entities.Photo", "ProfilePhoto", b1 =>
+                        {
+                            b1.Property<string>("AppUserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<string>("PublicId")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("PicturePublicId");
+
+                            b1.Property<string>("Url")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("PictureUrl");
+
+                            b1.HasKey("AppUserId");
+
+                            b1.ToTable("AspNetUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AppUserId");
+                        });
+
                     b.Navigation("Address");
+
+                    b.Navigation("ProfilePhoto");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

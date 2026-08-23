@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [MatIconModule],
   template: `
-    <div class="flex flex-col items-center justify-center text-center gap-3 py-16">
+    <div class="bg-white flex flex-col items-center justify-center text-center space-y-6 py-16 border border-gray-300 rounded-lg">
       @if (icon()) {
         <mat-icon class="text-5xl! w-12! h-12! text-secondary/40">{{ icon() }}</mat-icon>
       }

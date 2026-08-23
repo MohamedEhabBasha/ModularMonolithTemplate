@@ -2,6 +2,7 @@
 using App.API.Modules.Commerce.Realtime;
 using BuildingBlocks.Application.Contracts.Services;
 using BuildingBlocks.Infrastructure.Services.Caching;
+using BuildingBlocks.Infrastructure.Services.CloudinaryPhotos;
 using Commerce.Application.Contracts.Notifications;
 using Identity.Core.Entities;
 using Identity.Infrastructure.Data;
@@ -93,6 +94,9 @@ public static class DependencyInjection
                       .AllowCredentials();
             });
         });
+
+        services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
+        services.AddScoped<IPhotoService, PhotoService>();
 
         services.AddSignalR();
         services.AddScoped<ICommerceNotifier, SignalRCommerceNotifier>(); //Commerce

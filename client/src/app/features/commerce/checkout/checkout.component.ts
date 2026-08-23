@@ -44,7 +44,7 @@ export class CheckoutComponent {
   protected saving = signal(false);
   protected redirectUrl = signal<string | null>(null);
 
-  onAddressNext(stepper: MatStepper) {
+  async onAddressNext(stepper: MatStepper) {
     const step = this.addressStep();
 
     if (step.addressForm.invalid) {
@@ -59,18 +59,16 @@ export class CheckoutComponent {
 
     this.saving.set(true);
 
-    this.accountService
-      .updateAddress(step.addressToSave)
-      .pipe(switchMap(() => this.accountService.updatePhoneNumber(step.phoneNumber)))
-      .subscribe({
-        next: () => {
-          this.saving.set(false);
-          stepper.next();
-        },
-        error: () => {
-          this.saving.set(false);
-        },
-      });
+    try {
+      await this.accountService.updateAddress(step.addressToSave);
+      await this.accountService.updatePhoneNumber(step.phoneNumber);
+      stepper.next();
+    } catch {
+      this.saving.set(false);
+      return;
+    }
+
+    this.saving.set(false);
   }
 
   onDeliveryNext(stepper: MatStepper) {

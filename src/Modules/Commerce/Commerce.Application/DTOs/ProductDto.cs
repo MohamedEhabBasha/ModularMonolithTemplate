@@ -6,7 +6,7 @@ public record ProductDto
     string Name,
     string Description,
     decimal Price,
-    string PictureUrl,
+    IReadOnlyList<string> PictureUrls,
     string Type,
     string Brand,
     int AvailableQuantity,

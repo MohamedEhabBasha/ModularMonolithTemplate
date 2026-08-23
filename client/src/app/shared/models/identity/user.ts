@@ -1,8 +1,10 @@
 export type User = {
+  id: string
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber?: string;
+  pictureUrl?: string;
   address: Address;
   roles: string[];
 };
@@ -15,3 +17,14 @@ export type Address = {
   state?: string;
   postalCode?: string;
 };
+
+export interface PhotoDto {
+  url: string;
+}
+export interface UpdateBasicInfoDto {
+  firstName: string;
+  lastName: string;
+}
+export interface UpdateBrandNameDto {
+  brandName: string;
+}

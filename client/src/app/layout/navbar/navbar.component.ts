@@ -9,6 +9,7 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { CartService } from '../../core/services/commerce/cart';
 import { AccountService } from '../../core/services/identity/account';
 import { MatDivider } from '@angular/material/divider';
+import { AccountRoles } from '../../shared/models/identity/account-roles';
 
 @Component({
   selector: 'app-navbar',
@@ -33,6 +34,7 @@ export class NavbarComponent {
   protected readonly accountService = inject(AccountService);
   private router = inject(Router);
   protected readonly isMenuOpen = signal(false);
+  readonly accountRoles = AccountRoles;
 
   async logout() {
     await this.accountService.logout();

@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Application.Contracts.Services.Users;
+﻿using BuildingBlocks.Application.Contracts.Services;
+using BuildingBlocks.Application.Contracts.Services.Users;
 using Commerce.Application.Contracts.Services.Orders;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Infrastructure.Data;
@@ -30,7 +31,9 @@ public static class DependencyInjection
 
         services.AddScoped<IStoreUnitOfWork, StoreUnitOfWork>();
         services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IUserProfileProvider, BuyerProfileProvider>();
         services.AddScoped<IUserProfileProvider, SellerProfileProvider>();
+        services.AddScoped<ISellerProfileUpdater, SellerProfileUpdater>();
         services.AddScoped<SellerBrandNameCacheService>();
         services.AddScoped<SellerDisplayResolver>();
         services.AddSingleton<ShoppingCartCacheService>();

@@ -14,7 +14,7 @@ public class UserDirectory(UserManager<AppUser> userManager) : IUserDirectory
 
         return await userManager.Users
             .Where(u => ids.Contains(u.Id))
-            .Select(u => new UserDisplayInfo(u.Id, u.FirstName!, u.LastName!, u.PictureUrl))
+            .Select(u => new UserDisplayInfo(u.Id, u.FirstName!, u.LastName!, u.ProfilePhoto!.Url))
             .ToDictionaryAsync(u => u.Id);
     }
 }

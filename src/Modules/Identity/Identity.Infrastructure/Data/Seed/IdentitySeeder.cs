@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Infrastructure.Seeding;
+﻿using BuildingBlocks.Core.Entities;
+using BuildingBlocks.Infrastructure.Seeding;
 using Identity.Core.Constants;
 using Identity.Core.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -71,7 +72,7 @@ public static class IdentitySeeder
             EmailConfirmed = true,
             FirstName = firstName,
             LastName = lastName,
-            PictureUrl = pictureUrl
+            ProfilePhoto = pictureUrl is not null ? new Photo(pictureUrl, PublicId: null) : null
         };
 
         var result = await userManager.CreateAsync(user, "Seller@123"); // dev fixture only — never reuse this password anywhere real

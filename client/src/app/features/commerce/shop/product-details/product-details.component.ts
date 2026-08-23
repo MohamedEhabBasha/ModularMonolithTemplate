@@ -45,7 +45,7 @@ export class ProductDetailsComponent {
 
   readonly media = computed<ProductMedia[]>(() => {
     const product = this.productResource.value();
-    return product ? [{ type: 'image', url: product.pictureUrl }] : [];
+    return product ? [{ type: 'image', url: product.pictureUrls[0] }] : [];
   });
 
   readonly cartQuantity = computed<number>(

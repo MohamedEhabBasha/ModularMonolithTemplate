@@ -1,0 +1,144 @@
+<!-- edit-profile.component.html -->
+@if (loading()) {
+  <div class="space-y-3 max-w-2xl mx-auto p-4">
+    @for (i of [1, 2, 3, 4]; track i) {
+      <div class="h-16 bg-gray-200 animate-pulse rounded-lg"></div>
+    }
+  </div>
+} @else if (loadError()) {
+  <div class="max-w-2xl mx-auto p-4 text-red-600">
+    Could not load your profile. Please refresh the page.
+  </div>
+} @else {
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-semibold mb-8">Edit Profile</h1>
+
+    <mat-accordion [multi]="true" class="flex! flex-col! gap-9!">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="flex items-center gap-3">
+            @if (photoUrl()) {
+              <img [src]="photoUrl()" alt="" class="w-8 h-8 rounded-full object-cover" />
+            } @else {
+              <mat-icon>account_circle</mat-icon>
+            }
+            <span>Profile Photo</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="flex items-center gap-4 py-2">
+          @if (photoUrl()) {
+            <img [src]="photoUrl()" alt="" class="w-20 h-20 rounded-full object-cover" />
+          } @else {
+            <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+              <mat-icon>person</mat-icon>
+            </div>
+          }
+          <div class="flex flex-col gap-2">
+            <input
+              #photoInput
+              type="file"
+              accept="image/*"
+              class="hidden"
+              (change)="onPhotoSelected($event)"
+            />
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="saving() === 'photo'"
+              (click)="photoInput.click()"
+            >
+              Change Photo
+            </button>
+            @if (photoUrl()) {
+              <button
+                mat-button
+                color="warn"
+                type="button"
+                [disabled]="saving() === 'photo'"
+                (click)="removePhoto()"
+              >
+                Remove Photo
+              </button>
+            }
+          </div>
+        </div>
+        @if (errors().photo) {
+          <p class="text-red-600 text-sm">{{ errors().photo }}</p>
+        }
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="flex items-center gap-3"
+            ><mat-icon>badge</mat-icon><span>Basic Info</span></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <form
+          [formGroup]="basicInfoForm"
+          (ngSubmit)="saveBasicInfo()"
+          class="flex flex-col gap-3 py-2"
+        >
+          <mat-form-field appearance="outline"
+            ><mat-label>First Name</mat-label><input matInput formControlName="firstName"
+          /></mat-form-field>
+          <mat-form-field appearance="outline"
+            ><mat-label>Last Name</mat-label><input matInput formControlName="lastName"
+          /></mat-form-field>
+          @if (errors().basicInfo) {
+            <p class="text-red-600 text-sm">{{ errors().basicInfo }}</p>
+          }
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="basicInfoForm.invalid || basicInfoForm.pristine || saving() === 'basicInfo'"
+          >
+            Save
+          </button>
+        </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="flex items-center gap-3"
+            ><mat-icon>home</mat-icon><span>Address</span></mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="flex flex-col gap-3 py-2">
+          <mat-form-field appearance="outline"
+            ><mat-label>Address Line 1</mat-label><input matInput formControlName="line1"
+          /></mat-form-field>
+          <mat-form-field appearance="outline"
+            ><mat-label>Address Line 2</mat-label><input matInput formControlName="line2"
+          /></mat-form-field>
+          <div class="grid grid-cols-2 gap-3">
+            <mat-form-field appearance="outline"
+              ><mat-label>City</mat-label><input matInput formControlName="city"
+            /></mat-form-field>
+            <mat-form-field appearance="outline"
+              ><mat-label>State</mat-label><input matInput formControlName="state"
+            /></mat-form-field>
+            <mat-form-field appearance="outline"
+              ><mat-label>Postal Code</mat-label><input matInput formControlName="postalCode"
+            /></mat-form-field>
+            <mat-form-field appearance="outline"
+              ><mat-label>Country</mat-label><input matInput formControlName="country"
+            /></mat-form-field>
+          </div>
+          @if (errors().address) {
+            <p class="text-red-600 text-sm">{{ errors().address }}</p>
+          }
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="addressForm.invalid || addressForm.pristine || saving() === 'address'"
+          >
+            Save
+          </button>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+}

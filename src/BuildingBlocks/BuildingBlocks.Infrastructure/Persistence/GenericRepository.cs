@@ -30,6 +30,11 @@ public class GenericRepository<T>(DbContext context) : IGenericRepository<T> whe
         return await context.Set<T>().FindAsync(id);
     }
 
+    public async Task<T?> GetByIdAsync(string id)
+    {
+        return await context.Set<T>().FindAsync(id);
+    }
+
     public async Task<T?> GetEntityWithSpec(ISpecification<T> spec)
     {
         return await ApplySpecification(spec).FirstOrDefaultAsync();

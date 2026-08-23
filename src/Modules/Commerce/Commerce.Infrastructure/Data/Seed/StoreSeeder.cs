@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Infrastructure.Seeding;
+﻿using BuildingBlocks.Core.Entities;
+using BuildingBlocks.Infrastructure.Seeding;
 using Commerce.Core.Entities.Products;
 using System.Text.Json;
 
@@ -37,11 +38,28 @@ public static class StoreSeeder
 
             var productsData = await File.ReadAllTextAsync(path);
 
-            var products = JsonSerializer.Deserialize<List<Product>>(productsData);
+            var products = JsonSerializer.Deserialize<List<ProductSeedDto>>(productsData);
 
             if (products is null) return;
 
-            context.Products.AddRange(products);
+            foreach (var item in products)
+            {
+                var product = new Product
+                {
+                    Name = item.Name,
+                    Description = item.Description,
+                    Price = item.Price,
+                    Type = item.Type,
+                    Brand = item.Brand,
+                    AvailableQuantity = item.AvailableQuantity,
+                    SellerId = item.SellerId,
+                    Status = item.Status
+                };
+
+                product.AddPhoto(new Photo(item.PictureUrl, PublicId: "null"));
+
+                context.Products.Add(product);
+            }
 
             await context.SaveChangesAsync();
         }
@@ -66,4 +84,16 @@ public static class StoreSeeder
             await context.SaveChangesAsync();
         }
     }
+}
+public class ProductSeedDto
+{
+    public string Name { get; set; } = default!;
+    public string Description { get; set; } = default!;
+    public decimal Price { get; set; }
+    public string PictureUrl { get; set; } = default!;
+    public string Type { get; set; } = default!;
+    public string Brand { get; set; } = default!;
+    public int AvailableQuantity { get; set; }
+    public string SellerId { get; set; } = default!;
+    public ProductStatus Status { get; set; }
 }

@@ -13,6 +13,10 @@ import { ConfirmationStepComponent } from './features/commerce/checkout/confirma
 import { OrdersComponent } from './features/commerce/orders/orders.component';
 import { OrderDetailsComponent } from './features/commerce/orders/order-details/order-details.component';
 import { confirmationGuard } from './core/guards/commerce/confirmation-guard';
+import { ProfileComponent } from './features/identity/profile/profile.component';
+import { EditProfileComponent } from './features/identity/edit-profile/edit-profile.component';
+import { SellerProfileComponent } from './features/identity/profile/seller-profile/seller-profile.component';
+import { sellerProfileResolver } from './core/resolvers/seller-profile-resolver';
 
 
 export const routes: Routes = [
@@ -25,6 +29,10 @@ export const routes: Routes = [
   { path: 'checkout/confirmation', component: ConfirmationStepComponent, canActivate: [authGuard, confirmationGuard] },
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/login', component: LoginComponent },
+  { path: 'account/me', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'account/me/edit', component: EditProfileComponent, canActivate: [authGuard] },
+  { path: 'seller/:id', component: SellerProfileComponent, resolve: { sellerProfile: sellerProfileResolver }},
+
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },
   { path: '**', component: NotFoundComponent },

@@ -1,0 +1,24 @@
+@if (accountService.currentUser(); as u) {
+  <app-profile-layout
+    [pictureUrl]="u.pictureUrl ?? null"
+    [name]="u.firstName + ' ' + u.lastName"
+    [showEditButton]="isOwner()"
+  >
+    <mat-tab-group>
+      @if (isOwner()) {
+        <mat-tab label="Address">
+          @if (u.address) {
+            <div class="space-y-1 p-4">
+              <p>{{ u.address.line1 }}</p>
+              @if (u.address.line2) {
+                <p>{{ u.address.line2 }}</p>
+              }
+              <p>{{ u.address.city }}, {{ u.address.state }} {{ u.address.postalCode }}</p>
+              <p>{{ u.address.country }}</p>
+            </div>
+          }
+        </mat-tab>
+      }
+    </mat-tab-group>
+  </app-profile-layout>
+}

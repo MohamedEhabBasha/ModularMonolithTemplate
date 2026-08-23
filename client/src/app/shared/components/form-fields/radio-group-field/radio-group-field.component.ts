@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FieldErrorMessages } from '../../../models/field-error-messages';
 import { MatIcon } from '@angular/material/icon';
-import { MatRadioButton } from '@angular/material/radio';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 
 export interface RadioOption<T extends string = string> {
   value: T;
@@ -13,7 +13,7 @@ export interface RadioOption<T extends string = string> {
 
 @Component({
   selector: 'app-radio-group-field',
-  imports: [ReactiveFormsModule, MatIcon, MatRadioButton],
+  imports: [ReactiveFormsModule, MatIcon, MatRadioGroup, MatRadioButton],
   templateUrl: './radio-group-field.component.html',
   styleUrl: './radio-group-field.component.css',
 })

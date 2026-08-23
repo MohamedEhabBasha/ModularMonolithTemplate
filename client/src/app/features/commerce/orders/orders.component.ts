@@ -5,10 +5,11 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { EmptyStateComponent } from "../../../shared/components/empty-state/empty-state.component";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { RouterLink } from '@angular/router';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-orders',
-  imports: [RouterLink, CurrencyPipe, DatePipe, EmptyStateComponent, MatProgressSpinner],
+  imports: [RouterLink, CurrencyPipe, DatePipe, EmptyStateComponent, MatProgressSpinner, MatButton],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.css',
 })

@@ -11,3 +11,12 @@
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
+.create-product-dialog .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 0.5rem !important;
+}
+
+.mat-mdc-paginator {
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+}

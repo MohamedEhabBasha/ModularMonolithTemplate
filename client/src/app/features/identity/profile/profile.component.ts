@@ -2,7 +2,6 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { AccountService } from '../../../core/services/identity/account';
 import { SellerProfileComponent } from './seller-profile/seller-profile.component';
 import { ProfileService } from '../../../core/services/identity/profile';
-import { SellerProfile } from '../../../shared/models/commerce/seller-profile';
 import { BuyerProfileComponent } from './buyer-profile/buyer-profile.component';
 import { AccountRoles } from '../../../shared/models/identity/account-roles';
 import { UserProfileDto } from '../../../shared/models/identity/profile';

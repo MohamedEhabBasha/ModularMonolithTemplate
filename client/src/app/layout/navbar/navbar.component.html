@@ -141,7 +141,13 @@
     </a>
     <mat-divider></mat-divider>
   }
-  @if (accountService.currentUser()?.roles?.includes(accountRoles.Seller)) {}
+  @if (accountService.currentUser()?.roles?.includes(accountRoles.Admin)) {
+    <a mat-menu-item routerLink="/admin">
+      <mat-icon>admin_panel_settings</mat-icon>
+      <span>Dashboard</span>
+    </a>
+    <mat-divider></mat-divider>
+  }
 
   @if (accountService.currentUser()) {
     <a mat-menu-item routerLink="/account/me">

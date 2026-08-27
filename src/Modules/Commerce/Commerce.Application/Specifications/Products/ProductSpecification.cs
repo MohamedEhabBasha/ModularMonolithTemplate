@@ -8,7 +8,8 @@ public class ProductSpecification : BaseSpecification<Product>
         x.Status == ProductStatus.Approved &&
         (string.IsNullOrEmpty(specParams.Search) || x.Name.ToLower().Contains(specParams.Search)) &&
         (specParams.Brands.Count == 0 || specParams.Brands.Contains(x.Brand)) &&
-        (specParams.Types.Count == 0 || specParams.Types.Contains(x.Type))
+        (specParams.Types.Count == 0 || specParams.Types.Contains(x.Type)) &&
+        (specParams.SellerId == null || x.SellerId == specParams.SellerId)
     )
     {
         ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
@@ -28,5 +29,12 @@ public class ProductSpecification : BaseSpecification<Product>
     }
     public ProductSpecification(int id) : base(x => x.Id == id && x.Status == ProductStatus.Approved)
     {
+    }
+    public ProductSpecification(ProductStatus status) : base(p => p.Status == status) 
+    { 
+    }
+    public ProductSpecification(string sellerId) : base(p => p.SellerId == sellerId)
+    {
+        AddOrderByDescending(p => p.Id);
     }
 }

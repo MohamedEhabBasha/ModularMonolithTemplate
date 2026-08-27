@@ -1,0 +1,100 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4 w-full p-10">
+  @if (dialogRef) {
+    <h2 class="text-lg font-semibold">{{ isEditMode ? 'Edit Product' : 'Create Product' }}</h2>
+  }
+  <mat-form-field appearance="outline">
+    <mat-label>Product Name</mat-label>
+    <input matInput [formControl]="form.controls.name" />
+    @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+      <mat-error>Name is required.</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Description</mat-label>
+    <textarea matInput [formControl]="form.controls.description" rows="4"></textarea>
+  </mat-form-field>
+
+  <div class="grid grid-cols-2 gap-4">
+    <mat-form-field appearance="outline">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" step="0.01" [formControl]="form.controls.price" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Available Quantity</mat-label>
+      <input matInput type="number" [formControl]="form.controls.availableQuantity" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <input matInput [formControl]="form.controls.type" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Brand</mat-label>
+      <input matInput [formControl]="form.controls.brand" />
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <input
+      #photoInput
+      type="file"
+      accept="image/*"
+      [multiple]="!isEditMode"
+      class="hidden"
+      (change)="onPhotosSelected($event)"
+    />
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="uploadingPhoto()"
+      (click)="photoInput.click()"
+    >
+      <mat-icon>add_photo_alternate</mat-icon>
+      {{ uploadingPhoto() ? 'Uploading...' : 'Add Photo' + (isEditMode ? '' : 's') }}
+    </button>
+
+    <div class="flex flex-wrap gap-3 pt-2">
+      @if (isEditMode) {
+        @for (photo of existingPhotos(); track photo.publicId) {
+          <div class="relative h-20 w-20">
+            <img [src]="photo.url" alt="" class="h-full w-full rounded-lg object-cover" />
+            <button
+              type="button"
+              class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-neutral-900 text-white disabled:opacity-50"
+              [disabled]="removingPublicId() === photo.publicId"
+              (click)="removeExistingPhoto(photo.publicId)"
+            >
+              <mat-icon class="text-base! h-4! w-4!">close</mat-icon>
+            </button>
+          </div>
+        }
+      } @else {
+        @for (photo of newPhotos(); track photo.url; let i = $index) {
+          <div class="relative h-20 w-20">
+            <img [src]="photo.url" alt="" class="h-full w-full rounded-lg object-cover" />
+            <button
+              type="button"
+              class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-neutral-900 text-white"
+              (click)="removeNewPhoto(i)"
+            >
+              <mat-icon class="text-base! h-4! w-4!">close</mat-icon>
+            </button>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  @if (error()) {
+    <p class="text-sm text-red-600">{{ error() }}</p>
+  }
+
+  <div class="flex justify-end gap-2">
+    @if (dialogRef) {
+      <button mat-button type="button" (click)="cancel()">Cancel</button>
+    }
+    <button mat-flat-button color="primary" type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Saving...' : isEditMode ? 'Save Changes' : 'Create Product' }}
+    </button>
+  </div>
+</form>

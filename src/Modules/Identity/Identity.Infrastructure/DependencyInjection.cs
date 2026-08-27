@@ -20,6 +20,7 @@ public static class DependencyInjection
 
         services.AddScoped<IUserDirectory, UserDirectory>();
         services.AddScoped<UserProfileResolver>();
+        services.AddScoped<IUserProfileProvider, AdminProfileProvider>();
 
         return services;
     }

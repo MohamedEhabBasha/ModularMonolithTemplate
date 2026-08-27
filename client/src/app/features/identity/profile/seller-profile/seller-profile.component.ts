@@ -1,13 +1,14 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { SellerProfile } from '../../../../shared/models/commerce/seller-profile';
 import { ProfileLayoutComponent } from '../profile-layout/profile-layout.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserProfileDto } from '../../../../shared/models/identity/profile';
 import { AccountService } from '../../../../core/services/identity/account';
+import { ManageProductsComponent } from "./manage-products/manage-products.component";
+import { AboutSellerComponent } from "./about-seller/about-seller.component";
 
 @Component({
   selector: 'app-seller-profile',
-  imports: [ProfileLayoutComponent, MatTabsModule],
+  imports: [ProfileLayoutComponent, MatTabsModule, ManageProductsComponent, AboutSellerComponent],
   templateUrl: './seller-profile.component.html',
   styleUrl: './seller-profile.component.css',
 })

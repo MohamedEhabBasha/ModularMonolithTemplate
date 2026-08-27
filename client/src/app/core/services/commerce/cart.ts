@@ -3,7 +3,7 @@ import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Cart, CartItem } from '../../../shared/models/commerce/cart';
 import { map, Observable, of, tap } from 'rxjs';
-import { Product } from '../../../shared/models/commerce/products';
+import { Product } from '../../../shared/models/commerce/products/product';
 import { CheckoutService } from './checkout';
 
 @Injectable({

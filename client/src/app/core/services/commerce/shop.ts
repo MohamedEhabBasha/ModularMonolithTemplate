@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Pagination } from '../../../shared/models/Pagination';
-import { Product } from '../../../shared/models/commerce/products';
+import { Product } from '../../../shared/models/commerce/products/product';
 import { ShopParams } from '../../../shared/models/commerce/shopParams ';
 
 @Injectable({
@@ -31,6 +31,10 @@ export class ShopService {
 
     if (shopParams.search) {
       params = params.append('search', shopParams.search);
+    }
+
+    if (shopParams.sellerId) {
+      params = params.append('sellerId', shopParams.sellerId);
     }
 
     params = params.append('pageSize', shopParams.pageSize);

@@ -13,7 +13,7 @@ import { ShopService } from '../../../../core/services/commerce/shop';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Product } from '../../../../shared/models/commerce/products';
+import { Product } from '../../../../shared/models/commerce/products/product';
 
 import type { SwiperContainer } from 'swiper/element';
 import { CartService } from '../../../../core/services/commerce/cart';

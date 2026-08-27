@@ -2,14 +2,14 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { AccountService } from '../../../../core/services/identity/account';
 import { ProfileService } from '../../../../core/services/identity/profile';
 import { Address } from '../../../../shared/models/identity/user';
 
-type SectionKey = 'photo' | 'basicInfo' | 'address';
+type SectionKey = 'photo' | 'basicInfo' | 'address' | 'phoneNumber';
 
 @Component({
   selector: 'app-profile-fields',
@@ -21,6 +21,7 @@ type SectionKey = 'photo' | 'basicInfo' | 'address';
     MatButton,
     MatIcon,
     MatLabel,
+    MatError
   ],
   templateUrl: './profile-fields.component.html',
   styleUrl: './profile-fields.component.css',
@@ -51,6 +52,10 @@ export class ProfileFieldsComponent implements OnInit {
     country: ['', [Validators.required, Validators.maxLength(100)]],
   });
 
+  phoneNumberForm = this.fb.nonNullable.group({
+    phoneNumber: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-()]{7,20}$/)]],
+  });
+
   async ngOnInit() {
     this.loading.set(true);
     try {
@@ -65,6 +70,7 @@ export class ProfileFieldsComponent implements OnInit {
       this.photoUrl.set(profile.pictureUrl);
 
       this.basicInfoForm.setValue({ firstName: userInfo.firstName, lastName: userInfo.lastName });
+      this.phoneNumberForm.setValue({ phoneNumber: userInfo.phoneNumber ?? '' });
 
       if (userInfo.address) {
         this.addressForm.setValue({
@@ -156,6 +162,20 @@ export class ProfileFieldsComponent implements OnInit {
       this.addressForm.markAsPristine();
     } catch {
       this.setError('address', 'Could not save your address. Please try again.');
+    } finally {
+      this.saving.set(null);
+    }
+  }
+
+  async savePhoneNumber() {
+    if (this.phoneNumberForm.invalid) return;
+    this.saving.set('phoneNumber');
+    this.clearError('phoneNumber');
+    try {
+      await this.accountService.updatePhoneNumber(this.phoneNumberForm.getRawValue().phoneNumber);
+      this.phoneNumberForm.markAsPristine();
+    } catch {
+      this.setError('phoneNumber', 'Could not save your phone number. Please try again.');
     } finally {
       this.saving.set(null);
     }

@@ -17,7 +17,8 @@ import { ProfileComponent } from './features/identity/profile/profile.component'
 import { EditProfileComponent } from './features/identity/edit-profile/edit-profile.component';
 import { SellerProfileComponent } from './features/identity/profile/seller-profile/seller-profile.component';
 import { sellerProfileResolver } from './core/resolvers/seller-profile-resolver';
-
+import { AdminDashboardComponent } from './features/identity/admin-dashboard/admin-dashboard.component';
+import { adminGuard } from './core/guards/identity/admin-guard';
 
 export const routes: Routes = [
   { path: 'shop', component: ShopComponent },
@@ -26,13 +27,25 @@ export const routes: Routes = [
   { path: 'orders', component: OrdersComponent, canActivate: [authGuard] },
   { path: 'orders/:id', component: OrderDetailsComponent, canActivate: [authGuard] },
   { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard, emptyCartGuard] },
-  { path: 'checkout/confirmation', component: ConfirmationStepComponent, canActivate: [authGuard, confirmationGuard] },
+  {
+    path: 'checkout/confirmation',
+    component: ConfirmationStepComponent,
+    canActivate: [authGuard, confirmationGuard],
+  },
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'account/me', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'account/me/edit', component: EditProfileComponent, canActivate: [authGuard] },
-  { path: 'seller/:id', component: SellerProfileComponent, resolve: { sellerProfile: sellerProfileResolver }},
-
+  {
+    path: 'seller/:id',
+    component: SellerProfileComponent,
+    resolve: { sellerProfile: sellerProfileResolver },
+  },
+  {
+    path: 'admin',
+    component: AdminDashboardComponent,
+    canActivate: [adminGuard],
+  },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },
   { path: '**', component: NotFoundComponent },

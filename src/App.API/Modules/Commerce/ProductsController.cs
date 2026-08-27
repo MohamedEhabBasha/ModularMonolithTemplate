@@ -1,13 +1,31 @@
-﻿using Commerce.Application.Contracts.Persistence;
+﻿using BuildingBlocks.Application.Contracts.Events.Products;
+using BuildingBlocks.Application.Contracts.Services;
+using BuildingBlocks.Application.Dtos;
+using BuildingBlocks.Core.Entities;
+using BuildingBlocks.Infrastructure.Services.CloudinaryPhotos;
+using Commerce.Application.Contracts.Persistence;
 using Commerce.Application.DTOs;
-using Commerce.Application.Specifications.Products;
+using Commerce.Application.DTOs.Requests;
 using Commerce.Application.Extensions;
+using Commerce.Application.Specifications.Products;
 using Commerce.Core.Entities.Products;
 using Commerce.Infrastructure.Services.SellerProfiles;
+using Identity.Core.Constants;
+using Identity.Core.Entities;
+using MassTransit;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace App.API.Modules.Commerce;
 
-public class ProductsController(IStoreUnitOfWork storeUnit, SellerDisplayResolver sellerDisplayResolver) : BaseController
+public class ProductsController
+    (
+        IStoreUnitOfWork storeUnit,
+        IPhotoService photoService,
+        IPublishEndpoint bus,
+        SellerDisplayResolver sellerDisplayResolver, 
+        UserManager<AppUser> userManager
+    ) : BaseController
 {
 
     [HttpGet]
@@ -37,47 +55,121 @@ public class ProductsController(IStoreUnitOfWork storeUnit, SellerDisplayResolve
         return Ok(product.ToDto(sellerDisplays));
     }
 
+    [Authorize(Roles = Roles.Seller)]
     [HttpPost]
-    public async Task<ActionResult<Product>> CreateProduct(Product product)
+    public async Task<ActionResult<ProductDto>> CreateProduct([FromForm] CreateProductRequest request)
     {
+        var sellerId = userManager.GetUserId(User)!; // [Authorize] guarantees a claim exists
+
+
+        var product = new Product
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Price = request.Price,
+            Type = request.Type,
+            Brand = request.Brand,
+            AvailableQuantity = request.AvailableQuantity,
+            SellerId = sellerId
+        };
+
+        foreach (var file in request.Photos)
+        {
+            var uploadResult = await photoService.AddPhotoAsync(file);
+            if (uploadResult.Error is not null)
+                throw new BadRequestException(uploadResult.Error.Message);
+
+            product.AddPhoto(new Photo(uploadResult.SecureUrl.AbsoluteUri, uploadResult.PublicId));
+        }
+
         storeUnit.Products.Add(product);
 
-        if(await storeUnit.CommitAsync())
-        {
-            return CreatedAtAction("GetProduct", new {id = product.Id}, product);
-        }
+        if (!await storeUnit.CommitAsync())
+            throw new BadRequestException("Problem creating product.");
 
-        throw new BadRequestException("Problem Creating Product");
+        await bus.Publish(new ProductSubmittedForReview(product.Id, product.SellerId, DateTime.UtcNow));
+
+        var sellerDisplays = await sellerDisplayResolver.GetManyAsync([sellerId]);
+
+        return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product.ToDto(sellerDisplays));
     }
+
+    [Authorize(Roles = Roles.Seller)]
     [HttpPut("{id:int}")]
-    public async Task<ActionResult> UpdateProduct(int id, Product product)
+    public async Task<ActionResult> UpdateProduct(int id, UpdateProductRequest request)
     {
-        if (id != product.Id || !ProductExists(id))
-            throw new BadRequestException("The route ID does not match the product ID.");
+        var product = await storeUnit.Products.GetByIdAsync(id)
+            ?? throw new NotFoundException("Product not found.");
 
-        storeUnit.Products.Update(product);
+        if (product.SellerId != userManager.GetUserId(User))
+            return Forbid();
 
-        if (await storeUnit.CommitAsync())
-        {
-            return NoContent();
-        }
+        product.Update(request.Name, request.Description, request.Price, request.Type, request.Brand, request.AvailableQuantity);
 
-        throw new BadRequestException("Problem Updating Product");
+        if (!await storeUnit.CommitAsync())
+            throw new BadRequestException("Problem updating product.");
+
+        await bus.Publish(new ProductSubmittedForReview(product.Id, product.SellerId, DateTime.UtcNow));
+
+        return NoContent();
     }
+
+    [Authorize(Roles = Roles.Seller)]
+    [HttpPost("{id:int}/photos")]
+    public async Task<ActionResult<PhotoDto>> AddProductPhoto(int id, IFormFile file)
+    {
+        if (file.Length == 0) throw new BadRequestException("File is required.");
+
+        var product = await storeUnit.Products.GetByIdAsync(id) ?? throw new NotFoundException("Product not found.");
+        if (product.SellerId != userManager.GetUserId(User)) return Forbid();
+
+        var uploadResult = await photoService.AddPhotoAsync(file);
+        if (uploadResult.Error is not null) throw new BadRequestException(uploadResult.Error.Message);
+
+        var photo = new Photo(uploadResult.SecureUrl.AbsoluteUri, uploadResult.PublicId);
+        product.AddPhoto(photo);
+
+        if (!await storeUnit.CommitAsync())
+            throw new BadRequestException("Problem adding photo.");
+
+        return Ok(new PhotoDto(photo.Url, photo.PublicId));
+    }
+
+    [Authorize(Roles = Roles.Seller)]
+    [HttpDelete("{id:int}/photos")]
+    public async Task<ActionResult> RemoveProductPhoto(int id, [FromQuery] string publicId)
+    {
+        var product = await storeUnit.Products.GetByIdAsync(id) ?? throw new NotFoundException("Product not found.");
+        if (product.SellerId != userManager.GetUserId(User)) return Forbid();
+
+        if (product.Photos.Count <= 1)
+            throw new BadRequestException("A product must have at least one photo.");
+
+        await photoService.DeletePhotoAsync(publicId);
+        product.RemovePhoto(publicId);
+
+        if (!await storeUnit.CommitAsync())
+            throw new BadRequestException("Problem removing photo.");
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = Roles.Seller)]
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
         var product = await storeUnit.Products.GetByIdAsync(id)
-            ?? throw new NotFoundException("Product Can Not Be Found");
+            ?? throw new NotFoundException("Product not found.");
 
-        storeUnit.Products.Remove(product);
+        if (product.SellerId != userManager.GetUserId(User))
+            return Forbid();
 
-        if (await storeUnit.CommitAsync())
-        {
-            return NoContent();
-        }
+        product.Delete();
 
-        throw new BadRequestException("Problem Deleting Product");
+        if (!await storeUnit.CommitAsync())
+            throw new BadRequestException("Problem deleting product.");
+
+        return NoContent();
     }
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
@@ -94,8 +186,8 @@ public class ProductsController(IStoreUnitOfWork storeUnit, SellerDisplayResolve
 
         return Ok(await storeUnit.Products.ListAsync(spec));
     }
-    private bool ProductExists(int id)
-    {
-        return storeUnit.Products.Exists(id);
-    }
+    //private bool ProductExists(int id)
+    //{
+    //    return storeUnit.Products.Exists(id);
+    //}
 }

@@ -4,10 +4,10 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { CartService } from '../../../../core/services/commerce/cart';
 import { MatButton } from '@angular/material/button';
 import { OrderDetailsComponent } from '../../orders/order-details/order-details.component';
-import { PaymentHubService } from '../../../../core/services/commerce/payment-hub';
 import { CheckoutService } from '../../../../core/services/commerce/checkout';
 import { OrderService } from '../../../../core/services/commerce/order';
 import { SnackbarService } from '../../../../core/services/snackbar';
+import { CommerceHubService } from '../../../../core/services/commerce/commerce-hub';
 
 @Component({
   selector: 'app-confirmation-step',
@@ -22,10 +22,10 @@ export class ConfirmationStepComponent {
   private orderService = inject(OrderService);
   private snackbar = inject(SnackbarService);
   private checkoutService = inject(CheckoutService);
-  protected paymentHub = inject(PaymentHubService);
+  protected commerceHub = inject(CommerceHubService);
 
-  protected status = this.paymentHub.status;
-  protected order = this.paymentHub.order;
+  protected status = this.commerceHub.status;
+  protected order = this.commerceHub.order;
   private cartDeleted = false;
 
   constructor() {
@@ -40,7 +40,7 @@ export class ConfirmationStepComponent {
       return;
     }
 
-    this.paymentHub.connect(cartId).then(() => {
+    this.commerceHub.joinPaymentGroup(cartId).then(() => {
       if (this.status() !== 'pending') return; // a push already resolved it — don't overwrite
       this.checkoutService.getPaymentStatus(merchantOrderId).subscribe((res) => {
         this.status.set(res.status);
@@ -61,7 +61,7 @@ export class ConfirmationStepComponent {
       this.orderService.createOrder(cartId).subscribe({
         next: (order) => {
           this.order.set(order);
-          this.paymentHub.confirmationCanActivate.set(true);
+          this.commerceHub.confirmationCanActivate.set(true);
         },
         error: () =>
           this.snackbar.error(
@@ -71,9 +71,9 @@ export class ConfirmationStepComponent {
     });
 
     this.destroyRef.onDestroy(() => {
-      this.paymentHub.disconnect();
-      this.paymentHub.confirmationCanActivate.set(false);
-      this.paymentHub.order.set(null);
+      this.commerceHub.disconnect();
+      this.commerceHub.confirmationCanActivate.set(false);
+      this.commerceHub.order.set(null);
     });
   }
 }

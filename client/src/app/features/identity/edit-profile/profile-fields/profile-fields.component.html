@@ -139,6 +139,43 @@
           </button>
         </form>
       </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="flex items-center gap-3">
+            <mat-icon>phone</mat-icon>
+            <span>Phone Number</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form
+          [formGroup]="phoneNumberForm"
+          (ngSubmit)="savePhoneNumber()"
+          class="flex flex-col gap-3 py-2"
+        >
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phoneNumber" />
+            @if (
+              phoneNumberForm.controls.phoneNumber.hasError('pattern') &&
+              phoneNumberForm.controls.phoneNumber.touched
+            ) {
+              <mat-error>Enter a valid phone number.</mat-error>
+            }
+          </mat-form-field>
+          @if (errors().phoneNumber) {
+            <p class="text-red-600 text-sm">{{ errors().phoneNumber }}</p>
+          }
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="
+              phoneNumberForm.invalid || phoneNumberForm.pristine || saving() === 'phoneNumber'
+            "
+          >
+            Save
+          </button>
+        </form>
+      </mat-expansion-panel>
     </mat-accordion>
   </div>
 }

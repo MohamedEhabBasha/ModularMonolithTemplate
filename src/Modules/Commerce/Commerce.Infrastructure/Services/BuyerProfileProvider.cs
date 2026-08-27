@@ -8,7 +8,7 @@ public class BuyerProfileProvider : IUserProfileProvider
     public string Role => "Buyer";
 
     public Task<UserProfileDto> GetProfileAsync(UserIdentitySnapshot identity) =>
-        Task.FromResult<UserProfileDto>(new UserProfileDto
+        Task.FromResult(new UserProfileDto
         {
             Id = identity.Id,
             Email = identity.Email,

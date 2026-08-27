@@ -1,12 +1,13 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { PaymentHubService } from '../../services/commerce/payment-hub';
+import { CommerceHubService } from '../../services/commerce/commerce-hub';
+
 
 export const confirmationGuard: CanActivateFn = (route, state) => {
-  const paymentHub = inject(PaymentHubService);
+  const commerceHub = inject(CommerceHubService);
   const router = inject(Router);
 
-  if (paymentHub.confirmationCanActivate()) return true;
+  if (commerceHub.confirmationCanActivate()) return true;
 
   router.navigateByUrl('/shop');
   return false;

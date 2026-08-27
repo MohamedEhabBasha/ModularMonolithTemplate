@@ -6,8 +6,13 @@
   >
     <mat-tab-group>
       <mat-tab label="About">
-        <div class="p-4 text-gray-500">Coming soon.</div>
+        <app-about-seller [sellerProfile]="sp"></app-about-seller>
       </mat-tab>
+      @if (isOwner()) {
+        <mat-tab label="Manage Products">
+          <app-manage-products />
+        </mat-tab>
+      }
     </mat-tab-group>
   </app-profile-layout>
 } @else {

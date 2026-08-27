@@ -66,7 +66,7 @@ body {
 );
 @include mat.paginator-overrides(
   (
-    container-background-color: #f4f6f9,
+    container-background-color: #fff,
   )
 );
 @include mat.snack-bar-overrides(
@@ -117,11 +117,17 @@ body {
   (
     active-focus-indicator-color: #d32f2f,
     active-hover-indicator-color: #d32f2f,
-    active-indicator-color: #333
+    active-indicator-color: #333,
   )
 );
-  @include mat.expansion-overrides((
+@include mat.expansion-overrides(
+  (
     container-shape: 2px,
-/*     header-text-size: 20px,
-    header-collapsed-state-height: 60px */
-  ));
+  )
+);
+
+@include mat.dialog-overrides(
+  (
+    actions-alignment: flex-center
+  )
+);

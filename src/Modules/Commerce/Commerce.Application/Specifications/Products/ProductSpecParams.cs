@@ -42,4 +42,5 @@ public class ProductSpecParams
     }
 
     public string? Sort { get; set; }
+    public string? SellerId { get; set; }
 }

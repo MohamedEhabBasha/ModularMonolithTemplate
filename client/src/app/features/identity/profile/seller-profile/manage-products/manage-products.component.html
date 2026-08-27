@@ -1,0 +1,57 @@
+<!-- manage-products.component.html — header row and list, replacing the three <section> blocks -->
+<div class="my-6 flex flex-wrap items-center justify-between gap-3">
+  <h2 class="text-xl font-semibold">My Products</h2>
+  <div class="flex items-center gap-6">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-44">
+      <mat-label>Status</mat-label>
+      <mat-select [value]="statusFilter()" (selectionChange)="statusFilter.set($event.value)">
+        @for (status of statusOptions; track status) {
+          <mat-option [value]="status">{{ status }} ({{ statusCounts()[status] }})</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-flat-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Create Product
+    </button>
+  </div>
+</div>
+
+@if (productsResource.isLoading()) {
+  <div class="flex flex-col gap-3">
+    @for (i of [1, 2, 3]; track i) { <div class="h-20 animate-pulse rounded-xl bg-neutral-100"></div> }
+  </div>
+} @else if (productsResource.error()) {
+  <app-empty-state icon="error_outline" title="Couldn't load your products" actionLabel="Retry" (actionClicked)="retry()" />
+} @else if (!products().length) {
+  <app-empty-state icon="inventory_2" title="No products yet" message="Create your first product to start selling." actionLabel="Create Product" (actionClicked)="openCreateDialog()" />
+} @else {
+  @if (actionError()) { <p class="mb-3 text-sm text-red-600">{{ actionError() }}</p> }
+
+  @if (!filteredProducts().length) {
+    <app-empty-state icon="inventory_2" [title]="'No ' + statusFilter().toLowerCase() + ' products'" />
+  } @else {
+    <div class="flex flex-col gap-3">
+      @for (product of filteredProducts(); track product.id) {
+        <div
+          class="flex items-center gap-4 rounded-xl border p-4"
+          [class]="product.status === 'Rejected' ? 'border-red-200 bg-red-50' : 'border-neutral-200'"
+        >
+          <img [src]="product.pictures[0].url" [alt]="product.name" class="h-16 w-16 shrink-0 rounded-lg bg-neutral-100 object-cover" />
+          <div class="flex min-w-0 flex-1 flex-col">
+            <p class="truncate text-sm font-semibold text-neutral-900">{{ product.name }}</p>
+            @switch (product.status) {
+              @case ('Pending') { <p class="text-xs text-neutral-500">{{ product.price | currency }} · Awaiting admin review</p> }
+              @case ('Rejected') { <p class="text-xs text-red-700">Rejected: {{ product.rejectionReason }}</p> }
+              @case ('Approved') { <p class="text-xs text-neutral-500">{{ product.price | currency }} · {{ product.availableQuantity }} in stock</p> }
+            }
+          </div>
+          <button mat-icon-button (click)="editProduct(product)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button [disabled]="deletingId() === product.id" (click)="deleteProduct(product.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+}

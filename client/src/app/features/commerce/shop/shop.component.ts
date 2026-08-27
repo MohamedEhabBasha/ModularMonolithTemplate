@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ShopService } from '../../../core/services/commerce/shop';
-import { Product } from '../../../shared/models/commerce/products';
+import { Product } from '../../../shared/models/commerce/products/product';
 import { ShopCarouselComponent } from './shop-carousel/shop-carousel.component';
 import { FilterSidenavComponent } from './filter-sidenav/filter-sidenav.component';
 import { ProductItemComponent } from './product-item/product-item.component';
@@ -11,7 +11,7 @@ import { Pagination } from '../../../shared/models/Pagination';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogMobileComponent } from './filter-dialog-mobile/filter-dialog-mobile.component';
 import { MarqueeComponent } from './marquee/marquee.component';
-import { EmptyStateComponent } from "../../../shared/components/empty-state/empty-state.component";
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 
 export interface FilterState {
   search: string;
@@ -29,8 +29,8 @@ export interface FilterState {
     ProductItemComponent,
     MatPaginatorModule,
     MarqueeComponent,
-    EmptyStateComponent
-],
+    EmptyStateComponent,
+  ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
 })

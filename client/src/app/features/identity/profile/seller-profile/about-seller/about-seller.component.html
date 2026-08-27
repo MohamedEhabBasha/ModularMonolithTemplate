@@ -1,0 +1,40 @@
+<!-- seller-catalog.component.html -->
+@if (productsResource.isLoading()) {
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+      <div class="aspect-square animate-pulse rounded-xl bg-neutral-100"></div>
+    }
+  </div>
+} @else if (productsResource.error()) {
+  <app-empty-state
+    icon="error_outline"
+    title="Couldn't load products"
+    actionLabel="Retry"
+    (actionClicked)="retry()"
+  />
+} @else if (!productsResource.value()?.totalCount) {
+  <app-empty-state
+    icon="storefront"
+    title="No products yet"
+    message="This seller hasn't listed any approved products yet."
+  />
+} @else {
+  <section class="flex flex-col space-y-6 py-8">
+    <h2 class="text-xl font-semibold">More Products from {{ sellerProfile().brandName }}</h2>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      @for (product of productsResource.value()!.items; track product.id) {
+        <app-product-item [product]="product" />
+      }
+    </div>
+    <div class="flex justify-center mt-4">
+      <mat-paginator
+        [length]="productsResource.value()?.totalCount"
+        [pageIndex]="productsResource.value()!.pageIndex - 1"
+        [pageSize]="productsResource.value()?.pageSize"
+        (page)="onPageChange($event)"
+        [showFirstLastButtons]="true"
+        aria-label="Select page"
+      ></mat-paginator>
+    </div>
+  </section>
+}

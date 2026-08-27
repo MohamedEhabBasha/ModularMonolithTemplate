@@ -4,8 +4,10 @@ using BuildingBlocks.Application.Contracts.Services;
 using BuildingBlocks.Infrastructure.Services.Caching;
 using BuildingBlocks.Infrastructure.Services.CloudinaryPhotos;
 using Commerce.Application.Contracts.Notifications;
+using Commerce.Infrastructure.Messaging.Consumers;
 using Identity.Core.Entities;
 using Identity.Infrastructure.Data;
+using MassTransit;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
@@ -100,6 +102,15 @@ public static class DependencyInjection
 
         services.AddSignalR();
         services.AddScoped<ICommerceNotifier, SignalRCommerceNotifier>(); //Commerce
+
+        services.AddMassTransit(x =>
+        {
+            x.AddConsumer<ProductSubmittedForReviewConsumer>();
+            x.AddConsumer<ProductApprovedConsumer>();
+            x.AddConsumer<ProductRejectedConsumer>();
+
+            x.UsingInMemory((context, cfg) => cfg.ConfigureEndpoints(context));
+        });
 
         return services;
     }

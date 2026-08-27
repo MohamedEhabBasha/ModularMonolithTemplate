@@ -53,5 +53,7 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
         builder.HasIndex(p => new { p.Status, p.CreatedAt }); // admin queue: pending items, oldest first
 
         builder.Property(p => p.RejectionReason).HasMaxLength(500);
+
+        builder.HasQueryFilter(p => !p.IsDeleted);
     }
 }

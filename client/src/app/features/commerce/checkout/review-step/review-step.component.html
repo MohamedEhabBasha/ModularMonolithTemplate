@@ -36,6 +36,13 @@
       }
     </span>
   </div>
+  <div class="flex justify-between border-t border-gray-200 p-4 text-sm">
+    <strong>Discount</strong>
+    <span>
+      {{ cartService.cart()?.couponCode ?? 'N/A' }}
+      {{ cartService.totals()?.discount ?? 0 | currency }}
+    </span>
+  </div>
 
   <div class="flex justify-between border-t border-gray-200 p-4 font-medium">
     <strong>Total</strong>

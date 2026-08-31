@@ -134,13 +134,7 @@
 
 <!-- Shared account dropdown — same panel, triggered from either the desktop or mobile button above -->
 <mat-menu #userMenu="matMenu" panelClass="bg-white!">
-  @if (accountService.currentUser()?.roles?.includes(accountRoles.Buyer)) {
-    <a mat-menu-item routerLink="/orders">
-      <mat-icon>receipt_long</mat-icon>
-      <span>My Orders</span>
-    </a>
-    <mat-divider></mat-divider>
-  }
+  @if (accountService.currentUser()?.roles?.includes(accountRoles.Buyer)) {}
   @if (accountService.currentUser()?.roles?.includes(accountRoles.Admin)) {
     <a mat-menu-item routerLink="/admin">
       <mat-icon>admin_panel_settings</mat-icon>
@@ -150,6 +144,11 @@
   }
 
   @if (accountService.currentUser()) {
+    <a mat-menu-item routerLink="/orders">
+      <mat-icon>receipt_long</mat-icon>
+      <span>My Orders</span>
+    </a>
+    <mat-divider></mat-divider>
     <a mat-menu-item routerLink="/account/me">
       <mat-icon>person</mat-icon>
       <span>profile</span>

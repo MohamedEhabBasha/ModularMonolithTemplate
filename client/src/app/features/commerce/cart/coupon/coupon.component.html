@@ -19,11 +19,19 @@
       {{ status() === 'applying' ? 'Applying…' : 'Apply' }}
     </button>
   </div>
-
   @if (status() === 'applied') {
-    <p class="text-sm text-green-600">Coupon applied!</p>
+    <div class="flex items-center justify-between">
+      <p class="text-sm text-green-600">Coupon "{{ code() }}" applied!</p>
+      <button
+        type="button"
+        (click)="removeCoupon()"
+        class="text-xs text-gray-400 underline hover:text-gray-600"
+      >
+        Remove
+      </button>
+    </div>
   }
   @if (status() === 'error') {
-    <p class="text-sm text-accent-red">Invalid coupon code.</p>
+    <p class="text-sm text-accent-red">{{ errorMessage() }}</p>
   }
 </div>

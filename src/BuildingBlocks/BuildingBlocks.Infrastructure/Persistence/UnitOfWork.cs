@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Application.Contracts.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BuildingBlocks.Infrastructure.Persistence;
 

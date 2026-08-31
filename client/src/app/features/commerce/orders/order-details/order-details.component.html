@@ -59,6 +59,11 @@
           <span>{{ order.deliveryMethod }}</span>
           <span>{{ order.deliveryPrice | currency }}</span>
         </div>
+        <div class="flex justify-between">
+          <span>Discount</span>
+          <span>{{ order.couponCode }}</span>
+          <span>{{ order.discount | currency }}</span>
+        </div>
         <div class="flex justify-between font-medium text-base pt-2 border-t border-neutral-100">
           <span>Total</span>
           <span>{{ order.total | currency }}</span>

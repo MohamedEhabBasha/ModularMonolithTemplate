@@ -17,6 +17,8 @@ export type CartType = {
   paymentReference?: string;
   clientToken?: string;
   redirectUrl?: string;
+  couponCode?: string | null;
+  discount?: number;
 };
 
 export class Cart implements CartType {
@@ -26,4 +28,6 @@ export class Cart implements CartType {
   paymentReference?: string;
   clientToken?: string;
   redirectUrl?: string;
+  couponCode?: string | null;
+  discount?: number;
 }

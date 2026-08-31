@@ -31,7 +31,7 @@ export class CartService {
     if (!cart) return null;
     const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const shipping = this.shippingPrice();
-    const discount = 0;
+    const discount = cart.discount ?? 0;
     return {
       subtotal,
       shipping,

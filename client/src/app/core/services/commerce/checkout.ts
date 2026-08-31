@@ -5,6 +5,7 @@ import { Cart } from '../../../shared/models/commerce/cart';
 import { DeliveryMethod } from '../../../shared/models/commerce/payment/delivery-method';
 import { tap } from 'rxjs';
 import { PaymentRequest } from '../../../shared/models/commerce/payment/payment-request';
+import { CartService } from './cart';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,8 @@ import { PaymentRequest } from '../../../shared/models/commerce/payment/payment-
 export class CheckoutService {
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
+
+  //private cartService = inject(CartService);
 
   deliveryMethods = signal<DeliveryMethod[]>([]);
 
@@ -22,8 +25,9 @@ export class CheckoutService {
   }
 
   createOrUpdatePayment(request: PaymentRequest) {
-    return this.http.post<Cart>(`${this.baseUrl}payments`, request);
-    //TODO call cart.setCart in case this method changes the cart
+    return this.http
+      .post<Cart>(`${this.baseUrl}payments`, request)
+      //.pipe(tap((cart) => this.cartService.setCart(cart)));
   }
 
   // paymob-webhook-result

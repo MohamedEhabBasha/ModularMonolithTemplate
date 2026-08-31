@@ -4,6 +4,7 @@ using Commerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Commerce.Infrastructure.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20260829091727_AddCoupons")]
+    partial class AddCoupons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,18 +84,11 @@ namespace Commerce.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BuyerEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("CouponId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -100,9 +96,13 @@ namespace Commerce.Infrastructure.Migrations
                     b.Property<DateTime>("RedeemedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CouponId", "BuyerEmail");
+                    b.HasIndex("CouponId", "UserId");
 
                     b.ToTable("CouponRedemptions");
                 });
@@ -154,9 +154,6 @@ namespace Commerce.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CouponCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -164,9 +161,6 @@ namespace Commerce.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("DeliveryPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("OrderDate")
@@ -318,15 +312,6 @@ namespace Commerce.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("SellerProfiles");
-                });
-
-            modelBuilder.Entity("Commerce.Core.Entities.Coupons.CouponRedemption", b =>
-                {
-                    b.HasOne("Commerce.Core.Entities.Coupons.Coupon", null)
-                        .WithMany()
-                        .HasForeignKey("CouponId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Commerce.Core.Entities.OrderAggregate.Order", b =>

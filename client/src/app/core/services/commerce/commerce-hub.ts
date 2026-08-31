@@ -19,7 +19,6 @@ export class CommerceHubService {
   private connectionPromise?: Promise<void>;
 
   // --- Payment ---
-  confirmationCanActivate = signal(false);
   status = signal<'pending' | 'paid' | 'failed'>('pending');
   order = signal<Order | null>(null);
 
@@ -38,7 +37,6 @@ export class CommerceHubService {
     this.connection.on('PaymentStatusChanged', (update: PaymentStatusUpdate) => {
       this.status.set(update.status);
       this.order.set(update.order);
-      this.confirmationCanActivate.set(true);
     });
 
     this.connection.on('ProductPendingReview', (update: ProductPendingReviewUpdate) => {

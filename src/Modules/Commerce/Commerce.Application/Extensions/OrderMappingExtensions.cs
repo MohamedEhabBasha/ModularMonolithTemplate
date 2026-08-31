@@ -16,9 +16,11 @@ public static class OrderMappingExtensions
             DeliveryPrice = order.DeliveryMethod.Price,
             PaymentSummary = order.PaymentSummary!,
             OrderItems = [.. order.OrderItems.Select(i => i.ToDto())],
+            Discount = order.Discount,
+            CouponCode = order.CouponCode ?? "N/A",
             Subtotal = order.Subtotal,
             Status = order.Status.ToString(),
-            Total = order.Subtotal + order.DeliveryMethod.Price,
+            Total = order.Subtotal + order.DeliveryMethod.Price - order.Discount,
             PaymentTransactionId = order.PaymentTransactionId
         };
     }

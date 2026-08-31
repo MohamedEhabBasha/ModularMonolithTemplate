@@ -1,6 +1,8 @@
 ﻿using BuildingBlocks.Application.Exceptions;
+using Commerce.Application.Contracts.Services.Coupons;
 using Commerce.Application.Contracts.Services.Payment;
 using Commerce.Core.Entities.Cart;
+using Commerce.Infrastructure.Services.Coupons;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -9,6 +11,7 @@ namespace Commerce.Infrastructure.Services.Payment.Paymob;
 
 public class PaymobPaymentService(
     ShoppingCartCacheService _cartCache,
+    ICouponService couponService,
     IStoreUnitOfWork storeUnit,
     HttpClient _httpClient,
     IConfiguration config) : IPaymentService
@@ -46,6 +49,25 @@ public class PaymobPaymentService(
             }
         }
 
+        var billingEmail = paymentRequest.BillingAddress.Email
+                ?? throw new InvalidOperationException("Billing data missing on cart — collect it before calling CreateOrUpdatePayment.");
+
+        if (!string.IsNullOrWhiteSpace(cart.CouponCode))
+        {
+            var subtotal = cart.Items.Sum(i => i.Price * i.Quantity);
+
+            var revalidated = await couponService.PreviewAsync(cart.CouponCode, billingEmail, subtotal);
+            
+            // authoritative, fresh — never blindly trust the stale guest-time value
+            cart.Discount = revalidated.DiscountAmount; 
+        }
+
+
+        if (cart.Discount > 0)
+        {
+            items.Add(new PaymobItem { Name = "Discount", Amount = -(long)(cart.Discount * 100), Quantity = 1 });
+        }
+
         var requestBody = new PaymobIntentionRequest
         {
             Amount = items.Sum(i => i.Amount * i.Quantity),
@@ -56,14 +78,13 @@ public class PaymobPaymentService(
             RedirectionUrl = $"{config["AppSettings:ClientBaseUrl"]}/checkout/confirmation",
             BillingData = new BillingAddress
             {
-                FirstName = paymentRequest.BillingAddress.FirstName
-                ?? throw new InvalidOperationException("Billing data missing on cart — collect it before calling CreateOrUpdatePayment."),
-                LastName = paymentRequest.BillingAddress.LastName!,
-                Email = paymentRequest.BillingAddress.Email!,
-                PhoneNumber = paymentRequest.BillingAddress.PhoneNumber!,
-                Country = paymentRequest.BillingAddress.Country!,
-                City = paymentRequest.BillingAddress.City!,
-                Street = paymentRequest.BillingAddress.Street!
+                FirstName = paymentRequest.BillingAddress.FirstName,
+                LastName = paymentRequest.BillingAddress.LastName,
+                Email = paymentRequest.BillingAddress.Email,
+                PhoneNumber = paymentRequest.BillingAddress.PhoneNumber,
+                Country = paymentRequest.BillingAddress.Country,
+                City = paymentRequest.BillingAddress.City,
+                Street = paymentRequest.BillingAddress.Street
             }
         };
 

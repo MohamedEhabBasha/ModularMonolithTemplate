@@ -1,13 +1,11 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { CommerceHubService } from '../../services/commerce/commerce-hub';
 
-
-export const confirmationGuard: CanActivateFn = (route, state) => {
-  const commerceHub = inject(CommerceHubService);
+export const confirmationGuard: CanActivateFn = (route) => {
   const router = inject(Router);
+  const hasMerchantOrderId = route.queryParamMap.has('merchant_order_id');
 
-  if (commerceHub.confirmationCanActivate()) return true;
+  if (hasMerchantOrderId) return true;
 
   router.navigateByUrl('/shop');
   return false;

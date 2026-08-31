@@ -13,4 +13,6 @@ public class ShoppingCart
     public string? PaymentStatus { get; set; } // null, "pending", "paid", or "failed"
     public BillingAddress? BillingAddress { get; set; } // snapshotted at payment creation — only record of who/where once the webhook fires
     public PaymentSummary? PaymentSummary { get; set; } // set by the webhook from Paymob's own payload, never trusted from the client
+    public string? CouponCode { get; set; }
+    public decimal Discount { get; set; }
 }

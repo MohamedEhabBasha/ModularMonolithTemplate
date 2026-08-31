@@ -6,7 +6,9 @@ public class StoreUnitOfWork
         IProductRepository products,
         IOrderRepository orders,
         IDeliveryMethodRepository deliveryMethods,
-        ISellerProfileRepository sellerProfiles
+        ISellerProfileRepository sellerProfiles,
+        ICouponRepository coupons,
+        ICouponRedemptionRepository couponRedemptions
     )
     : UnitOfWork<StoreContext>(context), IStoreUnitOfWork
 {
@@ -15,4 +17,8 @@ public class StoreUnitOfWork
     public IDeliveryMethodRepository DeliveryMethods => deliveryMethods;
 
     public ISellerProfileRepository SellerProfiles => sellerProfiles;
+
+    public ICouponRepository Coupons => coupons;
+
+    public ICouponRedemptionRepository CouponsRedemptions => couponRedemptions;
 }

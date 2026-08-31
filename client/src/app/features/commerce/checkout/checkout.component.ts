@@ -101,7 +101,7 @@ export class CheckoutComponent {
         },
         error: (err) => {
           this.saving.set(false);
-          this.snackbarService.error(err.message ?? 'Could not proceed to payment');
+          //this.snackbarService.error(err.message ?? 'Could not proceed to payment');
         },
       });
   }

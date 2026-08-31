@@ -6,4 +6,6 @@ public interface IStoreUnitOfWork : IUnitOfWork
     IOrderRepository Orders { get; }
     IDeliveryMethodRepository DeliveryMethods { get; }
     ISellerProfileRepository SellerProfiles { get; }
+    ICouponRepository Coupons { get; }
+    ICouponRedemptionRepository CouponsRedemptions { get; }
 }

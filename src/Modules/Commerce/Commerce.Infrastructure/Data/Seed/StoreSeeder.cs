@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Core.Entities;
 using BuildingBlocks.Infrastructure.Seeding;
+using Commerce.Core.Entities.Coupons;
 using Commerce.Core.Entities.Products;
 using System.Text.Json;
 
@@ -80,6 +81,33 @@ public static class StoreSeeder
             if (deliveries is null) return;
 
             context.DeliveryMethods.AddRange(deliveries);
+
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.Coupons.Any())
+        {
+            context.Coupons.AddRange(
+                Coupon.Create(
+                    code: "WELCOME10",
+                    type: DiscountType.Percentage,
+                    value: 10,
+                    minimumOrderAmount: 500,
+                    startsAt: DateTime.UtcNow,
+                    expiresAt: DateTime.UtcNow.AddMonths(3),
+                    maxRedemptions: null,          // unlimited overall — just capped by single-use-per-customer
+                    singleUsePerCustomer: true),
+
+                Coupon.Create(
+                    code: "FLASH50",
+                    type: DiscountType.FixedAmount,
+                    value: 50,
+                    minimumOrderAmount: null,
+                    startsAt: DateTime.UtcNow,
+                    expiresAt: DateTime.UtcNow.AddDays(14),
+                    maxRedemptions: 10,           // limited-run promo, first 100 redemptions total
+                    singleUsePerCustomer: false)
+            );
 
             await context.SaveChangesAsync();
         }

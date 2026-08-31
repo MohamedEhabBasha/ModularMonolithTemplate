@@ -10,6 +10,8 @@ export interface Order {
   paymentSummary: PaymentSummary;
   orderItems: OrderItem[];
   subtotal: number;
+  discount: number;
+  couponCode: string;
   status: string;
   total: number;
   paymentTransactionId: string;

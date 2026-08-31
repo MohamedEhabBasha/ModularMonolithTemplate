@@ -1,4 +1,5 @@
-﻿using Commerce.Core.Entities.Products;
+﻿using Commerce.Core.Entities.Coupons;
+using Commerce.Core.Entities.Products;
 using System.Reflection;
 
 namespace Commerce.Infrastructure.Data;
@@ -10,6 +11,8 @@ public class StoreContext(DbContextOptions<StoreContext> options) : DbContext(op
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<SellerProfile> SellerProfiles { get; set; }
+    public DbSet<Coupon> Coupons { get; set; }
+    public DbSet<CouponRedemption> CouponRedemptions { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

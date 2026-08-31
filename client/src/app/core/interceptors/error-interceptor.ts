@@ -16,7 +16,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             const modelStateErrors = Object.values(err.error.errors).flat() as string[];
             return throwError(() => modelStateErrors);
           }
-          snackbar.error(err.error?.title ?? err.error ?? 'Bad request');
+          snackbar.error(err.error?.detail ?? err.error ?? 'Bad request');
           break;
 
         case 401:

@@ -61,7 +61,6 @@ export class ConfirmationStepComponent {
       this.orderService.createOrder(cartId).subscribe({
         next: (order) => {
           this.order.set(order);
-          this.commerceHub.confirmationCanActivate.set(true);
         },
         error: () =>
           this.snackbar.error(
@@ -72,7 +71,6 @@ export class ConfirmationStepComponent {
 
     this.destroyRef.onDestroy(() => {
       this.commerceHub.disconnect();
-      this.commerceHub.confirmationCanActivate.set(false);
       this.commerceHub.order.set(null);
     });
   }

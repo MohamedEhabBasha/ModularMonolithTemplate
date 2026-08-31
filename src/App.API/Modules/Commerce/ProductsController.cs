@@ -79,7 +79,7 @@ public class ProductsController
             if (uploadResult.Error is not null)
                 throw new BadRequestException(uploadResult.Error.Message);
 
-            product.AddPhoto(new Photo(uploadResult.SecureUrl.AbsoluteUri, uploadResult.PublicId));
+            product.AddPhoto(new(uploadResult.SecureUrl.AbsoluteUri, uploadResult.PublicId));
         }
 
         storeUnit.Products.Add(product);
@@ -116,7 +116,7 @@ public class ProductsController
 
     [Authorize(Roles = Roles.Seller)]
     [HttpPost("{id:int}/photos")]
-    public async Task<ActionResult<PhotoDto>> AddProductPhoto(int id, IFormFile file)
+    public async Task<ActionResult<PhotoDto>> AddProductPhoto(int id, IFormFile file) // Edit Photo
     {
         if (file.Length == 0) throw new BadRequestException("File is required.");
 
@@ -137,7 +137,7 @@ public class ProductsController
 
     [Authorize(Roles = Roles.Seller)]
     [HttpDelete("{id:int}/photos")]
-    public async Task<ActionResult> RemoveProductPhoto(int id, [FromQuery] string publicId)
+    public async Task<ActionResult> RemoveProductPhoto(int id, [FromQuery] string publicId) // Edit Photo
     {
         var product = await storeUnit.Products.GetByIdAsync(id) ?? throw new NotFoundException("Product not found.");
         if (product.SellerId != userManager.GetUserId(User)) return Forbid();

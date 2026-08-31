@@ -12,6 +12,8 @@ public class OrderResponseDto
     public decimal DeliveryPrice { get; set; }
     public required PaymentSummary PaymentSummary { get; set; }
     public required List<OrderItemDto> OrderItems { get; set; }
+    public required decimal Discount { get; set; }
+    public required string CouponCode { get; set; }
     public decimal Subtotal { get; set; }
     public required string Status { get; set; }
     public decimal Total { get; set; }

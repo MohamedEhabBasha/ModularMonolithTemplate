@@ -31,7 +31,7 @@ export class OrderDetailsComponent implements OnInit {
     this.loading.set(true);
     this.orderService
       .getOrderDetailed(id)
-      .then((order) => this.fetchedOrder.set(order))
+      .then((order) => {this.fetchedOrder.set(order); console.log(order) })
       .finally(() => this.loading.set(false));
   }
 }

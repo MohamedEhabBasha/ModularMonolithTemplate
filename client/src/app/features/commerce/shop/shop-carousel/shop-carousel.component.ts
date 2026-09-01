@@ -35,7 +35,7 @@ export class ShopCarouselComponent {
       headline: 'Customer Favorites',
       subline: 'The products everyone is talking about.',
       imageUrl:
-        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1400&auto=format&fit=crop',
+        'commerce/shop-1.avif',
       imageAlt: 'A curated stack of best-selling products',
     },
     {
@@ -44,7 +44,7 @@ export class ShopCarouselComponent {
       headline: 'Up to 40% Off',
       subline: 'Premium products. Limited-time prices.',
       imageUrl:
-        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1400&auto=format&fit=crop',
+        'commerce/shop-2.avif',
       imageAlt: 'Premium product on display at a discounted price',
     },
     {
@@ -53,7 +53,7 @@ export class ShopCarouselComponent {
       headline: 'Fast. Secure. Reliable.',
       subline: 'Fast shipping, secure payments, and easy returns.',
       imageUrl:
-        'https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1400&auto=format&fit=crop',
+        'commerce/shop-3.avif',
       imageAlt: 'Package ready for fast, secure delivery',
     },
   ]);

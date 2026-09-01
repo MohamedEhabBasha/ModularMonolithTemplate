@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../../../core/services/commerce/cart';
+import { SnackbarService } from '../../../../core/services/snackbar';
 
 @Component({
   selector: 'app-product-item',
@@ -17,8 +18,10 @@ export class ProductItemComponent {
   product = input.required<Product>();
 
   private cartService = inject(CartService);
+  private snackbar = inject(SnackbarService);
 
   onAddToCart(): void {
     this.cartService.addItemToCart(this.product());
+    this.snackbar.success('One item added to cart!');
   }
 }

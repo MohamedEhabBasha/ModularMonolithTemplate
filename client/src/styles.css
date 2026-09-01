@@ -12,6 +12,15 @@ body {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .create-product-dialog .mat-mdc-dialog-container .mdc-dialog__surface {
   border-radius: 0.5rem !important;
 }
@@ -19,4 +28,17 @@ body {
 .mat-mdc-paginator {
   border-radius: 18px;
   border: 1px solid #e5e7eb;
+}
+
+.snack-error .mdc-snackbar__surface,
+.snack-success .mdc-snackbar__surface {
+  border-radius: 12px !important;
+}
+
+.snack-error .mdc-snackbar__surface {
+  background-color: #dc2626 !important;
+}
+
+.snack-success .mdc-snackbar__surface {
+  background-color: #16a34a !important;
 }

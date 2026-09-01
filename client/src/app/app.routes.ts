@@ -19,8 +19,10 @@ import { SellerProfileComponent } from './features/identity/profile/seller-profi
 import { sellerProfileResolver } from './core/resolvers/seller-profile-resolver';
 import { AdminDashboardComponent } from './features/identity/admin-dashboard/admin-dashboard.component';
 import { adminGuard } from './core/guards/identity/admin-guard';
+import { HomeComponent } from './layout/home/home.component';
 
 export const routes: Routes = [
+  { path: '/', component: HomeComponent, pathMatch: 'full' },
   { path: 'shop', component: ShopComponent },
   { path: 'shop/product/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },

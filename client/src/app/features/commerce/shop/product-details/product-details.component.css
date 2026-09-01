@@ -5,27 +5,21 @@
 .product-layout {
   display: grid;
   grid-template-areas:
-    'info'
-    'gallery'
+    'detailsbox'
     'buybox';
   gap: 1.5rem; 
 
   @media (min-width: 1024px) {
     grid-template-columns: 3fr 1fr;
     grid-template-areas:
-      'gallery buybox'
-      'info    info';
+      'detailsbox buybox';
     column-gap: 2rem;
     row-gap: 2.5rem;
   }
 }
 
-.product-layout__info {
-  grid-area: info;
-}
-
-.product-layout__gallery {
-  grid-area: gallery;
+.product-layout__detailsbox {
+  grid-area: detailsbox;
 }
 
 .product-layout__buybox {

@@ -1,0 +1,84 @@
+<section
+  #section
+  class="product-experience relative font-dm-sans text-(--journey-ink) min-h-[calc(min(51vh,37rem)+18rem)] lg:min-h-[calc(min(62vh,44rem)+16rem)]"
+  aria-label="Product experience"
+>
+  <div
+    #holder
+    class="product-experience__holder absolute top-0 left-1/2 -translate-x-1/2 overflow-hidden bg-[#520503] w-[min(72vw,28rem)] h-[min(51vh,37rem)] rounded-bl-3xl rounded-br-3xl lg:left-[6.25vw] lg:translate-x-0 lg:w-[min(36vw,37rem)] lg:h-[min(62vh,44rem)]"
+  >
+    <div class="product-experience__slider absolute inset-0 pointer-events-none">
+      @for (product of products; track product.src) {
+        <img
+          class="product-experience__product absolute top-1/2 left-1/2 w-[65%] opacity-0"
+          [src]="product.src"
+          [alt]="product.alt"
+        />
+      }
+    </div>
+  </div>
+
+  <div
+    class="product-experience__intro absolute left-1/2 -translate-x-1/2 w-[min(72vw,28rem)] top-[calc(min(51vh,37rem)+1.5rem)] lg:left-[6.25vw] lg:translate-x-0 lg:w-[min(38vw,40rem)] lg:top-[calc(min(62vh,44rem)+2rem)]"
+  >
+    <h2
+      #introHeading
+      class="font-orbitron font-semibold leading-[1.1] tracking-[-0.03em] mb-3 text-[clamp(1.5rem,3.6vw,2.4rem)]"
+    >
+      The Conversation Doesn't End at Checkout.
+    </h2>
+    <p
+      #introParagraph
+      class="text-[#565853] leading-normal text-[.95rem] lg:text-[1.05rem]"
+    >
+      Discover what others think, share your experience, connect with sellers, and become part of a
+      community built around the things you buy and sell.
+    </p>
+  </div>
+
+  <!-- Right Grid -->
+  <div
+    #rightGrid
+    class="product-experience__right-grid hidden lg:grid absolute top-0 right-0 w-[min(72vw,28rem)] h-[min(51vh,37rem)] lg:w-[calc(100%-min(42vw,43rem))] lg:h-[calc(100%-3.2rem)]"
+  >
+    <div class="blob-cont">
+      <div class="yellow blob"></div>
+      <div class="red blob"></div>
+      <div class="green blob"></div>
+    </div>
+    <img
+      [src]="productInteractions.reviews.src"
+      [alt]="productInteractions.reviews.alt"
+      class="product-experience__interaction product-experience__interaction-reviews absolute z-10 left-0 top-0 w-[60%] h-[46%] object-contain rounded-2xl overflow-hidden drop-shadow-xl"
+    />
+    <img
+      [src]="productInteractions.ratings.src"
+      [alt]="productInteractions.ratings.alt"
+      class="product-experience__interaction product-experience__interaction-ratings absolute z-10 right-[5%] top-[10%] w-[40%] h-[26%] object-contain rounded-2xl overflow-hidden drop-shadow-xl"
+    />
+    <img
+      [src]="productInteractions.testimonial.src"
+      [alt]="productInteractions.testimonial.alt"
+      class="product-experience__interaction product-experience__interaction-testimonial absolute z-10 left-[8%] top-[50%] w-[35%] h-[31%] object-contain rounded-2xl overflow-hidden drop-shadow-xl"
+    />
+    <img
+      [src]="productInteractions.comments.src"
+      [alt]="productInteractions.comments.alt"
+      class="product-experience__interaction product-experience__interaction-comments absolute z-10 right-[5%] top-[47%] w-[50%] h-[55%] object-contain rounded-2xl overflow-hidden drop-shadow-xl"
+    />
+    <img
+      [src]="productInteractions.center.src"
+      [alt]="productInteractions.center.alt"
+      class="product-experience__interaction product-experience__interaction-center absolute z-20 left-[29%] top-[26%] w-[43%] h-[38%] object-contain rounded-2xl overflow-hidden drop-shadow-2xl"
+    />
+  </div>
+
+  <!-- Same eyebrow treatment as Journey's topline, mirrored to the bottom edge. -->
+  <div
+    class="product-experience__eyebrow absolute z-6 bottom-5 left-5 right-5 lg:bottom-7 lg:left-10 lg:right-10 flex justify-between pt-[.8rem] border-t border-(--journey-line) text-[#585a56] font-orbitron text-[.53rem] lg:text-[.63rem] tracking-[.13em] uppercase"
+    aria-hidden="true"
+  >
+    <span>Beyond</span>
+    <span>The purchase</span>
+  </div>
+</section>

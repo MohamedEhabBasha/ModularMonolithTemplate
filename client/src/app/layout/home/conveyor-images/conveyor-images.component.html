@@ -1,0 +1,48 @@
+<section class="relative h-screen lg:h-[140vh] flex justify-center items-center">
+  <app-marquee
+    [images]="[
+      {
+        src: 'home/marquee-style.avif',
+        alt: 'style',
+      },
+      {
+        src: 'home/marquee-expression.avif',
+        alt: 'expression',
+      },
+      {
+        src: 'home/marquee-community.avif',
+        alt: 'community',
+      },
+    ]"
+    [speed]="50"
+  ></app-marquee>
+  <div class="absolute top-0 w-full flex items-start justify-center overflow-hidden">
+    <span
+      class="font-signature font-black text-[30vw] leading-relaxed tracking-[-0.5rem] text-[#520503]/5 whitespace-nowrap"
+    >
+      MwGoods
+    </span>
+  </div>
+  <div class="absolute bottom-[20%] w-full max-w-5xl overflow-hidden">
+    <h6
+      class="flex justify-center gap-4 md:gap-8 font-orbitron font-black text-xs md:text-2xl leading-tight text-[#520503]/70 whitespace-nowrap"
+    >
+      <span>Style</span>
+      <span>&diams;</span>
+      <span>Expression</span>
+      <span>&diams;</span>
+      <span>Community</span>
+      <span>&diams;</span>
+      <span>Culture</span>
+      <span>&diams;</span>
+      <span>Discovery</span>
+    </h6>
+  </div>
+  <div
+    class="product-experience__eyebrow absolute z-6 bottom-5 left-5 right-5 lg:bottom-7 lg:left-10 lg:right-10 flex justify-between pt-[.8rem] border-b border-(--journey-line) text-[#585a56] font-orbitron text-[.53rem] lg:text-[.63rem] tracking-[.13em] uppercase"
+    aria-hidden="true"
+  >
+    <span>AND</span>
+    <span>BEYOND</span>
+  </div>
+</section>

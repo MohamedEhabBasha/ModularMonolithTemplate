@@ -4,10 +4,12 @@ import { NavbarComponent } from './layout/navbar/navbar.component';
 import { PreloaderReadyService } from './core/services/preloader-ready';
 import { InitService } from './core/services/init';
 import { PreloaderComponent } from "./layout/preloader/preloader.component";
+import { FooterComponent } from './layout/footer/footer.component';
+import { DemoNavbarComponent } from './layout/navbar/demo-navbar/demo-navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, PreloaderComponent],
+  imports: [RouterOutlet/* , NavbarComponent */, PreloaderComponent, FooterComponent, DemoNavbarComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

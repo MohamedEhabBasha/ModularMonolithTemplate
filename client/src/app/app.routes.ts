@@ -22,7 +22,7 @@ import { adminGuard } from './core/guards/identity/admin-guard';
 import { HomeComponent } from './layout/home/home.component';
 
 export const routes: Routes = [
-  { path: '/', component: HomeComponent, pathMatch: 'full' },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'shop', component: ShopComponent },
   { path: 'shop/product/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },

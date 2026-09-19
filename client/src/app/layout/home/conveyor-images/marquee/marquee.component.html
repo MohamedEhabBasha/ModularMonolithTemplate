@@ -1,0 +1,32 @@
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10 overflow-hidden">
+  <div
+    #marqueeRow
+    class="flex items-end justify-center w-full px-4 md:px-10 lg:px-16"
+  >
+    @for (slot of slots(); track $index) {
+      <div
+        #marqueeSlot
+        class="relative overflow-hidden rounded-2xl shrink-0"
+        [class]="slotClass($index)"
+        [style.width.px]="slot.width"
+        [style.height.px]="slot.height"
+        [style.margin-right.px]="$index === 0 ? -overlapPx() : null"
+        [style.margin-left.px]="$index === 2 ? -overlapPx() : null"
+      >
+        <div #conveyorStrip class="flex h-full w-max will-change-transform">
+          @for (img of strip(); track img.src + '-' + $index) {
+            <div class="relative h-full shrink-0" [style.width.px]="frameWidth()">
+              <img
+                [src]="img.src"
+                [alt]="img.alt"
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

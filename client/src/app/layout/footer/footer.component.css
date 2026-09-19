@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+  z-index: 99;
+
+  background: url('../../../../public/home/noise-transparent.png') repeat;
+  background-size: 180px 180px;
+}
+
+.wordmark {
+  position: relative;
+  display: inline-block;
+  --rgb-shift: 0;
+}
+
+.wordmark__slice {
+  will-change: transform, clip-path;
+}
+
+/* Both slices share identical seam vertices — same jagged-tear language as
+   CtaComponent's .feature-badge__slice — only which side of the seam each
+   keeps differs. */
+.wordmark__slice--top {
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 80% 44%, 60% 58%, 40% 44%, 20% 58%, 0 50%);
+}
+
+.wordmark__slice--bottom {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 50%, 20% 58%, 40% 44%, 60% 58%, 80% 44%, 100% 50%, 100% 100%, 0 100%);
+}
+
+.wordmark__slice--glitch-cyan {
+  text-shadow: -3px 0 #00e1ff;
+}
+
+.wordmark__slice--glitch-magenta {
+  text-shadow: 3px 0 #ff2d5f;
+}

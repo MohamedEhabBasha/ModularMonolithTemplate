@@ -1,0 +1,120 @@
+<!-- cta.component.html -->
+<section #ctaContainer class="relative lg:h-[630svh]">
+  <div class="lg:sticky top-0 flex items-center py-16 lg:py-0 overflow-hidden h-svh">
+    <div
+      #imageReveal
+      class="cta-reveal relative hidden lg:block lg:w-[50%] h-svh"
+      aria-hidden="true"
+    >
+      <svg class="absolute w-0 h-0" aria-hidden="true" focusable="false">
+        <defs>
+          <filter
+            [attr.id]="filterId"
+            x="-30%"
+            y="-30%"
+            width="160%"
+            height="160%"
+            color-interpolation-filters="sRGB"
+          >
+            <feTurbulence
+              #turbulence
+              type="fractalNoise"
+              [attr.baseFrequency]="glitchBaseFrequencyRest"
+              numOctaves="3"
+              seed="7"
+              result="glitchNoise"
+            />
+            <feDisplacementMap
+              #displacement
+              in="SourceGraphic"
+              in2="glitchNoise"
+              scale="0"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      <div #framesWrapper class="cta-reveal__frames absolute inset-0">
+        @for (image of images; track image.src) {
+          <div class="cta-reveal__frame absolute inset-0">
+            <img
+              [src]="image.src"
+              [alt]="image.alt"
+              class="absolute bottom-0 right-0 w-80% h-auto aspect-auto object-cover"
+            />
+          </div>
+        }
+      </div>
+
+      <div
+        #featureWheel
+        class="absolute inset-y-0 left-0 w-1/2 pointer-events-none z-30"
+        aria-hidden="true"
+      >
+        @for (feature of features; track feature) {
+          <div
+            #featureRect
+            class="absolute top-1/2 left-0 w-40 h-10 md:w-100 md:h-20 -mt-5 md:-mt-7 will-change-transform"
+          >
+            <div #glitchBadge class="feature-badge relative w-full h-full">
+              <span
+                #glitchTop
+                class="feature-badge__slice feature-badge__slice--top absolute inset-0 flex items-center pl-4 font-orbitron text-white text-xs md:text-base font-semibold uppercase tracking-[0.2em]"
+              >
+                {{ feature }}
+              </span>
+              <span
+                #glitchBottom
+                class="feature-badge__slice feature-badge__slice--bottom absolute inset-0 flex items-center pl-4 font-orbitron text-white text-xs md:text-base font-semibold uppercase tracking-[0.2em]"
+              >
+                {{ feature }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div
+      #ctaSlot
+      class="w-full lg:w-[50%] box-content px-8 text-left pointer-events-none select-none"
+    >
+      <p
+        class="font-orbitron font-semibold tracking-tight text-black text-5xl md:text-7xl leading-none"
+      >
+        Make Your Own
+        <br />
+        <span class="font-signature text-7xl md:text-9xl leading-none"> Personality </span>
+      </p>
+      <p class="font-orbitron uppercase text-xs space-x-3 text-[black]/40">
+        <span>Discover</span>
+        <span>Connect</span>
+        <span>Express</span>
+      </p>
+
+      <button
+        routerLink="linkedinUrl"
+        type="button"
+        (click)="onJoinNow()"
+        class="mt-12 inline-flex items-center justify-center pointer-events-auto rounded-full border-2 border-[#520503] px-10 py-3 font-orbitron text-sm md:text-base font-semibold uppercase tracking-[0.2em] text-[#520503] transition-colors duration-300 hover:bg-[#520503] hover:text-white"
+      >
+        Create Your Personality
+      </button>
+    </div>
+    <img src="home/rotating-text.avif" alt="" class="cta-rotating-image hidden lg:block" />
+    <div class="absolute inset-0 z-40 hidden lg:block pointer-events-none" aria-hidden="true">
+      @for (spot of pixelGlitchSpots; track spot.id) {
+        <app-pixel-glitch
+          class="absolute"
+          [style.top.%]="spot.topPct"
+          [style.left.%]="spot.leftPct"
+          [sizePx]="spot.sizePx"
+          [color]="spot.color"
+        />
+      }
+    </div>
+  </div>
+</section>

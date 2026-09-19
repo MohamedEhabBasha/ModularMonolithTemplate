@@ -1,0 +1,112 @@
+<footer
+  class="relative overflow-hidden border-y border-white/15 bg-[#f5f5f2] px-6 py-16 md:py-20 lg:flex lg:h-screen lg:flex-col lg:items-center lg:justify-center"
+>
+  <div class="bg"></div>
+  <!-- Ambient pixel-glitch accents, lg+ only — same component/technique as CtaComponent. -->
+  <div class="pointer-events-none absolute inset-0 z-20 hidden lg:block" aria-hidden="true">
+    @for (spot of pixelGlitchSpots; track spot.id) {
+      <app-pixel-glitch
+        class="absolute"
+        [style.top.%]="spot.topPct"
+        [style.left.%]="spot.leftPct"
+        [sizePx]="spot.sizePx"
+        [color]="spot.color"
+      />
+    }
+  </div>
+
+  <!-- Hidden filter defs: same feTurbulence/feDisplacementMap distortion technique
+       as CtaComponent.addGlitchBurst, driving the wordmark's ambient glitch pulse. -->
+  <svg class="absolute h-0 w-0" aria-hidden="true" focusable="false">
+    <defs>
+      <filter
+        [attr.id]="filterId"
+        x="-30%"
+        y="-30%"
+        width="160%"
+        height="160%"
+        color-interpolation-filters="sRGB"
+      >
+        <feTurbulence
+          #turbulence
+          type="fractalNoise"
+          [attr.baseFrequency]="glitchBaseFrequencyRest"
+          numOctaves="3"
+          seed="11"
+          result="glitchNoise"
+        />
+        <feDisplacementMap
+          #displacement
+          in="SourceGraphic"
+          in2="glitchNoise"
+          scale="0"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="relative z-10 flex flex-col items-center gap-6 text-center lg:gap-10">
+    <div #wordmarkWrapper class="wordmark">
+      <span
+        #wordmarkTop
+        class="wordmark__slice wordmark__slice--top font-orbitron text-5xl font-black uppercase tracking-wide text-black md:text-7xl lg:text-8xl xl:text-[10rem]"
+      >
+        MWGOODS
+      </span>
+      <span
+        #wordmarkBottom
+        class="wordmark__slice wordmark__slice--bottom font-orbitron text-5xl font-black uppercase tracking-wide text-black md:text-7xl lg:text-8xl xl:text-[10rem]"
+        aria-hidden="true"
+      >
+        MWGOODS
+      </span>
+    </div>
+
+    <p
+      class="font-orbitron text-sm uppercase tracking-[0.3em] text-black/60 md:text-base lg:text-lg xl:text-xl"
+    >
+      Shopping Shouldn't Be Solitary.
+    </p>
+  </div>
+
+  <div
+    class="relative w-full z-10 mx-auto mt-14 flex max-w-5xl items-center justify-between md:mt-20 lg:mt-24 lg:max-w-4xl xl:mt-28"
+  >
+    <a
+      routerLink="/"
+      class="font-orbitron text-sm uppercase tracking-[0.2em] text-black/80 transition-colors duration-300 hover:text-accent-red md:text-base lg:text-lg"
+    >
+      [ HOME ]
+    </a>
+    <span
+      class="font-orbitron text-xs uppercase tracking-[0.2em] text-black/40 md:text-sm lg:text-base"
+    >
+      © {{ currentYear }} MWgoods
+    </span>
+  </div>
+  <div
+    class="relative z-10 mt-6 flex items-center gap-6 font-orbitron text-xs uppercase tracking-[0.2em] text-black/50 md:text-sm lg:mt-8 lg:text-base"
+  >
+    <a
+      [href]="linkedinUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="transition-colors duration-300 hover:text-accent-red"
+    >
+      LinkedIn
+    </a>
+
+    <span class="h-1 w-1 rounded-full bg-black/30" aria-hidden="true"></span>
+
+    <a
+      [href]="githubUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="transition-colors duration-300 hover:text-accent-red"
+    >
+      GitHub
+    </a>
+  </div>
+</footer>

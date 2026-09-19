@@ -1,0 +1,119 @@
+<section
+  #section
+  class="journey-showcase font-dm-sans relative h-svh min-h-152.5 lg:min-h-155 overflow-hidden text-(--journey-ink)"
+  [attr.aria-label]="title"
+>
+  <div
+    class="journey-showcase__topline absolute z-6 top-5 left-5 right-5 lg:top-7 lg:left-10 lg:right-10 flex justify-between pt-[.8rem] border-t border-(--journey-line) text-[#585a56] font-orbitron text-[.53rem] lg:text-[.63rem] tracking-[.13em] uppercase"
+    aria-hidden="true"
+  >
+    <span>{{ eyebrow }}</span>
+    <span class="hidden lg:inline">Journey</span>
+  </div>
+
+  <figure
+    class="journey-showcase__visual journey-showcase__visual--left absolute z-2 overflow-hidden bg-[#deded7] will-change-transform after:content-[''] after:absolute after:inset-0 after:pointer-events-none after:bg-[linear-gradient(180deg,rgba(0,0,0,.05),transparent_34%,rgba(0,0,0,.13))] top-0 left-1/2 -translate-x-1/2 w-[min(72vw,28rem)] h-[min(51vh,37rem)] lg:top-[16vh] lg:left-[6.25vw] lg:translate-x-0 lg:w-[min(36vw,37rem)] lg:h-[min(62vh,44rem)]"
+  >
+    @for (item of steps; track item.step) {
+      <div class="journey-showcase__frame absolute inset-0">
+        <div class="journey-showcase__mask-outer absolute inset-0 overflow-hidden">
+          <div class="journey-showcase__mask-inner absolute inset-0 overflow-hidden">
+            @if (item.left.type === 'image') {
+              <img
+                [src]="item.left.src"
+                [alt]="item.left.alt"
+                (load)="refreshScrollTrigger()"
+                class="absolute inset-0 w-full h-full object-cover object-[50%_42%] saturate-[.82] contrast-[.96]"
+              />
+            } @else {
+              <video
+                [src]="item.left.src"
+                autoplay
+                muted
+                loop
+                playsinline
+                (loadeddata)="refreshScrollTrigger()"
+                class="absolute inset-0 w-full h-full object-cover object-[50%_42%] saturate-[.82] contrast-[.96]"
+              ></video>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </figure>
+
+  <figure
+    class="journey-showcase__visual journey-showcase__visual--right absolute z-2 overflow-hidden bg-[#deded7] will-change-transform hidden after:content-[''] after:absolute after:inset-0 after:pointer-events-none after:bg-[linear-gradient(180deg,rgba(0,0,0,.05),transparent_34%,rgba(0,0,0,.13))] lg:block lg:top-[22vh] lg:right-[6.25vw] lg:w-[min(36vw,37rem)] lg:h-[min(62vh,44rem)]"
+  >
+    @for (item of steps; track item.step) {
+      <div class="journey-showcase__frame absolute inset-0">
+        <div class="journey-showcase__mask-outer absolute inset-0 overflow-hidden">
+          <div class="journey-showcase__mask-inner absolute inset-0 overflow-hidden">
+            @if (item.right.type === 'image') {
+              <img
+                [src]="item.right.src"
+                [alt]="item.right.alt"
+                (load)="refreshScrollTrigger()"
+                class="absolute inset-0 w-full h-full object-cover object-[54%_50%] saturate-[.82] contrast-[.96]"
+              />
+            } @else {
+              <video
+                [src]="item.right.src"
+                autoplay
+                muted
+                loop
+                playsinline
+                (loadeddata)="refreshScrollTrigger()"
+                class="absolute inset-0 w-full h-full object-cover object-[54%_50%] saturate-[.82] contrast-[.96]"
+              ></video>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </figure>
+
+  <h2
+    class="journey-showcase__title absolute z-5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-max m-0 font-orbitron font-semibold leading-[.9] tracking-[-0.09em] uppercase whitespace-nowrap mix-blend-multiply pointer-events-none text-[clamp(2.2rem,11vw,4.8rem)] lg:text-[clamp(3.4rem,7.7vw,8.7rem)]"
+  >
+    {{ title }}
+  </h2>
+
+  <div
+    class="journey-showcase__step-label absolute z-4 grid top-[11.5vh] left-1/2 -translate-x-1/2 lg:top-[16vh] lg:left-[6.25vw] lg:translate-x-0"
+    aria-live="polite"
+  >
+    @for (item of steps; track item.step) {
+      <span
+        class="journey-showcase__step-text col-start-1 row-start-1 font-orbitron font-semibold leading-none tracking-[-0.08em] whitespace-nowrap text-[clamp(1.5rem,8vw,2.7rem)] lg:text-[clamp(1.85rem,3.4vw,4.3rem)]"
+      >
+        {{ item.step }}
+      </span>
+    }
+  </div>
+
+  <div
+    class="journey-showcase__copy absolute z-4 grid bottom-[9vh] left-1/2 -translate-x-1/2 w-[min(80vw,29rem)] text-center lg:right-[6.25vw] lg:bottom-[7vh] lg:left-auto lg:translate-x-0 lg:w-[min(36vw,37rem)] lg:text-left"
+    aria-live="polite"
+  >
+    @for (item of steps; track item.step) {
+      <div class="journey-showcase__copy-panel col-start-1 row-start-1">
+        <h3
+          class="font-orbitron font-semibold leading-none tracking-[-0.08em] uppercase mb-[.65rem] text-[clamp(1.35rem,7vw,2.2rem)] lg:mb-4 lg:text-[clamp(1.55rem,2.5vw,3rem)]"
+        >
+          {{ item.heading }}
+        </h3>
+        <p class="text-[#565853] leading-[1.45] text-[.95rem] lg:text-[clamp(1rem,1.4vw,1.35rem)]">
+          {{ item.description }}
+        </p>
+      </div>
+    }
+  </div>
+
+  <p
+    class="journey-showcase__hint absolute z-6 right-5 bottom-5 lg:right-10 lg:bottom-7 m-0 text-(--journey-muted) font-orbitron text-[.5rem] lg:text-[.6rem] tracking-[.15em] uppercase"
+    aria-hidden="true"
+  >
+    Scroll to continue
+  </p>
+</section>

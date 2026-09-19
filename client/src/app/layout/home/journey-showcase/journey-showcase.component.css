@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:host {
+  --journey-ink: #090909;
+  --journey-muted: #6f716e;
+  --font-orbitron: "Orbitron", sans-serif;
+  display: block;
+}
+
+.font-dm-sans { font-family: "DM Sans", Arial, sans-serif; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-showcase__visual--left { transform: translate(0, 20vh) !important; }
+  .journey-showcase__visual--right { transform: translateY(-22vh) !important; }
+  .journey-showcase__title { opacity: .3 !important; }
+  .journey-showcase__step-text,
+  .journey-showcase__copy-panel { opacity: 1 !important; visibility: visible !important; }
+}
+
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  .journey-showcase__visual--left { transform: translate(-50%, 12vh) !important; }
+}

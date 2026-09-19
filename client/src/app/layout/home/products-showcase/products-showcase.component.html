@@ -1,0 +1,58 @@
+<section #section class="relative overflow-hidden text-center">
+  <div class="w-full">
+    <div #galleryWrapper class="relative flex justify-end w-full h-svh flex-nowrap">
+      <h2
+        #header
+        class="w-full absolute top-16 left-2 md:top-[16%] lg:left-22 pointer-events-none select-none text-black font-extrabold font-orbitron tracking-tight leading-[1.2] text-[clamp(3.5rem,8vw,6rem)] xl:text-[clamp(3.5rem,10vw,7rem)] text-left"
+      >
+        See What’s Trending
+      </h2>
+
+      <div
+        #holder
+        class="product-experience__holder absolute bottom-0 left-1/2 -translate-x-1/2 overflow-hidden bg-[#520503]/20 w-[min(72vw,28rem)] h-[min(51vh,37rem)] rounded-tl-3xl rounded-tr-3xl lg:left-[6.25vw] lg:translate-x-0 lg:w-[min(36vw,37rem)] lg:h-[min(62vh,44rem)] flex items-center justify-center"
+      >
+        <span
+           class="pointer-events-none select-none font-orbitron font-bold text-white/80 text-[clamp(2.5rem,5vw,4.5rem)]"
+        >
+          Now?
+        </span>
+      </div>
+
+      <div #heroStrip class="absolute inset-0 flex items-end will-change-transform">
+        @for (product of products(); track product.id) {
+          <div class="box-content absolute bottom-0 left-1/2 w-[50vw] lg:w-[25vw] shrink-0 p-8 pb-4">
+            <img
+              [src]="product.revealImageUrl"
+              [alt]="product.alt ?? ''"
+              class="block aspect-square w-full object-cover rounded-2xl"
+            />
+          </div>
+        }
+      </div>
+
+      <div #teaserStrip class="absolute inset-0 flex items-end will-change-transform">
+        @for (product of products(); track product.id) {
+          <div class="box-content absolute bottom-0 left-1/2 w-[50vw] lg:w-[25vw] shrink-0 p-8 pb-4">
+            <img
+              [src]="product.imageUrl"
+              [alt]="product.alt ?? ''"
+              class="block aspect-square w-full object-cover rounded-2xl"
+            />
+          </div>
+        }
+
+        <div
+          #ctaSlot
+          class="box-content absolute left-1/2 top-1/2 w-[50vw] lg:w-[40vw] shrink-0 px-8 text-center pointer-events-none select-none hidden lg:block"
+        >
+          <p class="font-orbitron font-semibold tracking-tight text-black text-2xl md:text-7xl leading-tight">
+            Be Part Of The
+            <br />
+            <span class="font-signature text-4xl md:text-7xl leading-none">Trend</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

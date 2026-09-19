@@ -1,0 +1,4 @@
+:host {
+  display: block;
+  line-height: 0; /* canvas is inline by default and leaves a descender gap otherwise */
+}

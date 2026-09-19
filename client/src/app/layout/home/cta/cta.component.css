@@ -1,0 +1,60 @@
+:host {
+  position: relative;
+}
+
+/* cta.component.css */
+.cta-reveal__frames {
+  --rgb-shift: 0;
+}
+
+.feature-badge {
+  filter: drop-shadow(-3px 0 rgba(255, 45, 95, 0.35)) drop-shadow(3px 0 rgba(0, 225, 255, 0.35));
+}
+
+.feature-badge__slice {
+  background-color: #000;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  will-change: transform, clip-path;
+}
+
+.feature-badge__slice--top {
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 80% 44%, 60% 58%, 40% 44%, 20% 58%, 0 50%);
+}
+
+.feature-badge__slice--bottom {
+  clip-path: polygon(0 50%, 20% 58%, 40% 44%, 60% 58%, 80% 44%, 100% 50%, 100% 100%, 0 100%);
+}
+
+.feature-badge__slice--glitch-cyan {
+  text-shadow: -3px 0 #00e1ff;
+}
+
+.feature-badge__slice--glitch-magenta {
+  text-shadow: 3px 0 #ff2d5f;
+}
+.cta-rotating-image {
+  position: absolute;
+  left: clamp(1rem, 4vw, 4rem);
+  bottom: clamp(1rem, 4vw, 4rem);
+
+  width: clamp(70px, 16vw, 12rem);
+  aspect-ratio: 1;
+
+  object-fit: contain;
+  animation: cta-spin 12s linear infinite;
+
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes cta-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,134 @@
+<nav
+  #navbar
+  class="fixed z-999 w-full will-change-transform border-b border-white/20 bg-[#0c0000]/60"
+  aria-label="Main navigation"
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Main navbar row -->
+    <div class="grid h-20 grid-cols-2 items-center gap-4 pt-5 md:grid-cols-[1fr_auto_1fr]">
+      <!-- ========================================================= -->
+      <!-- Home link - desktop -->
+      <!-- ========================================================= -->
+      <div class="hidden justify-self-start md:flex">
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          appDotHover
+          class="relative inline-flex cursor-pointer items-center rounded text-sm font-medium tracking-wide text-white transition-colors hover:text-stone-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+        >
+          <span
+            class="dot-hover__line pointer-events-none absolute inset-x-0 bottom-2 h-px origin-left scale-x-0 bg-current"
+            aria-hidden="true"
+          ></span>
+
+          <span
+            class="dot-hover__dot pointer-events-none absolute bottom-1 left-0 h-1 w-1 -translate-y-1/2 rounded-full bg-current"
+            aria-hidden="true"
+          ></span>
+
+          <span class="dot-hover__label px-3"> Home </span>
+        </a>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- Logo -->
+      <!-- ========================================================= -->
+      <a
+        routerLink="/"
+        class="justify-self-start rounded text-xl font-bold leading-none tracking-tight focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red md:justify-self-center"
+        aria-label="mwgoods home"
+      >
+        <span class="mr-1 rounded-[0.3rem] bg-accent-red p-0.5 text-white"> MW </span>
+
+        <span class="font-normal text-white"> goods </span>
+      </a>
+
+      <!-- ========================================================= -->
+      <!-- Source - desktop -->
+      <!-- ========================================================= -->
+      <div class="hidden items-center justify-self-end gap-3 md:flex">
+        <a
+          [href]="linkedinUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          appDotHover
+          class="relative inline-flex cursor-pointer items-center rounded-md bg-accent-red text-sm font-semibold text-white transition-colors hover:bg-accent-red/90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
+          aria-label="View source code on GitHub"
+        >
+
+
+          <span class="dot-hover__label px-5 py-1"> Contact </span>
+        </a>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- Mobile menu toggle -->
+      <!-- ========================================================= -->
+      <button
+        type="button"
+        class="justify-self-end rounded p-2 text-white focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red md:hidden"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen()"
+        aria-controls="mobile-menu-panel"
+        aria-label="Toggle menu"
+      >
+        <mat-icon>
+          {{ isMenuOpen() ? 'close' : 'menu' }}
+        </mat-icon>
+      </button>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- Mobile dropdown panel -->
+    <!-- ========================================================= -->
+    <div
+      id="mobile-menu-panel"
+      class="overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out motion-reduce:transition-none md:hidden"
+      [class.max-h-96]="isMenuOpen()"
+      [class.opacity-100]="isMenuOpen()"
+      [class.max-h-0]="!isMenuOpen()"
+      [class.opacity-0]="!isMenuOpen()"
+    >
+      <div class="flex flex-col items-start gap-4 border-t border-white/10 py-4">
+        <!-- Home -->
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          appDotHover
+          (click)="closeMenu()"
+          class="relative inline-flex cursor-pointer items-center rounded text-sm font-medium tracking-wide text-white transition-colors hover:text-stone-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+        >
+          <span
+            class="dot-hover__line pointer-events-none absolute inset-x-0 bottom-2 h-px origin-left scale-x-0 bg-current"
+            aria-hidden="true"
+          ></span>
+
+          <span
+            class="dot-hover__dot pointer-events-none absolute bottom-1 left-0 h-1 w-1 -translate-y-1/2 rounded-full bg-current"
+            aria-hidden="true"
+          ></span>
+
+          <span class="dot-hover__label px-3"> Home </span>
+        </a>
+
+        <!-- Source -->
+        <div class="flex items-center gap-3">
+          <a
+            [href]="linkedinUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            appDotHover
+            (click)="closeMenu()"
+            class="relative inline-flex cursor-pointer items-center rounded-md bg-accent-red text-sm font-semibold text-white transition-colors hover:bg-accent-red/90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
+            aria-label="View source code on GitHub"
+          >
+
+            <span class="dot-hover__label px-5 py-1"> Source </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

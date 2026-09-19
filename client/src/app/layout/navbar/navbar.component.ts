@@ -7,6 +7,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { BusyService } from '../../core/services/busy-service';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { CartService } from '../../core/services/commerce/cart';
+import { WishlistService } from '../../core/services/commerce/wishlist';
 import { AccountService } from '../../core/services/identity/account';
 import { MatDivider } from '@angular/material/divider';
 import { AccountRoles } from '../../shared/models/identity/account-roles';
@@ -31,6 +32,7 @@ import { AccountRoles } from '../../shared/models/identity/account-roles';
 export class NavbarComponent {
   protected readonly busyService = inject(BusyService);
   protected readonly cartService = inject(CartService);
+  protected readonly wishlistService = inject(WishlistService);
   protected readonly accountService = inject(AccountService);
   private router = inject(Router);
   protected readonly isMenuOpen = signal(false);
@@ -38,7 +40,6 @@ export class NavbarComponent {
 
   async logout() {
     await this.accountService.logout();
-    console.log(this.accountService.currentUser());
     this.router.navigateByUrl('/shop');
   }
 

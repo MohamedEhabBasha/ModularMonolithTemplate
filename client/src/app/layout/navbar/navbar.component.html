@@ -1,7 +1,15 @@
-<nav class="fixed w-full bg-[#0c0000]/60 border-b border-white/20 z-999" aria-label="Main navigation">
+<nav
+  class="fixed top-0 left-0 z-999 w-full border-b border-white/20 bg-[#0c0000]/60"
+  aria-label="Main navigation"
+>
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="grid h-20 grid-cols-2 items-center gap-4 md:grid-cols-[1fr_auto_1fr] pt-5">
-      <!-- Shop link (desktop only) -->
+    <!-- ========================================================= -->
+    <!-- Main navbar row -->
+    <!-- ========================================================= -->
+    <div class="grid h-20 grid-cols-2 items-center gap-4 pt-5 md:grid-cols-[1fr_auto_1fr]">
+      <!-- ======================================================= -->
+      <!-- Shop link - desktop -->
+      <!-- ======================================================= -->
       <div class="hidden justify-self-start md:flex">
         <a
           routerLink="/shop"
@@ -9,23 +17,43 @@
           [routerLinkActiveOptions]="{ exact: true }"
           class="cursor-pointer rounded text-sm font-medium tracking-wide text-white transition-colors hover:text-stone-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
         >
-          shop
+          Shop
         </a>
       </div>
 
-      <!-- Logo: left on mobile, centered on desktop -->
-
+      <!-- ======================================================= -->
+      <!-- Logo -->
+      <!-- ======================================================= -->
       <a
         routerLink="/"
         class="justify-self-start rounded text-xl font-bold leading-none tracking-tight focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red md:justify-self-center"
         aria-label="mwgoods home"
       >
-        <span class="bg-accent-red p-0.5 rounded-[0.3rem] text-white mr-1">MW</span
-        ><span class="font-normal text-white">goods</span>
+        <span class="mr-1 rounded-[0.3rem] bg-accent-red p-0.5 text-white"> MW </span>
+        <span class="font-normal text-white"> goods </span>
       </a>
 
-      <!-- Cart + Sign up / Account menu (desktop only) -->
+      <!-- ======================================================= -->
+      <!-- Wishlist + Cart + Sign Up / Account - desktop -->
+      <!-- ======================================================= -->
       <div class="hidden items-center justify-self-end gap-3 md:flex">
+        <!-- Wishlist -->
+        <a
+          routerLink="/wishlist"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          mat-icon-button
+          type="button"
+          class="text-white! focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+          [matBadge]="wishlistService.count()"
+          matBadgeSize="large"
+          matBadgeColor="warn"
+          aria-label="View saved products"
+        >
+          <mat-icon class="text-white!"> favorite </mat-icon>
+        </a>
+
+        <!-- Cart -->
         <a
           routerLink="/cart"
           routerLinkActive="active"
@@ -33,22 +61,22 @@
           mat-icon-button
           type="button"
           class="text-white! focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
-          matBadge="{{ cartService.itemCount() }}"
+          [matBadge]="cartService.itemCount()"
           matBadgeSize="large"
           matBadgeColor="warn"
           aria-label="View cart"
         >
-          <mat-icon class="text-white!">shopping_cart</mat-icon>
+          <mat-icon class="text-white!"> shopping_cart </mat-icon>
         </a>
 
+        <!-- Account / Sign Up -->
         @if (accountService.currentUser() === null) {
-          <button
+          <a
             routerLink="/account/login"
-            type="button"
             class="cursor-pointer rounded-md bg-accent-red px-5 py-1 text-sm font-semibold text-white transition-colors hover:bg-accent-red/90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Sign Up
-          </button>
+          </a>
         } @else {
           <button
             mat-button
@@ -56,13 +84,17 @@
             type="button"
             class="cursor-pointer rounded-md px-3 py-1 text-sm font-semibold text-white! transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
           >
-            Hi, {{ accountService.currentUser()?.firstName || 'there' }}
-            <mat-icon class="text-white! align-middle" iconPositionEnd>expand_more</mat-icon>
+            Hi,
+            {{ accountService.currentUser()?.firstName || 'there' }}
+
+            <mat-icon class="align-middle text-white!" iconPositionEnd> expand_more </mat-icon>
           </button>
         }
       </div>
 
+      <!-- ======================================================= -->
       <!-- Mobile menu toggle -->
+      <!-- ======================================================= -->
       <button
         type="button"
         class="justify-self-end rounded p-2 text-white focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red md:hidden"
@@ -71,11 +103,15 @@
         aria-controls="mobile-menu-panel"
         aria-label="Toggle menu"
       >
-        <mat-icon>{{ isMenuOpen() ? 'close' : 'menu' }}</mat-icon>
+        <mat-icon>
+          {{ isMenuOpen() ? 'close' : 'menu' }}
+        </mat-icon>
       </button>
     </div>
 
+    <!-- ========================================================= -->
     <!-- Mobile dropdown panel -->
+    <!-- ========================================================= -->
     <div
       id="mobile-menu-panel"
       class="overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out motion-reduce:transition-none md:hidden"
@@ -85,36 +121,62 @@
       [class.opacity-0]="!isMenuOpen()"
     >
       <div class="flex flex-col items-start gap-4 border-t border-white/10 py-4">
+        <!-- Shop -->
         <a
           routerLink="/shop"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
           (click)="closeMenu()"
           class="rounded text-sm font-medium tracking-wide text-white transition-colors hover:text-stone-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
         >
           Shop
         </a>
 
+        <!-- Wishlist + Cart + Sign Up / Account -->
         <div class="flex items-center gap-3">
+          <!-- Wishlist -->
           <a
-            routerLink="/cart"
+            routerLink="/wishlist"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
             (click)="closeMenu()"
             mat-icon-button
             type="button"
             class="text-white! focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+            [matBadge]="wishlistService.count()"
+            matBadgeSize="small"
+            matBadgeColor="warn"
+            aria-label="View saved products"
+          >
+            <mat-icon class="text-white!"> favorite </mat-icon>
+          </a>
+
+          <!-- Cart -->
+          <a
+            routerLink="/cart"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="closeMenu()"
+            mat-icon-button
+            type="button"
+            class="text-white! focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+            [matBadge]="cartService.itemCount()"
             matBadgeSize="small"
             matBadgeColor="warn"
             aria-label="View cart"
           >
-            <mat-icon class="text-white!">shopping_cart</mat-icon>
+            <mat-icon class="text-white!"> shopping_cart </mat-icon>
           </a>
 
+          <!-- Account / Sign Up -->
           @if (accountService.currentUser() === null) {
-            <button
+            <a
               routerLink="/account/login"
-              type="button"
+              (click)="closeMenu()"
               class="cursor-pointer rounded-md bg-accent-red px-5 py-1 text-sm font-semibold text-white transition-colors hover:bg-accent-red/90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Sign Up
-            </button>
+            </a>
           } @else {
             <button
               mat-button
@@ -122,8 +184,10 @@
               type="button"
               class="cursor-pointer rounded-md px-3 py-1 text-sm font-semibold text-white! transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
             >
-              Hi, {{ accountService.currentUser()?.firstName || 'there' }}
-              <mat-icon class="text-white! align-middle" iconPositionEnd>expand_more</mat-icon>
+              Hi,
+              {{ accountService.currentUser()?.firstName || 'there' }}
+
+              <mat-icon class="align-middle text-white!" iconPositionEnd> expand_more </mat-icon>
             </button>
           }
         </div>
@@ -132,36 +196,48 @@
   </div>
 </nav>
 
-<!-- Shared account dropdown — same panel, triggered from either the desktop or mobile button above -->
+<!-- =============================================================== -->
+<!-- Shared account menu -->
+<!-- =============================================================== -->
 <mat-menu #userMenu="matMenu" panelClass="bg-white!">
-  @if (accountService.currentUser()?.roles?.includes(accountRoles.Buyer)) {}
+  <!-- Admin -->
   @if (accountService.currentUser()?.roles?.includes(accountRoles.Admin)) {
     <a mat-menu-item routerLink="/admin">
       <mat-icon>admin_panel_settings</mat-icon>
       <span>Dashboard</span>
     </a>
+
     <mat-divider></mat-divider>
   }
 
   @if (accountService.currentUser()) {
+    <!-- Orders -->
     <a mat-menu-item routerLink="/orders">
       <mat-icon>receipt_long</mat-icon>
       <span>My Orders</span>
     </a>
+
     <mat-divider></mat-divider>
+
+    <!-- Profile -->
     <a mat-menu-item routerLink="/account/me">
       <mat-icon>person</mat-icon>
-      <span>profile</span>
+      <span>Profile</span>
     </a>
+
     <mat-divider></mat-divider>
   }
 
-  <button mat-menu-item (click)="logout()">
+  <!-- Logout -->
+  <button mat-menu-item type="button" (click)="logout()">
     <mat-icon>logout</mat-icon>
     <span>Logout</span>
   </button>
 </mat-menu>
 
+<!-- =============================================================== -->
+<!-- Global loading bar -->
+<!-- =============================================================== -->
 @if (busyService.loading()) {
   <mat-progress-bar mode="indeterminate" class="fixed top-0 z-50"></mat-progress-bar>
 }

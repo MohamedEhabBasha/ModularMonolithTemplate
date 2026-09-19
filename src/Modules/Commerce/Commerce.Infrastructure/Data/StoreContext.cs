@@ -7,6 +7,7 @@ namespace Commerce.Infrastructure.Data;
 public class StoreContext(DbContextOptions<StoreContext> options) : DbContext(options)
 {
     public DbSet<Product> Products { get; set; }
+    public DbSet<WishlistItem> WishlistItems { get; set; }
     public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }

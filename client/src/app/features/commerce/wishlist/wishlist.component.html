@@ -1,0 +1,185 @@
+<section class="relative min-h-svh overflow-hidden bg-primary px-4 py-24 sm:px-6 lg:px-8">
+  <!-- Background grid -->
+  <div class="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
+    <div
+      class="absolute inset-0"
+      style="
+        background-image:
+          linear-gradient(to right, rgba(9, 9, 9, 0.08) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(9, 9, 9, 0.08) 1px, transparent 1px);
+        background-size: 6.25vw 6.25vw;
+      "
+    ></div>
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-7xl">
+    <!-- Header -->
+    <div class="mb-16 flex flex-col gap-6 lg:mb-20 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p
+          class="mb-4 font-orbitron text-[10px] uppercase tracking-[0.35em] text-black/40 sm:text-xs"
+        >
+          Your selection
+        </p>
+
+        <h1
+          class="font-orbitron text-4xl font-black uppercase tracking-tight text-black sm:text-5xl md:text-6xl lg:text-7xl"
+        >
+          Wishlist
+        </h1>
+      </div>
+
+      @if (!loading() && products().length > 0) {
+        <div class="font-orbitron text-xs uppercase tracking-[0.2em] text-black/45 sm:text-sm">
+          {{ products().length }}
+          {{ products().length === 1 ? 'piece' : 'pieces' }}
+        </div>
+      }
+    </div>
+
+    <!-- Loading -->
+    @if (loading()) {
+      <div class="flex min-h-[40vh] items-center justify-center">
+        <mat-spinner diameter="32"></mat-spinner>
+      </div>
+    }
+
+    <!-- Empty -->
+    @else if (products().length === 0) {
+      <div class="flex min-h-[45vh] items-center justify-center">
+        <app-empty-state
+          icon="favorite"
+          title="Your wishlist is empty"
+          message="Looks like you haven't added anything yet."
+          class="w-[90%] lg:w-1/2"
+        >
+          <a
+            routerLink="/shop"
+            emptyStateAction
+            class="mt-2 inline-block rounded-md bg-accent-red px-6 py-2.5 text-sm font-medium text-white transition hover:bg-accent-red/90"
+          >
+            Continue Shopping
+          </a>
+        </app-empty-state>
+      </div>
+    }
+
+    <!-- Products -->
+    @else {
+      <div class="grid grid-cols-1 gap-x-5 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        @for (product of products(); track product.id) {
+          <article class="group bg-white p-4">
+            <!-- Product image -->
+            <div class="relative aspect-4/5 overflow-hidden rounded-sm bg-[#e9e9e4]">
+              @if (product.pictureUrls.length > 0) {
+                <img
+                  [src]="product.pictureUrls[0]"
+                  [alt]="product.name"
+                  class="h-full w-full object-cover transition duration-700 ease-out will-change-transform group-hover:scale-105"
+                  loading="lazy"
+                />
+              } @else {
+                <div class="flex h-full items-center justify-center bg-black/5">
+                  <mat-icon class="text-black/20! text-4xl"> image </mat-icon>
+                </div>
+              }
+
+              <!-- Image overlay -->
+              <div
+                class="pointer-events-none absolute inset-0 bg-black/0 transition duration-500 group-hover:bg-black/10"
+              ></div>
+
+              <!-- Product type -->
+              <div class="absolute left-4 top-4">
+                <span
+                  class="rounded-full bg-primary/90 px-3 py-1.5 font-orbitron text-[9px] font-semibold uppercase tracking-[0.18em] text-black backdrop-blur-sm"
+                >
+                  {{ product.type }}
+                </span>
+              </div>
+
+              <!-- Wishlist remover -->
+              <button
+                type="button"
+                (click)="remove(product.id)"
+                class="group/remove absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-primary/90 text-black backdrop-blur-sm transition-all duration-300 hover:bg-accent-red hover:text-white focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-red"
+                [attr.aria-label]="'Remove ' + product.name + ' from wishlist'"
+                [attr.title]="'Remove ' + product.name + ' from wishlist'"
+              >
+                <mat-icon
+                  class="m-0! flex! h-5! w-5! items-center! justify-center! text-[18px]! leading-none! transition-transform duration-300 group-hover/remove:rotate-90"
+                >
+                  close
+                </mat-icon>
+              </button>
+
+              <!-- Bottom hover action -->
+              <div
+                class="absolute inset-x-4 bottom-4 translate-y-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
+              >
+                <a
+                  [routerLink]="['/shop/product/', product.id]"
+                  class="flex w-full items-center justify-center rounded-md bg-[#0c0000] px-5 py-3 font-orbitron text-[10px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-red"
+                >
+                  View Product
+                </a>
+              </div>
+            </div>
+
+            <!-- Product information -->
+            <div class="mt-5">
+              <!-- Brand -->
+              <div class="mb-2 flex items-center justify-between gap-3">
+                <p class="font-orbitron text-[9px] uppercase tracking-[0.2em] text-black/40">
+                  {{ product.brand }}
+                </p>
+
+                <p class="font-orbitron text-[9px] uppercase tracking-[0.15em] text-black/35">
+                  {{ product.availableQuantity }} left
+                </p>
+              </div>
+
+              <!-- Name -->
+              <h2
+                class="font-orbitron text-sm font-semibold uppercase leading-relaxed tracking-wider text-black sm:text-base"
+              >
+                {{ product.name }}
+              </h2>
+
+              <!-- Description -->
+              <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-black/50">
+                {{ product.description }}
+              </p>
+
+              <!-- Price + seller -->
+              <div class="mt-5 flex items-end justify-between gap-4 border-t border-black/10 pt-4">
+                <div>
+                  <span class="font-orbitron text-lg font-bold tracking-tight text-black">
+                    {{ product.price | currency }}
+                  </span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  @if (product.sellerPictureUrl) {
+                    <img
+                      [src]="product.sellerPictureUrl"
+                      [alt]="product.sellerBrandName"
+                      class="h-7 w-7 rounded-full object-cover"
+                      loading="lazy"
+                    />
+                  }
+
+                  <span
+                    class="max-w-25 truncate text-right text-[10px] uppercase tracking-[0.08em] text-black/45"
+                  >
+                    {{ product.sellerBrandName }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>

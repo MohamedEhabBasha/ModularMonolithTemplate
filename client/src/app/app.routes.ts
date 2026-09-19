@@ -20,6 +20,7 @@ import { sellerProfileResolver } from './core/resolvers/seller-profile-resolver'
 import { AdminDashboardComponent } from './features/identity/admin-dashboard/admin-dashboard.component';
 import { adminGuard } from './core/guards/identity/admin-guard';
 import { HomeComponent } from './layout/home/home.component';
+import { WishlistComponent } from './features/commerce/wishlist/wishlist.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -38,6 +39,7 @@ export const routes: Routes = [
   { path: 'account/login', component: LoginComponent },
   { path: 'account/me', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'account/me/edit', component: EditProfileComponent, canActivate: [authGuard] },
+  { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard] },
   {
     path: 'seller/:id',
     component: SellerProfileComponent,

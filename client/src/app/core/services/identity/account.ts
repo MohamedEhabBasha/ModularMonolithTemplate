@@ -5,6 +5,7 @@ import { Address, UpdateBasicInfoDto, User } from '../../../shared/models/identi
 import { firstValueFrom } from 'rxjs';
 import { RegisterRequest } from '../../../shared/models/identity/register';
 import { LoginRequest } from '../../../shared/models/identity/login';
+import { WishlistService } from '../commerce/wishlist';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class AccountService {
   baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
   currentUser = signal<User | null>(null);
+  private wishlistService = inject(WishlistService);
 
   private refreshAntiforgeryToken() {
     return firstValueFrom(this.http.get(`${this.baseUrl}antiforgery/token`));
@@ -33,13 +35,14 @@ export class AccountService {
   async logout() {
     await firstValueFrom(this.http.post(`${this.baseUrl}identity/logout`, {}));
     this.currentUser.set(null);
+    this.wishlistService.clear();
     await this.refreshAntiforgeryToken(); // re-mint for anonymous again
   }
 
   async loadCurrentUser() {
     const user = await firstValueFrom(this.http.get<User>(`${this.baseUrl}identity/user-info`));
     this.currentUser.set(user);
-    console.log('USER-INFO', user);
+    await this.wishlistService.load();
     return user;
   }
 

@@ -8,7 +8,8 @@ public class StoreUnitOfWork
         IDeliveryMethodRepository deliveryMethods,
         ISellerProfileRepository sellerProfiles,
         ICouponRepository coupons,
-        ICouponRedemptionRepository couponRedemptions
+        ICouponRedemptionRepository couponRedemptions,
+        IWishlistItemsRepository wishlistItems
     )
     : UnitOfWork<StoreContext>(context), IStoreUnitOfWork
 {
@@ -21,4 +22,6 @@ public class StoreUnitOfWork
     public ICouponRepository Coupons => coupons;
 
     public ICouponRedemptionRepository CouponsRedemptions => couponRedemptions;
+
+    public IWishlistItemsRepository WishlistItems => wishlistItems;
 }

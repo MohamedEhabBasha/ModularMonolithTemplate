@@ -8,4 +8,5 @@ public interface IStoreUnitOfWork : IUnitOfWork
     ISellerProfileRepository SellerProfiles { get; }
     ICouponRepository Coupons { get; }
     ICouponRedemptionRepository CouponsRedemptions { get; }
+    IWishlistItemsRepository WishlistItems { get; }
 }

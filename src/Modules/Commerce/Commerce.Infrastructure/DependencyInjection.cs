@@ -32,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IDeliveryMethodRepository, DeliveryMethodRepository>();
         services.AddScoped<ICouponRepository, CouponRepository>();
         services.AddScoped<ICouponRedemptionRepository, CouponRedemptionRepository>();
+        services.AddScoped<IWishlistItemsRepository, WishlistItemsRepository>();
 
         services.AddScoped<IStoreUnitOfWork, StoreUnitOfWork>();
         services.AddScoped<IOrderService, OrderService>();

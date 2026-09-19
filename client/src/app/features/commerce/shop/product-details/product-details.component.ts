@@ -17,6 +17,7 @@ import { Product } from '../../../../shared/models/commerce/products/product';
 
 import type { SwiperContainer } from 'swiper/element';
 import { CartService } from '../../../../core/services/commerce/cart';
+import { WishlistService } from '../../../../core/services/commerce/wishlist';
 import { RouterLink } from '@angular/router';
 
 interface ProductMedia {
@@ -37,6 +38,7 @@ export class ProductDetailsComponent {
 
   private readonly shopService = inject(ShopService);
   private readonly cartService = inject(CartService);
+  private readonly wishlistService = inject(WishlistService);
 
   readonly productResource = rxResource({
     params: () => ({ id: Number(this.id()) }),
@@ -60,9 +62,9 @@ export class ProductDetailsComponent {
     computation: () => this.cartQuantity() || 1,
   });
 
-  readonly isSaved = linkedSignal({
-    source: () => this.productResource.value()?.id,
-    computation: () => false,
+  readonly isSaved = computed<boolean>(() => {
+    const product = this.productResource.value();
+    return product ? this.wishlistService.isSaved(product.id) : false;
   });
 
   readonly maxQuantity = computed(() => this.productResource.value()?.availableQuantity ?? 0);
@@ -119,13 +121,19 @@ export class ProductDetailsComponent {
     }
   }
 
-  toggleSave(): void {
+  async toggleSave(): Promise<void> {
     const product = this.productResource.value();
     if (!product) {
       return;
     }
-    this.isSaved.update((saved) => !saved);
-    this.saveToggled.emit({ product, saved: this.isSaved() });
+
+    if (this.wishlistService.isSaved(product.id)) {
+      await this.wishlistService.remove(product.id);
+    } else {
+      await this.wishlistService.add(product.id);
+    }
+
+    this.saveToggled.emit({ product, saved: this.wishlistService.isSaved(product.id) });
   }
 
   /** Pauses any video slide once it's scrolled out of the active position. */

@@ -9,7 +9,7 @@ import { DemoNavbarComponent } from './layout/navbar/demo-navbar/demo-navbar.com
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet/* , NavbarComponent */, PreloaderComponent, FooterComponent, DemoNavbarComponent],
+  imports: [RouterOutlet, NavbarComponent, PreloaderComponent, FooterComponent/* , DemoNavbarComponent */],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

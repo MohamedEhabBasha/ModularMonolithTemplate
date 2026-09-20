@@ -4,6 +4,8 @@
 
 </div>
 
+### 📱 App Demo Clip
+
 <div align="center">
 <video
 src="https://github.com/user-attachments/assets/94bfaab6-b152-468c-800b-03ea8585d3da"

@@ -1,7 +1,18 @@
-[Mwgoods Home Page-1.webm](https://github.com/user-attachments/assets/94bfaab6-b152-468c-800b-03ea8585d3da)
+<div align="center">
+<video
+src="https://github.com/user-attachments/assets/94bfaab6-b152-468c-800b-03ea8585d3da"
+autoplay
+muted
+playsinline
+preload="auto"
+width="100%"
+
+<br><br>
+</div>
+
 <div align="center">
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Orbitron\&pause=1000\&color=D32F2F\&center=true\&vCenter=true\&width=435\&lines=Welcome+To+Mwgoods;Made+for+Modern+Shopping.;Products+Meet+People.)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Orbitron&size=35&pause=1000&color=D32F2F&center=true&vCenter=true&width=600&height=200&lines=Welcome+To+Mwgoods;Made+for+Modern+Shopping.;Products+Meet+People.)](https://git.io/typing-svg)
 
 </div>
 

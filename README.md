@@ -200,9 +200,20 @@ mwgoods/
 
 ## 📸 Screenshots
 
-*Add screenshots or a short demo GIF here.*
+### 🔐 Authentication
+
+#### Login
+
+<img width="1920" height="850" alt="login" src="https://github.com/user-attachments/assets/ea8bb072-2d2b-4367-941a-8d74ace42ee2" />
+
+#### Register
+
+<img width="1920" height="1080" alt="Register" src="https://github.com/user-attachments/assets/331c617c-2728-4b58-9b0a-83ee0569e682" />
+
 
 ---
+
+
 
 ## 📄 License
 

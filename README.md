@@ -91,8 +91,8 @@ graph TB
     end
 
     subgraph Infra["Infrastructure"]
-        SQL[(SQL Server)]
-        Redis[(Redis<br/>cart + coupon cache)]
+        SQL[(SQL Server<br/>Docker container)]
+        Redis[(Redis<br/>Docker container<br/>cart + coupon cache)]
         Bus[[MassTransit<br/>in-process bus]]
         Cloud[Cloudinary]
         Pay[Paymob]
@@ -118,6 +118,7 @@ graph TB
 * **EF Core owned types** (e.g. a `Photo` value object) and **global query filters** (soft delete) push data-shape invariants down into the persistence layer instead of trusting every call site to remember them.
 * **Event-driven decoupling** via MassTransit — currently running on the in-memory transport, with the exact same publish/consume code portable to RabbitMQ without touching business logic, should this project ever need real distributed messaging.
 * **Snapshotting over live references** wherever historical accuracy matters more than always-fresh data — order shipping addresses, ordered product details, and coupon redemption amounts are all captured at the moment they happen, immune to later edits of their source.
+* **Dockerized local infrastructure** with SQL Server and Redis running in containers, making the development environment consistent and easy to set up across machines.
 
 ---
 
@@ -133,6 +134,7 @@ graph TB
 | **Frontend**              | Angular 21, Angular Material, Tailwind CSS, GSAP, Three.js            |
 | **Design**                | Figma                                                                 |
 | **Auth**                  | Cookie-based (BFF pattern), ASP.NET Core Identity, antiforgery tokens |
+| **Containerization**       | Docker (SQL Server and Redis containers)                              |
 
 ---
 

@@ -222,6 +222,11 @@ mwgoods/
 
 [Profile & Product Management.webm](https://github.com/user-attachments/assets/23982ffb-10de-4fce-9bd3-9c517184ddc8)
 
+### ❤️ Wishlist Experience
+
+#### Save products you love and keep them close.
+
+[wishlist.webm](https://github.com/user-attachments/assets/39726a2a-6f53-4d25-a6d8-b641c14f11d5)
 
 ---
 

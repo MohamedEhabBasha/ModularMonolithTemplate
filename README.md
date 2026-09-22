@@ -22,8 +22,37 @@ width="100%">
 
 A full-stack, multi-vendor e-commerce marketplace built with the **.NET 10 SDK** as a modular monolith and an **Angular 21** frontend — buyers and sellers on one platform, with an admin-moderated product approval pipeline, real-time notifications, and a payment flow built on Paymob.
 
+<div align="center">
+
+![.NET](https://img.shields.io/badge/.NET_10-512BD4?style=flat-square&logo=dotnet&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular_21-DD0031?style=flat-square&logo=angular&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL_Server-CC2927?style=flat-square&logo=microsoftsqlserver&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
+![SignalR](https://img.shields.io/badge/SignalR-512BD4?style=flat-square&logo=dotnet&logoColor=white)
+![MassTransit](https://img.shields.io/badge/MassTransit-1E88E5?style=flat-square)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=flat-square&logo=cloudinary&logoColor=white)
+![Paymob](https://img.shields.io/badge/Paymob-00A99D?style=flat-square)
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=white)
+
+</div>
+
+## Table of Contents
+
+- [Features](#features)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [ER Diagram](#er-diagram)
+- [Screenshots](#screenshots)
+- [What's Next](#whats-next)
+- [Getting Started](#getting-started)
+- [License](#license)
+
 ---
 
+<a id="features"></a>
 ## ✨ Features
 
 ### Marketplace & Roles
@@ -74,6 +103,7 @@ A full-stack, multi-vendor e-commerce marketplace built with the **.NET 10 SDK**
 
 ---
 
+<a id="architecture"></a>
 ## 🏗️ Architecture
 
 The backend is a **modular monolith**: multiple bounded contexts (Identity, Commerce) deployed as a single application, but built and reasoned about as if they could be split into separate services later.
@@ -122,6 +152,7 @@ graph TB
 
 ---
 
+<a id="tech-stack"></a>
 ## 🛠️ Tech Stack
 
 | Layer                     | Technologies                                                          |
@@ -129,15 +160,16 @@ graph TB
 | **Backend**               | .NET 10 SDK, ASP.NET Core Web API, EF Core, SQL Server                |
 | **Messaging / Real-time** | MassTransit (in-memory transport), SignalR                            |
 | **Caching**               | Redis (cart sessions, coupon rules)                                   |
-| **Payments**              | Paymob                                                                |
+| **Payments**              | Paymob                                                                 |
 | **Media**                 | Cloudinary (server-managed uploads and deletions)                     |
 | **Frontend**              | Angular 21, Angular Material, Tailwind CSS, GSAP, Three.js            |
-| **Design**                | Figma                                                                 |
+| **Design**                | Figma                                                                  |
 | **Auth**                  | Cookie-based (BFF pattern), ASP.NET Core Identity, antiforgery tokens |
 | **Containerization**       | Docker (SQL Server and Redis containers)                              |
 
 ---
 
+<a id="project-structure"></a>
 ## 📁 Project Structure
 
 ```text
@@ -166,8 +198,6 @@ mwgoods/
     │       ├── Identity.Core/
     │       └── Identity.Infrastructure/
     │
-    ├── tests/
-    │
     └── App.API/
         ├── Exceptions/
         ├── Filters/
@@ -179,6 +209,7 @@ mwgoods/
 
 ---
 
+<a id="er-diagram"></a>
 ## ER Diagram
 
 ### Commerce Module
@@ -338,6 +369,7 @@ erDiagram
 
 ---
 
+<a id="screenshots"></a>
 ## 📸 Screenshots
 
 ### 🔐 Authentication
@@ -370,6 +402,65 @@ erDiagram
 
 ---
 
+<a id="whats-next"></a>
+## 🔭 What's Next
+
+* **Product reviews** — let buyers rate and review products they've purchased
+* **More admin tooling** — admin-created coupons, plus letting sellers create and manage their own coupons
+* **Seller analytics** — surface how many people have bought each of a seller's products
+
+---
+
+<a id="getting-started"></a>
+## 🚀 Getting Started
+
+### Prerequisites
+
+* [.NET SDK](https://dotnet.microsoft.com/download) (latest LTS or newer)
+* [Node.js](https://nodejs.org/) + npm
+* SQL Server (local instance or container)
+* Redis (local instance or container)
+* A [Cloudinary](https://cloudinary.com/) account (cloud name, API key, API secret)
+* A [Paymob](https://paymob.com/) account (API keys, integration ID, HMAC secret) — sandbox credentials are sufficient for local development
+
+### Backend Setup
+
+```bash
+cd <path-to-api-project>
+
+# Configure secrets — either via appsettings.Development.json or user-secrets
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<your-sql-connection-string>"
+dotnet user-secrets set "ConnectionStrings:Redis" "<your-redis-connection-string>"
+dotnet user-secrets set "CloudinarySettings:CloudName" "<cloud-name>"
+dotnet user-secrets set "CloudinarySettings:ApiKey" "<api-key>"
+dotnet user-secrets set "CloudinarySettings:ApiSecret" "<api-secret>"
+dotnet user-secrets set "PaymentSettings:Paymob:SecretKey" "<secret-key>"
+dotnet user-secrets set "PaymentSettings:Paymob:PublicKey" "<public-key>"
+dotnet user-secrets set "PaymentSettings:Paymob:IntegrationId" "<integration-id>"
+dotnet user-secrets set "PaymentSettings:Paymob:Hmac" "<hmac-secret>"
+
+# Apply migrations and seed data
+dotnet ef database update -p Commerce.Infrastructure -s App.API
+
+# Run
+dotnet run --project App.API
+```
+
+> **Paymob webhooks** need a publicly reachable URL during local development — a tunneling tool (e.g. ngrok) pointed at your local API is the simplest way to receive them while testing.
+
+### Frontend Setup
+
+```bash
+cd client
+npm install
+ng serve
+```
+
+Update `environment.ts` / `environment.development.ts` with the API's base URL if it differs from the default.
+
+---
+
+<a id="license"></a>
 ## License
 
 All rights reserved.

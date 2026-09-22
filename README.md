@@ -13,14 +13,14 @@ autoplay
 muted
 playsinline
 preload="auto"
-width="100%"
-
+width="100%">
+</video>
 <br><br>
 </div>
 
 # MWGoods
 
-A full-stack, multi-vendor e-commerce marketplace built as a **.NET modular monolith** with an **Angular 21** frontend — buyers and sellers on one platform, with an admin-moderated product approval pipeline, real-time notifications, and a payment flow built on Paymob.
+A full-stack, multi-vendor e-commerce marketplace built with the **.NET 10 SDK** as a modular monolith and an **Angular 21** frontend — buyers and sellers on one platform, with an admin-moderated product approval pipeline, real-time notifications, and a payment flow built on Paymob.
 
 ---
 
@@ -61,11 +61,16 @@ A full-stack, multi-vendor e-commerce marketplace built as a **.NET modular mono
 
 ### Media
 
-* Product and profile photos upload **directly from the browser to Cloudinary** using short-lived signed tokens — the API server never touches raw image bytes, keeping upload handling fast and memory-light regardless of file size
+* Product and profile photos are uploaded to and deleted from **Cloudinary through the API server**, keeping media management centralized and allowing the backend to control the full photo lifecycle
 
 ### Wishlist
 
 * Buyers can save products from any listing; saved items persist across sessions and devices, tied to their account rather than the browser
+
+### Experience & UI Design
+
+* A deliberately designed home page showcases the product visually, with **GSAP** motion design and an interactive **Three.js vase** as part of the hero experience
+* UI flows, layouts, and visual direction were designed in **Figma** before being brought into the Angular application
 
 ---
 
@@ -101,7 +106,8 @@ graph TB
     Commerce --> Redis
     Commerce --> Bus
     Bus --> Hub
-    UI -- signed upload --> Cloud
+    UI -- media requests --> API
+    API -- upload / delete --> Cloud
     Commerce -- webhook --> Pay
 ```
 
@@ -119,61 +125,14 @@ graph TB
 
 | Layer                     | Technologies                                                          |
 | ------------------------- | --------------------------------------------------------------------- |
-| **Backend**               | .NET, ASP.NET Core Web API, EF Core, SQL Server                       |
+| **Backend**               | .NET 10 SDK, ASP.NET Core Web API, EF Core, SQL Server                |
 | **Messaging / Real-time** | MassTransit (in-memory transport), SignalR                            |
 | **Caching**               | Redis (cart sessions, coupon rules)                                   |
 | **Payments**              | Paymob                                                                |
-| **Media**                 | Cloudinary (direct client-side signed uploads)                        |
-| **Frontend**              | Angular 21, Angular Material, Tailwind CSS                            |
+| **Media**                 | Cloudinary (server-managed uploads and deletions)                     |
+| **Frontend**              | Angular 21, Angular Material, Tailwind CSS, GSAP, Three.js            |
+| **Design**                | Figma                                                                 |
 | **Auth**                  | Cookie-based (BFF pattern), ASP.NET Core Identity, antiforgery tokens |
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-* [.NET SDK](https://dotnet.microsoft.com/download) (latest LTS or newer)
-* [Node.js](https://nodejs.org/) + npm
-* SQL Server (local instance or container)
-* Redis (local instance or container)
-* A [Cloudinary](https://cloudinary.com/) account (cloud name, API key, API secret)
-* A [Paymob](https://paymob.com/) account (API keys, integration ID, HMAC secret) — sandbox credentials are sufficient for local development
-
-### Backend Setup
-
-```bash
-cd <path-to-api-project>
-
-# Configure secrets — either via appsettings.Development.json or user-secrets
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<your-sql-connection-string>"
-dotnet user-secrets set "ConnectionStrings:Redis" "<your-redis-connection-string>"
-dotnet user-secrets set "CloudinarySettings:CloudName" "<cloud-name>"
-dotnet user-secrets set "CloudinarySettings:ApiKey" "<api-key>"
-dotnet user-secrets set "CloudinarySettings:ApiSecret" "<api-secret>"
-dotnet user-secrets set "PaymentSettings:Paymob:SecretKey" "<secret-key>"
-dotnet user-secrets set "PaymentSettings:Paymob:PublicKey" "<public-key>"
-dotnet user-secrets set "PaymentSettings:Paymob:IntegrationId" "<integration-id>"
-dotnet user-secrets set "PaymentSettings:Paymob:Hmac" "<hmac-secret>"
-
-# Apply migrations and seed data
-dotnet ef database update -p Commerce.Infrastructure -s App.API
-
-# Run
-dotnet run --project App.API
-```
-
-> **Paymob webhooks** need a publicly reachable URL during local development — a tunneling tool (e.g. ngrok) pointed at your local API is the simplest way to receive them while testing.
-
-### Frontend Setup
-
-```bash
-cd client
-npm install
-ng serve
-```
-
-Update `environment.ts` / `environment.development.ts` with the API's base URL if it differs from the default.
 
 ---
 
@@ -249,8 +208,6 @@ mwgoods/
 [wishlist.webm](https://github.com/user-attachments/assets/39726a2a-6f53-4d25-a6d8-b641c14f11d5)
 
 ---
-
-
 
 ## 📄 License
 

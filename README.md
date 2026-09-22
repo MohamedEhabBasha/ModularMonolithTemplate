@@ -370,6 +370,11 @@ erDiagram
 
 ---
 
-## 📄 License
+## License
 
-*Add a license if you intend to open-source this repository.*
+All rights reserved.
+
+This project is provided for portfolio and demonstration purposes only.
+No part of this repository (code, assets, or documentation) may be copied,
+modified, distributed, or used in any other project without explicit
+written permission from the author.

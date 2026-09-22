@@ -179,6 +179,165 @@ mwgoods/
 
 ---
 
+## ER Diagram
+
+### Commerce Module
+
+```mermaid
+erDiagram
+    SHOPPING_CART {
+        string Id PK "Redis cart key"
+        int DeliveryMethodId
+        string PaymentReference
+        string ClientToken
+        string RedirectUrl
+        string PaymentStatus
+        string CouponCode
+        decimal Discount
+    }
+
+    CART_ITEM {
+        int ProductId
+        string ProductName
+        decimal Price
+        int Quantity
+        string PictureUrl
+        string Brand
+        string Type
+    }
+
+    COUPON {
+        int Id PK
+        string Code UK
+        string DiscountType
+        decimal DiscountValue
+        decimal MinimumOrderAmount
+        datetime StartsAt
+        datetime ExpiresAt
+        int MaxRedemptions
+        int RedemptionCount
+        boolean IsSingleUsePerCustomer
+        boolean IsActive
+    }
+
+    COUPON_REDEMPTION {
+        int Id PK
+        int CouponId FK
+        string BuyerEmail
+        int OrderId
+        decimal DiscountAmount
+        datetime RedeemedAt
+    }
+
+    ORDER {
+        int Id PK
+        datetime OrderDate
+        string BuyerEmail
+        int DeliveryMethodId FK
+        decimal DeliveryPrice
+        decimal Discount
+        string CouponCode
+        decimal Subtotal
+        string Status
+        string PaymentTransactionId
+    }
+
+    ORDER_ITEM {
+        int Id PK
+        int OrderId FK
+        decimal Price
+        int Quantity
+    }
+
+    PRODUCT_ITEM_ORDERED {
+        int ProductId
+        string ProductName
+        string PictureUrl
+    }
+
+    DELIVERY_METHOD {
+        int Id PK
+        string ShortName
+        string DeliveryTime
+        string Description
+        decimal Price
+    }
+
+    PRODUCT {
+        int Id PK
+        string Name
+        string Description
+        decimal Price
+        string Type
+        string Brand
+        int AvailableQuantity
+        string SellerId
+        string Status
+        string RejectionReason
+        string ReviewedByUserId
+        datetime ReviewedAt
+        boolean IsDeleted
+    }
+
+    PRODUCT_PHOTO {
+        int Id PK
+        int ProductId FK
+        string Url
+        string PublicId
+    }
+
+    WISHLIST_ITEM {
+        int Id PK
+        string UserId
+        int ProductId FK
+        datetime AddedAt
+    }
+
+    SELLER_PROFILE {
+        int Id PK
+        string UserId UK
+        string BrandName
+        datetime BrandNameChangedAt
+    }
+
+    BILLING_ADDRESS {
+        string FirstName
+        string LastName
+        string Email
+        string PhoneNumber
+        string Country
+        string City
+        string Street
+        string Building
+        string Floor
+        string Apartment
+        string State
+    }
+
+    PAYMENT_SUMMARY {
+        string Last4
+        string Brand
+        int ExpMonth
+        int ExpYear
+    }
+
+    SHOPPING_CART ||--o{ CART_ITEM : contains
+    SHOPPING_CART o|--o| BILLING_ADDRESS : snapshots
+    SHOPPING_CART o|--o| PAYMENT_SUMMARY : stores
+
+    COUPON ||--o{ COUPON_REDEMPTION : redeemed_by
+    DELIVERY_METHOD ||--o{ ORDER : selected_for
+    ORDER ||--o{ ORDER_ITEM : contains
+    ORDER ||--|| BILLING_ADDRESS : snapshots
+    ORDER o|--o| PAYMENT_SUMMARY : stores
+    ORDER_ITEM ||--|| PRODUCT_ITEM_ORDERED : snapshots
+
+    PRODUCT ||--o{ PRODUCT_PHOTO : owns
+    PRODUCT ||--o{ WISHLIST_ITEM : saved_in
+```
+
+---
+
 ## 📸 Screenshots
 
 ### 🔐 Authentication

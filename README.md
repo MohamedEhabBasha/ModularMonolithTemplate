@@ -185,16 +185,36 @@ mwgoods/
 │   └── src/app/
 │       ├── core/                 # Services, guards, interceptors
 │       ├── features/             # Route-level feature components
+│       ├── layout/               # Application layouts and shell components
 │       └── shared/               # Reusable components, models
-├── App.API/                      # Composition root — DI wiring, controllers, hubs
-├── Identity.Core/                 # Identity domain
-├── Identity.Infrastructure/      # Identity persistence, EF config
-├── Commerce.Core/                 # Commerce domain (Product, Order, Coupon, ...)
-├── Commerce.Infrastructure/       # Commerce persistence, Cloudinary, MassTransit consumers
-└── BuildingBlocks/                # Shared contracts between modules
+│
+└── src/
+    ├── BuildingBlocks/
+    │   ├── BuildingBlocks.Application/
+    │   ├── BuildingBlocks.Core/
+    │   └── BuildingBlocks.Infrastructure/
+    │
+    ├── Modules/
+    │   ├── Commerce/
+    │   │   ├── Commerce.Application/
+    │   │   ├── Commerce.Core/
+    │   │   └── Commerce.Infrastructure/
+    │   │
+    │   └── Identity/
+    │       ├── Identity.Application/
+    │       ├── Identity.Core/
+    │       └── Identity.Infrastructure/
+    │
+    ├── tests/
+    │
+    └── App.API/
+        ├── Exceptions/
+        ├── Filters/
+        └── Modules/
+            ├── Commerce/
+            ├── Common/
+            └── Identity/
 ```
-
-> Adjust paths above to match your actual solution layout if it differs.
 
 ---
 

@@ -216,6 +216,13 @@ mwgoods/
 
 [Checkout Lifecycle.webm](https://github.com/user-attachments/assets/fb2e8d94-0397-4644-803a-1777bec0c779)
 
+### 👤 Profile & Product Management
+
+#### From personalizing your profile to managing the entire product lifecycle. Sellers can update their information and profile photo, manage approved products, edit or remove listings, and submit new products for review. Admins can then review pending products and approve or reject submissions, with approved products automatically appearing in the seller's live product list.
+
+[Profile & Product Management.webm](https://github.com/user-attachments/assets/23982ffb-10de-4fce-9bd3-9c517184ddc8)
+
+
 ---
 
 

@@ -210,6 +210,11 @@ mwgoods/
 
 <img width="1920" height="1080" alt="Register" src="https://github.com/user-attachments/assets/331c617c-2728-4b58-9b0a-83ee0569e682" />
 
+### 🛍️ Shopping & Checkout Journey
+
+#### From discovering products to completing an order — filtering, sorting, coupons, checkout steps, payment, and order creation, all in one flow.
+
+[Checkout Lifecycle.webm](https://github.com/user-attachments/assets/fb2e8d94-0397-4644-803a-1777bec0c779)
 
 ---
 

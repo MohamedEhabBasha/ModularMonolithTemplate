@@ -129,14 +129,24 @@ export class HomeComponent {
     this.mm.add('(min-width: 1024px)', () => {
       this.heroTimeline = this.setupHeroEntrance();
       this.lineDrawTween = this.setupLineDraw();
+
       const paragraphCleanup = this.setupParagraphReveal();
       const vaseRotationCleanup = this.setupVaseRotationLoop();
+
+      // Important: the preloader may already be dismissed
+      // when this animation context is created.
+      if (this.preloaderService.dismissed()) {
+        this.heroTimeline?.play();
+        this.lineDrawTween?.play();
+      }
 
       return () => {
         this.heroTimeline?.kill();
         this.heroTimeline = undefined;
+
         this.lineDrawTween?.kill();
         this.lineDrawTween = undefined;
+
         paragraphCleanup();
         vaseRotationCleanup();
       };

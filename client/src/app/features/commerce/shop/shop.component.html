@@ -14,7 +14,7 @@
     <h2 class="text-[1.5rem] font-semibold">Filters</h2>
   </div>
   <!-- Desktop-only filter column, plain div, sticky against page scroll -->
-<aside class="hidden! lg:block! lg:w-[25%]! sticky top-0 h-[calc(100vh-64px)]! bg-white! border-r!">
+<aside class="hidden! lg:block! lg:w-[25%]! sticky top-0 h-screen! bg-white! border-r!">
   <div class="h-full overflow-y-auto hide-scrollbar p-4">
     <app-filter-sidenav
       [allBrands]="shopService.brands()"

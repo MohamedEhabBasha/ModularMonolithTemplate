@@ -1,43 +1,161 @@
-<div class="min-h-[80vh] flex items-center justify-center px-4">
-  <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg p-8">
-    <h1 class="text-2xl font-semibold text-secondary mb-6 text-center">Sign in</h1>
-
-    <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate class="flex flex-col gap-4">
-      <app-text-field
-        [control]="loginForm.controls.email"
-        label="Email"
-        type="email"
-        autocomplete="email"
-        [errorMessages]="{ required: 'Email is required', email: 'Enter a valid email address' }"
-      />
-
-      <app-password-field
-        [control]="loginForm.controls.password"
-        label="Password"
-        autocomplete="current-password"
-        [errorMessages]="{ required: 'Password is required' }"
-      />
-
-      @if (serverValidationErrors(); as errors) {
-        <ul role="alert" class="text-accent-red text-sm -mt-2 list-disc pl-5">
-          @for (msg of errors; track msg) {
-            <li>{{ msg }}</li>
-          }
-        </ul>
-      }
-
-      <button mat-flat-button type="submit" class="bg-secondary! text-white! w-full py-2! mt-2" [disabled]="loading()">
-        @if (loading()) {
-          <mat-progress-spinner diameter="20" mode="indeterminate" class="inline-block" />
-        } @else {
-          Sign in
-        }
-      </button>
-    </form>
-
-    <p class="text-sm text-center text-secondary mt-6">
-      Don't have an account?
-      <a routerLink="/account/register" class="text-accent-red hover:underline">Create one</a>
-    </p>
+<section class="relative min-h-svh overflow-hidden bg-primary px-4 py-24 sm:px-6 lg:px-8">
+  <!-- Background grid -->
+  <div class="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
+    <div
+      class="absolute inset-0"
+      style="
+        background-image:
+          linear-gradient(to right, rgba(9, 9, 9, 0.08) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(9, 9, 9, 0.08) 1px, transparent 1px);
+        background-size: 6.25vw 6.25vw;
+      "
+    ></div>
   </div>
-</div>
+
+  <!-- Ambient accents -->
+  <div
+    class="pointer-events-none absolute left-[7%] top-[20%] h-1.5 w-1.5 rounded-full bg-accent-red"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="pointer-events-none absolute right-[9%] top-[30%] h-1 w-1 rounded-full bg-black/25"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="pointer-events-none absolute bottom-[16%] right-[18%] h-1.5 w-1.5 rounded-full bg-accent-red"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-10 flex min-h-[calc(100svh-12rem)] items-center justify-center">
+    <div class="w-full max-w-md">
+      <!-- Intro -->
+      <div class="mb-8 text-center">
+        <p
+          class="mb-4 font-orbitron text-[10px] uppercase tracking-[0.35em] text-black/40 sm:text-xs"
+        >
+          Welcome back
+        </p>
+
+        <h1
+          class="font-orbitron text-4xl font-black uppercase tracking-tight text-black sm:text-5xl"
+        >
+          Sign In
+        </h1>
+
+        <p class="mt-4 text-sm leading-relaxed text-black/50">Continue your MWgoods experience.</p>
+      </div>
+
+      <!-- Form card -->
+      <div
+        class="relative border border-black/10 bg-white p-6 shadow-[0_20px_60px_rgba(12,0,0,0.08)] sm:p-8"
+      >
+        <!-- Top accent -->
+        <div class="absolute left-0 top-0 h-1 w-16 bg-accent-red" aria-hidden="true"></div>
+
+        <!-- Corner label -->
+        <div
+          class="absolute right-5 top-4 font-orbitron text-[8px] uppercase tracking-[0.2em] text-black/30"
+        >
+          ACCOUNT
+        </div>
+
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="submit()"
+          novalidate
+          class="flex flex-col gap-5 mt-2"
+        >
+          <!-- Email -->
+          <app-text-field
+            [control]="loginForm.controls.email"
+            label="Email"
+            type="email"
+            autocomplete="email"
+            [errorMessages]="{
+              required: 'Email is required',
+              email: 'Enter a valid email address',
+            }"
+          />
+
+          <!-- Password -->
+          <app-password-field
+            [control]="loginForm.controls.password"
+            label="Password"
+            autocomplete="current-password"
+            [errorMessages]="{
+              required: 'Password is required',
+            }"
+          />
+
+          <!-- Server errors -->
+          @if (serverValidationErrors(); as errors) {
+            <div role="alert" class="-mt-1 border-l-2 border-accent-red bg-accent-red/5 px-4 py-3">
+              <p class="mb-2 font-orbitron text-[9px] uppercase tracking-[0.18em] text-accent-red">
+                Unable to sign in
+              </p>
+
+              <ul class="space-y-1 text-sm text-accent-red">
+                @for (msg of errors; track msg) {
+                  <li class="flex gap-2">
+                    <span aria-hidden="true">—</span>
+                    <span>{{ msg }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+
+          <!-- Submit -->
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="loading()"
+            class="mt-2! flex! min-h-12! w-full! items-center! justify-center! rounded-md! bg-secondary! px-6! py-3! font-orbitron! text-xs! font-semibold! uppercase! tracking-[0.2em]! text-white! transition-all! duration-300! hover:bg-accent-red! disabled:cursor-not-allowed! disabled:opacity-60!"
+          >
+            @if (loading()) {
+              <mat-progress-spinner
+                diameter="20"
+                mode="indeterminate"
+                class="h-5! w-5!"
+              ></mat-progress-spinner>
+            } @else {
+              <span>Sign In</span>
+            }
+          </button>
+        </form>
+
+        <!-- Register -->
+        <div class="mt-7 flex items-center gap-3 border-t border-black/10 pt-6">
+          <span class="h-px flex-1 bg-black/10" aria-hidden="true"></span>
+
+          <span class="font-orbitron text-[8px] uppercase tracking-[0.18em] text-black/30">
+            New here?
+          </span>
+
+          <span class="h-px flex-1 bg-black/10" aria-hidden="true"></span>
+        </div>
+
+        <p class="mt-5 text-center text-sm text-black/55">
+          Don't have an account?
+          <a
+            routerLink="/account/register"
+            class="ml-1 font-medium text-accent-red transition-colors duration-300 hover:text-secondary hover:underline"
+          >
+            Create one
+          </a>
+        </p>
+      </div>
+
+      <!-- Bottom metadata -->
+      <div
+        class="mt-7 flex items-center justify-between px-1 font-orbitron text-[8px] uppercase tracking-[0.2em] text-black/30 sm:text-[9px]"
+      >
+        <span>MWgoods</span>
+
+        <span>Shopping shouldn't be solitary.</span>
+      </div>
+    </div>
+  </div>
+</section>

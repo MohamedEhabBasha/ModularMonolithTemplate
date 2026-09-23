@@ -19,6 +19,7 @@ import type { SwiperContainer } from 'swiper/element';
 import { CartService } from '../../../../core/services/commerce/cart';
 import { WishlistService } from '../../../../core/services/commerce/wishlist';
 import { RouterLink } from '@angular/router';
+import { SnackbarService } from '../../../../core/services/snackbar';
 
 interface ProductMedia {
   readonly type: 'image' | 'video';
@@ -36,6 +37,8 @@ interface ProductMedia {
 export class ProductDetailsComponent {
   readonly id = input.required<string>();
 
+
+  private readonly snackbar = inject(SnackbarService);
   private readonly shopService = inject(ShopService);
   private readonly cartService = inject(CartService);
   private readonly wishlistService = inject(WishlistService);
@@ -113,11 +116,13 @@ export class ProductDetailsComponent {
         this.productResource.value() as Product,
         this.quantity() - this.cartQuantity(),
       );
+      this.snackbar.success(`${this.quantity() - this.cartQuantity()} items added to cart!`);
     } else if (this.quantity() < this.cartQuantity()) {
       this.cartService.removeItemFromCart(
         this.productResource.value()!.id,
         this.cartQuantity() - this.quantity(),
       );
+      this.snackbar.success(`${ this.cartQuantity() - this.quantity()} items removed from the cart!`);
     }
   }
 

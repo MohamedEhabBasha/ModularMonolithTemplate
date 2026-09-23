@@ -12,7 +12,7 @@
       <div class="flex justify-between text-secondary">
         <span>Discount</span>
         <span class="text-green-600">{{
-          totals.discount === 0 ? '-0.00' : (totals.discount | currency)
+          totals.discount === 0 ? '-0.00' : '-' + (totals.discount | currency)
         }}</span>
       </div>
       <div class="flex justify-between text-secondary">
@@ -21,12 +21,6 @@
           cartService.shippingPrice() === 0 ? 'Free' : (cartService.shippingPrice() | currency)
         }}</span>
       </div>
-      @if (totals.discount > 0) {
-        <div class="flex justify-between text-accent-red">
-          <span>Discount</span>
-          <span>-{{ totals.discount | currency }}</span>
-        </div>
-      }
     </div>
 
     <hr class="border-gray-200" />

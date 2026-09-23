@@ -1,0 +1,16 @@
+:host {
+    position: relative;
+}
+div {
+    background-image: url(../../../../public/curtain.avif);
+    background-repeat: none;
+    background-position: center;
+    background-size: cover;
+}
+div::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: #520503;
+    opacity: 0.7;
+}

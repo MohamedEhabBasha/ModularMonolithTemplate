@@ -2,9 +2,10 @@
   #screen
   class="fixed inset-0 z-9999 flex items-center justify-center bg-primary will-change-[clip-path] [clip-path:inset(0%_0%_0%_0%)]"
 >
+  <div class="overlay"></div>
   <span
     #percent
-    class="font-mono text-[clamp(3rem,10vw,8rem)] font-thin tracking-[-0.03em] text-[#333] opacity-0"
+    class="font-orbitron text-[clamp(3rem,10vw,8rem)] font-thin tracking-[-0.03em] text-white opacity-0 z-99"
   >
     {{ displayPercent() }}%
   </span>

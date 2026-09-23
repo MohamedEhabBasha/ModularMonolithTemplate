@@ -1,191 +1,197 @@
-<!-- Product Details -->
-@if (productResource.isLoading()) {
-  <div
-    class="mx-auto max-w-7xl animate-pulse px-4 py-8 sm:px-6 lg:px-8"
-    aria-busy="true"
-    aria-live="polite"
-  >
-    <div class="flex flex-col gap-6 lg:flex-row lg:gap-8">
-      <div class="aspect-square rounded-2xl bg-neutral-200 lg:w-3/4"></div>
-      <div class="flex flex-col gap-4 lg:w-1/4">
-        <div class="h-8 w-1/2 rounded bg-neutral-200"></div>
-        <div class="h-10 w-full rounded bg-neutral-200"></div>
-        <div class="h-11 w-full rounded bg-neutral-200"></div>
-        <div class="h-11 w-full rounded bg-neutral-200"></div>
+<section class="mt-20">
+  <!-- Product Details -->
+  @if (productResource.isLoading()) {
+    <div
+      class="mx-auto max-w-7xl animate-pulse px-4 py-8 sm:px-6 lg:px-8"
+      aria-busy="true"
+      aria-live="polite"
+    >
+      <div class="flex flex-col gap-6 lg:flex-row lg:gap-8">
+        <div class="aspect-square rounded-2xl bg-neutral-200 lg:w-3/4"></div>
+        <div class="flex flex-col gap-4 lg:w-1/4">
+          <div class="h-8 w-1/2 rounded bg-neutral-200"></div>
+          <div class="h-10 w-full rounded bg-neutral-200"></div>
+          <div class="h-11 w-full rounded bg-neutral-200"></div>
+          <div class="h-11 w-full rounded bg-neutral-200"></div>
+        </div>
       </div>
     </div>
-  </div>
-} @else if (productResource.error()) {
-  <div
-    class="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-16 text-center"
-    role="alert"
-  >
-    <p class="text-lg font-medium text-neutral-900">We couldn't load this product.</p>
-    <button type="button" matButton="filled" (click)="retry()">Try again</button>
-  </div>
-} @else if (productResource.value(); as product) {
-  <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-    <div class="product-layout">
-      <div class="product-layout__detailsbox flex flex-col gap-10 bg-white py-8 px-10 rounded-2xl border border-neutral-200">
-        <!-- Info: first on mobile, moves below the gallery row on desktop -->
-        <div class="max-w-4xl">
-          <p class="text-sm font-medium uppercase tracking-wide text-neutral-500">
-            {{ product.brand }}
-          </p>
-
-          <div class="flex items-baseline justify-between gap-4">
-            <h1 class="text-2xl font-semibold text-neutral-900 sm:text-3xl">{{ product.name }}</h1>
-            <p class="text-2xl font-semibold text-neutral-900 sm:text-3xl">
-              {{ product.price | currency }}
+  } @else if (productResource.error()) {
+    <div
+      class="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-16 text-center"
+      role="alert"
+    >
+      <p class="text-lg font-medium text-neutral-900">We couldn't load this product.</p>
+      <button type="button" matButton="filled" (click)="retry()">Try again</button>
+    </div>
+  } @else if (productResource.value(); as product) {
+    <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div class="product-layout">
+        <div
+          class="product-layout__detailsbox flex flex-col gap-10 bg-white py-8 px-10 rounded-2xl border border-neutral-200"
+        >
+          <!-- Info: first on mobile, moves below the gallery row on desktop -->
+          <div class="max-w-4xl">
+            <p class="text-sm font-medium uppercase tracking-wide text-neutral-500">
+              {{ product.brand }}
             </p>
-          </div>
 
-          <p class="mt-4 leading-relaxed text-neutral-600">{{ product.description }}</p>
-        </div>
-
-        <!-- Gallery: 75% width on desktop -->
-        <div class="lg:order-first">
-          <div class="mb-3 flex justify-end">
-            <span
-              class="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-neutral-600"
-            >
-              {{ product.type }}
-            </span>
-          </div>
-
-          <swiper-container
-            class="product-swiper block overflow-hidden rounded-2xl"
-            navigation="true"
-            pagination="true"
-            keyboard="true"
-            watch-overflow="true"
-            slides-per-view="1"
-            space-between="0"
-            [loop]="media().length > 1"
-            (swiperslidechange)="onSlideChange($event)"
-          >
-            @for (item of media(); track item.url) {
-              <swiper-slide>
-                @if (item.type === 'video') {
-                  <video
-                    class="h-full w-full object-cover"
-                    [poster]="item.poster"
-                    controls
-                    playsinline
-                  >
-                    <source [src]="item.url" />
-                  </video>
-                } @else {
-                  <img class="h-full w-full object-cover" [src]="item.url" [alt]="product.name" />
-                }
-              </swiper-slide>
-            }
-          </swiper-container>
-        </div>
-      </div>
-
-      <!-- Buy box: 25% width on desktop -->
-      <aside class="product-layout__buybox">
-        <div class="flex flex-col gap-4">
-          <!-- Seller box -->
-          <div class="bg-white flex items-center gap-3 rounded-2xl border border-neutral-200 p-4">
-            @if (product.sellerPictureUrl) {
-              <img
-                [src]="product.sellerPictureUrl"
-                [alt]="product.sellerBrandName"
-                class="h-12 w-12 shrink-0 rounded-full object-cover bg-neutral-100"
-              />
-            } @else {
-              <span
-                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-base font-medium text-neutral-600"
-              >
-                {{ product.sellerBrandName.charAt(0) }}
-              </span>
-            }
-
-            <div class="flex min-w-0 flex-1 flex-col">
-              <p class="text-xs text-neutral-500">Sold by</p>
-              <p class="truncate text-sm font-semibold text-neutral-900">
-                {{ product.sellerBrandName }}
+            <div class="flex items-baseline justify-between gap-4">
+              <h1 class="text-2xl font-semibold text-neutral-900 sm:text-3xl">
+                {{ product.name }}
+              </h1>
+              <p class="text-2xl font-semibold text-neutral-900 sm:text-3xl">
+                {{ product.price | currency }}
               </p>
             </div>
 
-            <a matButton="outlined" [routerLink]="['/seller', product.sellerId]" class="shrink-0">
-              Visit
-            </a>
+            <p class="mt-4 leading-relaxed text-neutral-600">{{ product.description }}</p>
           </div>
 
-          <!-- Existing buy box, unchanged -->
-          <div
-            class="bg-white flex flex-col gap-5 rounded-2xl border border-neutral-200 p-6 lg:static lg:top-24"
-          >
-            <p class="text-2xl font-semibold text-neutral-900">{{ product.price | currency }}</p>
+          <!-- Gallery: 75% width on desktop -->
+          <div class="lg:order-first">
+            <div class="mb-3 flex justify-end">
+              <span
+                class="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-neutral-600"
+              >
+                {{ product.type }}
+              </span>
+            </div>
 
-            <div class="flex flex-col gap-2">
-              <span class="text-sm font-medium text-neutral-700">Quantity</span>
+            <swiper-container
+              class="product-swiper block overflow-hidden rounded-2xl"
+              navigation="true"
+              pagination="true"
+              keyboard="true"
+              watch-overflow="true"
+              slides-per-view="1"
+              space-between="0"
+              [loop]="media().length > 1"
+              (swiperslidechange)="onSlideChange($event)"
+            >
+              @for (item of media(); track item.url) {
+                <swiper-slide>
+                  @if (item.type === 'video') {
+                    <video
+                      class="h-full w-full object-cover"
+                      [poster]="item.poster"
+                      controls
+                      playsinline
+                    >
+                      <source [src]="item.url" />
+                    </video>
+                  } @else {
+                    <img class="h-full w-full object-cover" [src]="item.url" [alt]="product.name" />
+                  }
+                </swiper-slide>
+              }
+            </swiper-container>
+          </div>
+        </div>
 
-              <div class="flex items-center gap-2">
-                <button
-                  type="button"
-                  matIconButton
-                  [disabled]="quantity() <= 1"
-                  aria-label="Decrease quantity"
-                  (click)="decrement()"
-                >
-                  <mat-icon>remove</mat-icon>
-                </button>
-
-                <input
-                  type="number"
-                  min="1"
-                  class="w-16 rounded-lg border border-neutral-300 px-2 py-1.5 text-center"
-                  [value]="quantity()"
-                  (change)="onQuantityInput($any($event.target).value)"
-                  aria-label="Quantity"
+        <!-- Buy box: 25% width on desktop -->
+        <aside class="product-layout__buybox">
+          <div class="flex flex-col gap-4">
+            <!-- Seller box -->
+            <div class="bg-white flex items-center gap-3 rounded-2xl border border-neutral-200 p-4">
+              @if (product.sellerPictureUrl) {
+                <img
+                  [src]="product.sellerPictureUrl"
+                  [alt]="product.sellerBrandName"
+                  class="h-12 w-12 shrink-0 rounded-full object-cover bg-neutral-100"
                 />
-
-                <button
-                  type="button"
-                  matIconButton
-                  aria-label="Increase quantity"
-                  (click)="increment()"
+              } @else {
+                <span
+                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-base font-medium text-neutral-600"
                 >
-                  <mat-icon>add</mat-icon>
-                </button>
+                  {{ product.sellerBrandName.charAt(0) }}
+                </span>
+              }
+
+              <div class="flex min-w-0 flex-1 flex-col">
+                <p class="text-xs text-neutral-500">Sold by</p>
+                <p class="truncate text-sm font-semibold text-neutral-900">
+                  {{ product.sellerBrandName }}
+                </p>
               </div>
 
-              <p
-                class="text-xs"
-                [class.text-red-600]="stockStatus().isWarning"
-                [class.text-neutral-500]="!stockStatus().isWarning"
-              >
-                {{ stockStatus().label }}
-              </p>
+              <a matButton="outlined" [routerLink]="['/seller', product.sellerId]" class="shrink-0">
+                Visit
+              </a>
             </div>
 
-            <button
-              type="button"
-              matButton="filled"
-              class="flex w-full items-center justify-center gap-2"
-              [disabled]="addToCartDisabled()"
-              (click)="addToCart()"
+            <!-- Existing buy box, unchanged -->
+            <div
+              class="bg-white flex flex-col gap-5 rounded-2xl border border-neutral-200 p-6 lg:static lg:top-24"
             >
-              <mat-icon>shopping_cart</mat-icon>
-              Add to cart
-            </button>
+              <p class="text-2xl font-semibold text-neutral-900">{{ product.price | currency }}</p>
 
-            <button
-              type="button"
-              matButton="outlined"
-              class="flex w-full items-center justify-center gap-2"
-              (click)="toggleSave()"
-            >
-              <mat-icon>{{ isSaved() ? 'favorite' : 'favorite_border' }}</mat-icon>
-              {{ isSaved() ? 'Saved' : 'Save' }}
-            </button>
+              <div class="flex flex-col gap-2">
+                <span class="text-sm font-medium text-neutral-700">Quantity</span>
+
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    matIconButton
+                    [disabled]="quantity() <= 1"
+                    aria-label="Decrease quantity"
+                    (click)="decrement()"
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+
+                  <input
+                    type="number"
+                    min="1"
+                    class="w-16 rounded-lg border border-neutral-300 px-2 py-1.5 text-center"
+                    [value]="quantity()"
+                    (change)="onQuantityInput($any($event.target).value)"
+                    aria-label="Quantity"
+                  />
+
+                  <button
+                    type="button"
+                    matIconButton
+                    aria-label="Increase quantity"
+                    (click)="increment()"
+                  >
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+
+                <p
+                  class="text-xs"
+                  [class.text-red-600]="stockStatus().isWarning"
+                  [class.text-neutral-500]="!stockStatus().isWarning"
+                >
+                  {{ stockStatus().label }}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                matButton="filled"
+                class="flex w-full items-center justify-center gap-2"
+                [disabled]="addToCartDisabled()"
+                (click)="addToCart()"
+              >
+                <mat-icon>shopping_cart</mat-icon>
+                Add to cart
+              </button>
+
+              <button
+                type="button"
+                matButton="outlined"
+                class="flex w-full items-center justify-center gap-2"
+                (click)="toggleSave()"
+              >
+                <mat-icon>{{ isSaved() ? 'favorite' : 'favorite_border' }}</mat-icon>
+                {{ isSaved() ? 'Saved' : 'Save' }}
+              </button>
+            </div>
           </div>
-        </div>
-      </aside>
-    </div>
-  </section>
-}
+        </aside>
+      </div>
+    </section>
+  }
+</section>

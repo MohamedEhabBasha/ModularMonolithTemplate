@@ -3,12 +3,13 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Pagination } from '../../../shared/models/Pagination';
 import { Product } from '../../../shared/models/commerce/products/product';
 import { ShopParams } from '../../../shared/models/commerce/shopParams ';
+import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShopService {
-  baseUrl = 'https://localhost:5001/api/';
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
   types = signal<string[]>([]);

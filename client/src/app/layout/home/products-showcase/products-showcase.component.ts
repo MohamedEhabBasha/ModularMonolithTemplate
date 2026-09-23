@@ -12,7 +12,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 
 ScrollTrigger.config({ ignoreMobileResize: true });
-gsap.registerPlugin(SplitText);
 
 export interface ShowcaseProduct {
   id: string | number;

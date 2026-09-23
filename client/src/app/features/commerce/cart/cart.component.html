@@ -1,40 +1,171 @@
-<div class="bg-primary min-h-screen py-8">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h1 class="text-2xl font-bold text-secondary mb-6">Shopping Cart</h1>
+<section class="relative min-h-svh overflow-hidden bg-primary px-4 py-24 sm:px-6 lg:px-8">
+  <!-- Background grid -->
+  <div class="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
+    <div
+      class="absolute inset-0"
+      style="
+        background-image:
+          linear-gradient(to right, rgba(9, 9, 9, 0.08) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(9, 9, 9, 0.08) 1px, transparent 1px);
+        background-size: 6.25vw 6.25vw;
+      "
+    ></div>
+  </div>
 
+  <!-- Ambient accents -->
+  <div
+    class="pointer-events-none absolute left-[7%] top-[22%] h-1.5 w-1.5 rounded-full bg-accent-red"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="pointer-events-none absolute right-[10%] top-[35%] h-1 w-1 rounded-full bg-black/25"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="pointer-events-none absolute bottom-[15%] left-[16%] h-1 w-1 rounded-full bg-black/20"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-10 mx-auto max-w-7xl">
     @let cart = cartService.cart();
 
-    @if (cart && cart.items.length > 0) {
-      <div class="flex flex-col lg:flex-row items-start gap-6">
-        <!-- Cart items (3/4 width) -->
-        <ul class="w-full lg:w-3/4 flex flex-col gap-4">
-          @for (item of cart.items; track item.productId) {
-            <li>
-              <app-cart-item [item]="item"></app-cart-item>
-            </li>
-          }
-        </ul>
-
-        <!-- Order summary + coupon (1/4 width) -->
-        <div class="w-full lg:w-1/4 flex flex-col gap-4 lg:sticky lg:top-8">
-          <app-order-summary> </app-order-summary>
-          <app-coupon></app-coupon>
-        </div>
-      </div>
-    } @else {
-      <app-empty-state
-        icon="shopping_cart"
-        title="Your cart is empty"
-        message="Looks like you haven't added anything yet."
-      >
-        <a
-          routerLink="/shop"
-          class="mt-2 inline-block bg-accent-red text-white text-sm font-medium px-6 py-2.5 rounded-md hover:bg-accent-red/90 transition"
-          emptyStateAction
+    <!-- ========================================================= -->
+    <!-- Header -->
+    <!-- ========================================================= -->
+    <div class="mb-12 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between lg:mb-16">
+      <div>
+        <p
+          class="mb-4 font-orbitron text-[10px] uppercase tracking-[0.35em] text-black/40 sm:text-xs"
         >
-          Continue Shopping
-        </a>
-      </app-empty-state>
+          Your selection
+        </p>
+
+        <h1
+          class="font-orbitron text-4xl font-black uppercase tracking-tight text-black sm:text-5xl md:text-6xl lg:text-7xl"
+        >
+          Shopping Cart
+        </h1>
+      </div>
+
+      @if (cart && cart.items.length > 0) {
+        <div class="font-orbitron text-xs uppercase tracking-[0.2em] text-black/45 sm:text-sm">
+          {{ cart.items.length }}
+          {{ cart.items.length === 1 ? 'item' : 'items' }}
+        </div>
+      }
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- Cart -->
+    <!-- ========================================================= -->
+    @if (cart && cart.items.length > 0) {
+      <div
+        class="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] xl:grid-cols-[minmax(0,1fr)_24rem]"
+      >
+        <!-- ======================================================= -->
+        <!-- Cart items -->
+        <!-- ======================================================= -->
+        <div class="min-w-0">
+          <div class="mb-4 flex items-center justify-between border-b border-black/10 pb-3">
+            <span
+              class="font-orbitron text-[9px] uppercase tracking-[0.22em] text-black/35 sm:text-[10px]"
+            >
+              Products
+            </span>
+
+            <span
+              class="font-orbitron text-[9px] uppercase tracking-[0.18em] text-black/30 sm:text-[10px]"
+            >
+              Review your selection
+            </span>
+          </div>
+
+          <ul class="flex flex-col gap-4">
+            @for (item of cart.items; track item.productId) {
+              <li>
+                <div
+                  class="border border-black/10 bg-white p-3 shadow-[0_10px_30px_rgba(12,0,0,0.04)] transition-shadow duration-300 hover:shadow-[0_15px_40px_rgba(12,0,0,0.07)] sm:p-4"
+                >
+                  <app-cart-item [item]="item"></app-cart-item>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- Order summary + coupon -->
+        <!-- ======================================================= -->
+        <aside class="flex w-full flex-col gap-4 lg:sticky lg:top-24">
+          <!-- Summary -->
+          <div
+            class="relative border border-black/10 bg-white p-5 shadow-[0_15px_40px_rgba(12,0,0,0.05)] sm:p-6"
+          >
+            <!-- Accent -->
+            <div class="absolute left-0 top-0 h-1 w-16 bg-accent-red" aria-hidden="true"></div>
+
+            <div class="mb-5 flex items-center justify-between border-b border-black/10 pb-4">
+              <span class="font-orbitron text-[10px] uppercase tracking-[0.24em] text-black/40">
+                Order summary
+              </span>
+
+              <span class="font-orbitron text-[8px] uppercase tracking-[0.18em] text-black/25">
+                MWgoods
+              </span>
+            </div>
+
+            <app-order-summary></app-order-summary>
+          </div>
+
+          <!-- Coupon -->
+          <div
+            class="border border-black/10 bg-white p-5 shadow-[0_15px_40px_rgba(12,0,0,0.05)] sm:p-6"
+          >
+            <div class="mb-4">
+              <p class="font-orbitron text-[10px] uppercase tracking-[0.24em] text-black/40">
+                Have a code?
+              </p>
+
+              <p class="mt-2 text-xs leading-relaxed text-black/40">
+                Apply a coupon before checkout.
+              </p>
+            </div>
+
+            <app-coupon></app-coupon>
+          </div>
+
+          <!-- Trust note -->
+          <div class="border-t border-black/10 pt-4 text-center">
+            <p class="font-orbitron text-[8px] uppercase tracking-[0.18em] text-black/30">
+              Your selection · Ready when you are
+            </p>
+          </div>
+        </aside>
+      </div>
+    }
+
+    <!-- ========================================================= -->
+    <!-- Empty state -->
+    <!-- ========================================================= -->
+    @else {
+      <div class="flex min-h-[50vh] items-center justify-center">
+        <app-empty-state
+          icon="shopping_cart"
+          title="Your cart is empty"
+          message="Looks like you haven't added anything yet."
+          class="w-[90%] lg:w-1/2"
+        >
+          <a
+            routerLink="/shop"
+            emptyStateAction
+            class="mt-2 inline-block rounded-md bg-accent-red px-6 py-2.5 text-sm font-medium text-white transition hover:bg-accent-red/90"
+          >
+            Continue Shopping
+          </a>
+        </app-empty-state>
+      </div>
     }
   </div>
-</div>
+</section>

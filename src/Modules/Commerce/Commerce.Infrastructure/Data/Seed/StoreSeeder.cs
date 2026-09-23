@@ -105,7 +105,7 @@ public static class StoreSeeder
                     minimumOrderAmount: null,
                     startsAt: DateTime.UtcNow,
                     expiresAt: DateTime.UtcNow.AddDays(14),
-                    maxRedemptions: 10,           // limited-run promo, first 100 redemptions total
+                    maxRedemptions: 10,           // limited-run promo, first 10 redemptions total
                     singleUsePerCustomer: false)
             );
 

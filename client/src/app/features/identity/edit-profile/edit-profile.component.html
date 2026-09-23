@@ -1,5 +1,7 @@
-@if (isSeller()) {
-  <app-edit-seller></app-edit-seller>
-} @else {
-  <app-edit-buyer></app-edit-buyer>
-}
+<section class="mt-20">
+  @if (isSeller()) {
+    <app-edit-seller></app-edit-seller>
+  } @else {
+    <app-edit-buyer></app-edit-buyer>
+  }
+</section>

@@ -1,7 +1,7 @@
-@if (role() === accountRoles.Seller) {
-  <app-seller-profile [sellerProfile]="profile()"></app-seller-profile>
-} @else {
-  <app-buyer-profile
-    [buyerProfile]="profile()"
-  ></app-buyer-profile>
-}
+<section class="mt-20">
+  @if (role() === accountRoles.Seller) {
+    <app-seller-profile [sellerProfile]="profile()"></app-seller-profile>
+  } @else {
+    <app-buyer-profile [buyerProfile]="profile()"></app-buyer-profile>
+  }
+</section>

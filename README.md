@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Orbitron&size=35&pause=1000&color=D32F2F&center=true&vCenter=true&width=600&height=200&lines=Welcome+To+Mwgoods;Made+for+Modern+Shopping.;Products+Meet+People.)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Orbitron&size=35&pause=1000&color=D32F2F&center=true&vCenter=true&width=800&height=200&lines=MWGoods;Full-Stack+Multi-Vendor+Marketplace;.NET+10+%2B+Angular+21;Products+Meet+People.)](https://git.io/typing-svg)
 
 </div>
 

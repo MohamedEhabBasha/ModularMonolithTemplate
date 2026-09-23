@@ -20,7 +20,7 @@ width="100%">
 
 # MWGoods
 
-A full-stack, multi-vendor e-commerce marketplace built with the **.NET 10 SDK** as a modular monolith and an **Angular 21** frontend — buyers and sellers on one platform, with an admin-moderated product approval pipeline, real-time notifications, and a payment flow built on Paymob.
+A production-style multi-vendor marketplace built with the **.NET 10 SDK** as a modular monolith and an **Angular 21** frontend — buyers and sellers on one platform, with an admin-moderated product approval pipeline, real-time notifications, and a payment flow built on Paymob.
 
 <div align="center">
 

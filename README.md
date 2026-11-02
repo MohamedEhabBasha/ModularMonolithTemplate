@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Orbitron&size=35&pause=1000&color=D32F2F&center=true&vCenter=true&width=600&height=200&lines=Welcome+To+Mwgoods;Made+for+Modern+Shopping.;Products+Meet+People.)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Orbitron&size=35&pause=1000&color=D32F2F&center=true&vCenter=true&width=800&height=200&lines=MWGoods;Full-Stack+Multi-Vendor+Marketplace;.NET+10+%2B+Angular+21;Products+Meet+People.)](https://git.io/typing-svg)
 
 </div>
 
@@ -20,7 +20,7 @@ width="100%">
 
 # MWGoods
 
-A full-stack, multi-vendor e-commerce marketplace built with the **.NET 10 SDK** as a modular monolith and an **Angular 21** frontend — buyers and sellers on one platform, with an admin-moderated product approval pipeline, real-time notifications, and a payment flow built on Paymob.
+A production-style multi-vendor marketplace built with the **.NET 10 SDK** as a modular monolith and an **Angular 21** frontend — buyers and sellers on one platform, with an admin-moderated product approval pipeline, real-time notifications, and a payment flow built on Paymob.
 
 <div align="center">
 

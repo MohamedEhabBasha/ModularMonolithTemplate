@@ -1,11 +1,22 @@
 import { Component, DestroyRef, effect, inject, resource, signal } from '@angular/core';
 import { AdminService } from '../../../../core/services/identity/admin';
 import { CommerceHubService } from '../../../../core/services/commerce/commerce-hub';
-import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { EmptyStateComponent } from "../../../../shared/components/empty-state/empty-state.component";
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { CurrencyPipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
+import { Store } from '@ngrx/store';
+import {
+  selectActionError,
+  selectActioningId,
+  selectLoadError,
+  selectLoading,
+  selectProducts,
+} from '../store/pending-products.selectors';
+import { PendingProductsActions } from '../store/pending-products.actions';
+import { Actions, ofType } from '@ngrx/effects';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pending-products',
@@ -14,47 +25,35 @@ import { MatInput } from '@angular/material/input';
   styleUrl: './pending-products.component.css',
 })
 export class PendingProductsComponent {
-  private destroyRef = inject(DestroyRef);
-  private adminProductsService = inject(AdminService);
-  private commerceHub = inject(CommerceHubService);
+  private store = inject(Store);
 
-  readonly productsResource = resource({
-    loader: () => this.adminProductsService.getPendingProducts(),
-  });
+  // Shared state: read from the store
+  protected products = this.store.selectSignal(selectProducts);
+  protected loading = this.store.selectSignal(selectLoading);
+  protected loadError = this.store.selectSignal(selectLoadError);
+  protected actioningId = this.store.selectSignal(selectActioningId);
+  protected actionError = this.store.selectSignal(selectActionError);
 
-  actioningId = signal<number | null>(null);
+  // Local UI state: stays here
   rejectingId = signal<number | null>(null);
-  actionError = signal<string | null>(null);
 
   constructor() {
-    this.commerceHub.joinProductAdminGroup();
-
-    effect(() => {
-      if (this.commerceHub.productPendingReview()) {
-        this.productsResource.reload();
-      }
-    });
-
-    this.destroyRef.onDestroy(() => {
-      this.commerceHub.leaveProductAdminGroup();
-    });
+    // Close the reject box only after the server confirms
+    inject(Actions)
+      .pipe(ofType(PendingProductsActions.rejectSuccess), takeUntilDestroyed())
+      .subscribe(({ id }) => {
+        if (this.rejectingId() === id) {
+          this.rejectingId.set(null);
+        }
+      });
   }
 
   retry(): void {
-    this.productsResource.reload();
+    this.store.dispatch(PendingProductsActions.load());
   }
 
-  async approve(id: number) {
-    this.actioningId.set(id);
-    this.actionError.set(null);
-    try {
-      await this.adminProductsService.approveProduct(id);
-      this.productsResource.reload();
-    } catch {
-      this.actionError.set('Could not approve this product. Please try again.');
-    } finally {
-      this.actioningId.set(null);
-    }
+  approve(id: number) {
+    this.store.dispatch(PendingProductsActions.approve({ id }));
   }
 
   openReject(id: number): void {
@@ -65,18 +64,8 @@ export class PendingProductsComponent {
     this.rejectingId.set(null);
   }
 
-  async confirmReject(id: number, reason: string) {
+  confirmReject(id: number, reason: string): void {
     if (!reason.trim()) return;
-    this.actioningId.set(id);
-    this.actionError.set(null);
-    try {
-      await this.adminProductsService.rejectProduct(id, reason.trim());
-      this.rejectingId.set(null);
-      this.productsResource.reload();
-    } catch {
-      this.actionError.set('Could not reject this product. Please try again.');
-    } finally {
-      this.actioningId.set(null);
-    }
+    this.store.dispatch(PendingProductsActions.reject({ id, reason: reason.trim() }));
   }
 }

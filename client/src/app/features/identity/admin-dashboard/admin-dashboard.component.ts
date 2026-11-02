@@ -1,8 +1,12 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { AccountService } from '../../../core/services/identity/account';
 import { ProfileService } from '../../../core/services/identity/profile';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { PendingProductsComponent } from "./pending-products/pending-products.component";
+import { PendingProductsComponent } from './pending-products/pending-products.component';
+import { selectPendingCount } from './store/pending-products.selectors';
+import { Store } from '@ngrx/store';
+import { CommerceHubService } from '../../../core/services/commerce/commerce-hub';
+import { PendingProductsActions } from './store/pending-products.actions';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -13,6 +17,10 @@ import { PendingProductsComponent } from "./pending-products/pending-products.co
 export class AdminDashboardComponent implements OnInit {
   private accountService = inject(AccountService);
   private profileService = inject(ProfileService);
+  private commerceHub = inject(CommerceHubService);
+  private store = inject(Store);
+
+  protected pendingCount = this.store.selectSignal(selectPendingCount);
 
   protected fullName = computed(() => {
     const user = this.accountService.currentUser();
@@ -26,6 +34,16 @@ export class AdminDashboardComponent implements OnInit {
   });
 
   protected photoUrl = signal<string | null>(null);
+
+  constructor() {
+    // The dashboard owns the shared state, so it owns the hub group and the initial load
+    this.store.dispatch(PendingProductsActions.load());
+    this.commerceHub.joinProductAdminGroup();
+
+    inject(DestroyRef).onDestroy(() => {
+      this.commerceHub.leaveProductAdminGroup();
+    });
+  }
 
   async ngOnInit() {
     try {

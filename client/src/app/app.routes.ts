@@ -21,6 +21,10 @@ import { AdminDashboardComponent } from './features/identity/admin-dashboard/adm
 import { adminGuard } from './core/guards/identity/admin-guard';
 import { HomeComponent } from './layout/home/home.component';
 import { WishlistComponent } from './features/commerce/wishlist/wishlist.component';
+import { provideState } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { pendingProductsFeature } from './features/identity/admin-dashboard/store/pending-products.reducer';
+import { pendingProductsEffects } from './features/identity/admin-dashboard/store/pending-products.effects';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -49,6 +53,7 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminDashboardComponent,
     canActivate: [adminGuard],
+    providers: [provideState(pendingProductsFeature), provideEffects(pendingProductsEffects)],
   },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },

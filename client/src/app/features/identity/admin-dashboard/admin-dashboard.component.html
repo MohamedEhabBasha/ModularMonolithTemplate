@@ -19,7 +19,7 @@
     </div>
   </section>
   <mat-tab-group class="px-4">
-    <mat-tab label="Pending Products">
+    <mat-tab [label]="'Pending Products (' + pendingCount() + ')'">
       <div class="py-4">
         <app-pending-products></app-pending-products>
       </div>

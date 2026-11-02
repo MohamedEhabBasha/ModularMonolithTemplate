@@ -4,6 +4,7 @@ import * as signalR from '@microsoft/signalr';
 import { Order } from '../../../shared/models/commerce/order';
 import { ProductPendingReviewUpdate } from '../../../shared/models/commerce/hubs/productPendingReviewUpdate';
 import { ProductReviewedUpdate } from '../../../shared/models/commerce/hubs/productReviewedUpdate';
+import { Subject } from 'rxjs';
 
 interface PaymentStatusUpdate {
   status: 'paid' | 'failed';
@@ -23,7 +24,9 @@ export class CommerceHubService {
   order = signal<Order | null>(null);
 
   // --- Product moderation ---
-  productPendingReview = signal<ProductPendingReviewUpdate | null>(null);
+  private productPendingReviewSubject = new Subject<ProductPendingReviewUpdate>();
+  readonly productPendingReview$ = this.productPendingReviewSubject.asObservable();
+
   productReviewed = signal<ProductReviewedUpdate | null>(null);
 
   private connect(): Promise<void> {
@@ -40,7 +43,7 @@ export class CommerceHubService {
     });
 
     this.connection.on('ProductPendingReview', (update: ProductPendingReviewUpdate) => {
-      this.productPendingReview.set(update);
+      this.productPendingReviewSubject.next(update);
     });
 
     this.connection.on('ProductReviewed', (update: ProductReviewedUpdate) => {

@@ -1,11 +1,11 @@
 <!-- pending-products.component.html -->
-@if (productsResource.isLoading()) {
+@if (loading() && !products().length) {
   <div class="flex flex-col gap-3 py-4">
     @for (i of [1, 2, 3]; track i) {
       <div class="h-20 animate-pulse rounded-xl bg-neutral-100"></div>
     }
   </div>
-} @else if (productsResource.error()) {
+} @else if (loadError() && !products().length) {
   <app-empty-state
     icon="error_outline"
     title="Couldn't load pending products"
@@ -13,18 +13,23 @@
     actionLabel="Retry"
     (actionClicked)="retry()"
   />
-} @else if (!productsResource.value()?.length) {
+} @else if (!products().length) {
   <app-empty-state
     icon="inventory_2"
     title="No pending products"
     message="New submissions waiting for approval will show up here."
   />
 } @else {
+  @if (loadError()) {
+    <p class="mb-3 text-sm text-red-600">
+      Couldn't refresh the queue. Showing the last loaded list.
+    </p>
+  }
   @if (actionError()) {
     <p class="mb-3 text-sm text-red-600">{{ actionError() }}</p>
   }
   <div class="flex flex-col gap-3 py-4">
-    @for (product of productsResource.value(); track product.id) {
+    @for (product of products(); track product.id) {
       <div class="flex flex-col gap-3 rounded-xl border border-neutral-200 p-4">
         <div class="flex items-center gap-4">
           <img
@@ -42,7 +47,7 @@
             <button
               mat-flat-button
               color="primary"
-              [disabled]="actioningId() === product.id"
+              [disabled]="actioningId() !== null"
               (click)="approve(product.id)"
             >
               Approve
@@ -50,7 +55,7 @@
             <button
               mat-stroked-button
               color="warn"
-              [disabled]="actioningId() === product.id"
+              [disabled]="actioningId() !== null"
               (click)="openReject(product.id)"
             >
               Reject
@@ -67,7 +72,7 @@
             <button
               mat-flat-button
               color="warn"
-              [disabled]="actioningId() === product.id"
+              [disabled]="actioningId() !== null"
               (click)="confirmReject(product.id, reasonInput.value)"
             >
               Confirm

@@ -2,11 +2,10 @@
 using Commerce.Application.Contracts.Services.Coupons;
 using Commerce.Application.DTOs;
 using Commerce.Core.Entities.Coupons;
-using Commerce.Infrastructure.Data;
 
 namespace Commerce.Infrastructure.Services.Coupons;
 
-public class CouponService(StoreContext context, CouponCacheService cache, IStoreUnitOfWork storeUnit) : ICouponService
+public class CouponService(CouponCacheService cache, IStoreUnitOfWork storeUnit) : ICouponService
 {
     public async Task<CouponPreviewDto> PreviewAsync(string code, string? buyerEmail, decimal subtotal)
     {
@@ -36,34 +35,20 @@ public class CouponService(StoreContext context, CouponCacheService cache, IStor
         return new CouponPreviewDto(coupon.Id, coupon.Code, coupon.CalculateDiscount(subtotal));
     }
 
-    // Call from inside order creation, wrapped in the SAME explicit transaction as the rest of that flow.
-    public async Task RedeemAsync(int couponId, string buyerEmail, int orderId, decimal discountAmount)
+    public async Task<CouponRedemptionResult> TryRedeemAsync(int couponId, string buyerEmail, int orderId, decimal discountAmount)
     {
-        await using var transaction = await context.Database.BeginTransactionAsync();
-
         var coupon = await storeUnit.Coupons.GetByIdAsync(couponId);
-
-        if(coupon is null)
-        {
-            await transaction.RollbackAsync();
-            throw new BadRequestException("Invalid coupon.");
-        }
+        if (coupon is null)
+            return CouponRedemptionResult.InvalidCoupon;
 
         if (coupon.IsSingleUsePerCustomer && await storeUnit.Coupons.HasUserRedeemedAsync(couponId, buyerEmail))
-        {
-            await transaction.RollbackAsync();
-            throw new BadRequestException("You've already used this coupon.");
-        }       
+            return CouponRedemptionResult.AlreadyUsed;
 
-        if (!await storeUnit.Coupons.TryIncrementRedemptionAsync(couponId)) 
-        {
-            await transaction.RollbackAsync();
-            throw new BadRequestException("This coupon has been fully redeemed.");
-        }
+        // Atomic conditional UPDATE, the same pattern as the stock decrement
+        if (!await storeUnit.Coupons.TryIncrementRedemptionAsync(couponId))
+            return CouponRedemptionResult.FullyRedeemed;
 
         storeUnit.CouponsRedemptions.Add(CouponRedemption.Create(couponId, buyerEmail, orderId, discountAmount));
-
-        await storeUnit.CommitAsync();
-        await transaction.CommitAsync();
+        return CouponRedemptionResult.Redeemed;
     }
 }

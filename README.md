@@ -42,6 +42,7 @@ A production-style multi-vendor marketplace built with the **.NET 10 SDK** as a 
 
 - [Features](#features)
 - [Architecture](#architecture)
+- [Correctness Under Concurrency](#concurrency)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [ER Diagram](#er-diagram)
@@ -79,6 +80,7 @@ A production-style multi-vendor marketplace built with the **.NET 10 SDK** as a 
 
 * **Paymob** hosted checkout integration with HMAC-signature-verified webhooks
 * Idempotent order creation — a webhook retry or duplicate delivery can never create two orders for the same payment
+* Overselling-safe stock — stock is decremented with an atomic conditional `UPDATE`, and the stock decrement, the order, and the coupon redemption commit in **one transaction** (see [Correctness Under Concurrency](#concurrency))
 * Guest checkout: carts are Redis-backed and fully anonymous until the customer is ready to pay, at which point they're prompted to log in with their cart, coupon, and discount preserved
 
 ### Coupons & Discounts
@@ -152,6 +154,57 @@ graph TB
 
 ---
 
+<a id="concurrency"></a>
+## 🧪 Correctness Under Concurrency
+
+Some bugs never show up when you click through the app — only when many requests hit the same data at the same moment. MWGoods tests for them directly: each problem is reproduced with a **failing integration test** first, then fixed, against a real SQL Server and Redis started in Docker by Testcontainers.
+
+### Overselling
+
+**The problem.** A product with 10 in stock and 50 buyers checking out at the same moment. The original flow read the stock, checked it in C#, then saved — so every request read `10` before any of them wrote, and every check passed.
+
+```mermaid
+sequenceDiagram
+    participant A as Buyer A
+    participant DB as SQL Server
+    participant B as Buyer B
+    A->>DB: read stock → 1
+    B->>DB: read stock → 1
+    Note over A,B: both pass "stock >= 1" in C#
+    A->>DB: save stock = 0
+    B->>DB: save stock = 0
+    Note over DB: 2 sold, 1 existed
+```
+
+**Result before the fix:** `Expected: 10, Actual: 50` — all 50 orders succeeded.
+
+**The fix.** The check moved *into* the write, so SQL Server evaluates it under the row lock:
+
+```sql
+UPDATE Products
+SET AvailableQuantity = AvailableQuantity - @qty
+WHERE Id = @id AND AvailableQuantity >= @qty
+-- 0 rows affected = out of stock
+```
+
+Order creation then runs **stock, order, and coupon redemption in one transaction** (`UnitOfWork.ExecuteInTransactionAsync`):
+
+1. Decrement stock for each product (sorted by id, so concurrent checkouts lock rows in the same order and can't deadlock) — any shortfall rolls back everything
+2. Save the order, so it has its real id
+3. Redeem the coupon against that order id
+
+Either all three commit, or none do — no order without stock, no stock taken without an order, no coupon used for an order that doesn't exist.
+
+**Result after the fix:** the same 50 buyers produce exactly **10 orders**, and stock ends at **0**.
+
+| Test | Scenario | Guarantee |
+| --- | --- | --- |
+| `CheckoutOversellingTests` | 50 paid carts, 10 units, released simultaneously through the real `OrderService` | Exactly 10 orders, stock = 0 |
+
+**Known limitation.** Stock is currently claimed when the payment webhook arrives, so in a sell-out race a buyer can pay and then find the item gone (logged for refund). The planned next step is reserving stock *before* the Paymob redirect, with expiry for abandoned checkouts.
+
+---
+
 <a id="tech-stack"></a>
 ## 🛠️ Tech Stack
 
@@ -165,6 +218,7 @@ graph TB
 | **Frontend**              | Angular 21, Angular Material, Tailwind CSS, GSAP, Three.js            |
 | **Design**                | Figma                                                                  |
 | **Auth**                  | Cookie-based (BFF pattern), ASP.NET Core Identity, antiforgery tokens |
+| **Testing**               | xUnit v3, Testcontainers (SQL Server and Redis)                       |
 | **Containerization**       | Docker (SQL Server and Redis containers)                              |
 
 ---
@@ -180,6 +234,12 @@ mwgoods/
 │       ├── features/             # Route-level feature components
 │       ├── layout/               # Application layouts and shell components
 │       └── shared/               # Reusable components, models
+│
+├── tests/
+│   └── MwGoods.IntegrationTests/
+│       ├── Fixtures/             # Throwaway SQL Server + Redis, real module services
+│       ├── Helpers/              # Concurrency helpers (release N requests at once)
+│       └── Commerce/             # Tests grouped by module and feature
 │
 └── src/
     ├── BuildingBlocks/
@@ -405,6 +465,7 @@ erDiagram
 <a id="whats-next"></a>
 ## 🔭 What's Next
 
+* **Stock reservations before payment** — claim stock before the Paymob redirect, with expiry for abandoned checkouts, so a sold-out buyer is never charged
 * **Product reviews** — let buyers rate and review products they've purchased
 * **More admin tooling** — admin-created coupons, plus letting sellers create and manage their own coupons
 * **Seller analytics** — surface how many people have bought each of a seller's products
@@ -422,6 +483,7 @@ erDiagram
 * Redis (local instance or container)
 * A [Cloudinary](https://cloudinary.com/) account (cloud name, API key, API secret)
 * A [Paymob](https://paymob.com/) account (API keys, integration ID, HMAC secret) — sandbox credentials are sufficient for local development
+* [Docker](https://www.docker.com/) — required to run the integration tests
 
 ### Backend Setup
 
@@ -457,6 +519,16 @@ ng serve
 ```
 
 Update `environment.ts` / `environment.development.ts` with the API's base URL if it differs from the default.
+
+### Running Tests
+
+With Docker running:
+
+```bash
+dotnet test tests/MwGoods.IntegrationTests
+```
+
+Each test run starts its own throwaway SQL Server and Redis containers, applies migrations, and deletes the containers afterwards — your development databases are never touched.
 
 ---
 
